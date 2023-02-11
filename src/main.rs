@@ -1,3 +1,5 @@
+use wry::application::dpi::PhysicalPosition;
+use wry::application::error::ExternalError;
 use crate::platform::{get_translator, Translator};
 
 mod platform;
@@ -14,7 +16,7 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
             event::{Event, StartCause, WindowEvent},
             event_loop::{ControlFlow, EventLoop},
             window::WindowBuilder,
-            dpi::{LogicalPosition, Position},
+            dpi::{Position},
         },
         webview::WebViewBuilder,
     };
@@ -32,14 +34,15 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
         .with_inner_size(translator.inner_size())
         .with_resizable(false)
         .with_focused(true)
-        // .with_always_on_top(true)
-        .with_position(Position::Logical(LogicalPosition::new(-100.0, 100.0)))
+        .with_position(Position::Physical(get_cursor_position(event_loop.cursor_position())))
         .build(&event_loop)?;
-    let webview = WebViewBuilder::new(window)?
+
+    let _webview = WebViewBuilder::new(window)?
         .with_url(translator.url(word).as_str())?
         .with_user_agent(user_agent_string)
         .with_initialization_script(translator.js_code().as_str())
         .build()?;
+
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -55,4 +58,15 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
             _ => (),
         }
     });
+}
+
+fn get_cursor_position(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
+    match pos {
+        Ok(ph) => {
+            PhysicalPosition::new(ph.x as i32, ph.y as i32)
+        }
+        Err(_) => {
+            PhysicalPosition::new(0, 0)
+        }
+    }
 }
