@@ -34,7 +34,7 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
         .with_inner_size(translator.inner_size())
         .with_resizable(false)
         .with_focused(true)
-        .with_position(Position::Physical(get_cursor_position(event_loop.cursor_position())))
+        .with_position(Position::Physical(position(event_loop.cursor_position())))
         .build(&event_loop)?;
 
     let _webview = WebViewBuilder::new(window)?
@@ -49,7 +49,7 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
 
         match event {
             Event::NewEvents(StartCause::Init) => {
-                println!("Wry has started!")
+                println!("Popup translation has started!")
             }
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
@@ -60,7 +60,7 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
     });
 }
 
-fn get_cursor_position(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
+fn position(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
     match pos {
         Ok(ph) => {
             PhysicalPosition::new(ph.x as i32, ph.y as i32)
