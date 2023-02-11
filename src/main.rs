@@ -1,13 +1,27 @@
+use clap::Parser;
 use wry::application::dpi::PhysicalPosition;
 use wry::application::error::ExternalError;
 use crate::platform::{get_translator, Translator};
 
 mod platform;
 
+/// Simple program to greet a person
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Text to be translated
+    text: String,
+
+    /// Platform to be used. Default is bing, available platforms are: bing, dictcn, youdao, youglish
+    #[arg(short, long, default_value = "bing")]
+    platform: String,
+}
+
 fn main() -> wry::Result<()> {
-    let platform = get_translator("123".into());
-    let word = "你好".into();
-    show(platform, word)
+    let args = Args::parse();
+
+    let platform = get_translator(args.platform);
+    show(platform, args.text)
 }
 
 fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {

@@ -1,7 +1,7 @@
 use crate::platform::Translator;
 
+#[derive(Copy, Clone)]
 pub struct YouDao {}
-
 
 impl Translator for YouDao {
     fn name(&self) -> String {

@@ -1,10 +1,11 @@
 #!/usr/bin/env just --justfile
 
-run:
-    cargo run --bin fanyi
+run args: release
+    ./target/release/fanyi {{args}}
+
 
 release:
-  cargo build --release    
+  cargo build --release
 
 install:
     cargo install --path .

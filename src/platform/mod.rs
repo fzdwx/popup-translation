@@ -18,7 +18,7 @@ pub trait Translator {
         let (w, h) = self.size();
         LogicalSize::new(w, h)
     }
-    
+
     fn size(&self) -> (u32, u32) {
         (600, 400)
     }

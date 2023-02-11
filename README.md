@@ -4,10 +4,14 @@ A translation tool is realized by providing the ability of webview through wry.
 
 ![img.png](.github/img.png)
 
-## 📦 Install
+## 🚀 Getting Started
 
 ```shell
 cargo install --git https://github.com/fzdwx/popup-translation
+
+fanyi hello
+fanyi -p youdao 你好
+fanyi --help
 ```
 
 ## 💥 Supported platforms

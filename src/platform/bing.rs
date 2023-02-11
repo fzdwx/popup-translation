@@ -1,5 +1,6 @@
 use crate::platform::Translator;
 
+#[derive(Copy, Clone)]
 pub struct Bing {}
 
 impl Translator for Bing {
