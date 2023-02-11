@@ -15,4 +15,7 @@ impl Translator for YouDao {
     fn js_code(&self) -> String {
         include_str!("../js/youdao.js").to_string()
     }
+    fn size(&self) -> (u32, u32) {
+        (655,400)
+    }
 }

@@ -1,12 +1,10 @@
-mod platform;
-
-use wry::application::dpi::{LogicalPosition, Position};
-use wry::application::window::WindowAttributes;
 use crate::platform::{get_translator, Translator};
+
+mod platform;
 
 fn main() -> wry::Result<()> {
     let platform = get_translator("123".into());
-    let word = "翻译器".into();
+    let word = "你好".into();
     show(platform, word)
 }
 
@@ -16,6 +14,7 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
             event::{Event, StartCause, WindowEvent},
             event_loop::{ControlFlow, EventLoop},
             window::WindowBuilder,
+            dpi::{LogicalPosition, Position},
         },
         webview::WebViewBuilder,
     };

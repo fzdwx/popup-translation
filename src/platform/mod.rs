@@ -20,7 +20,7 @@ pub trait Translator {
     }
     
     fn size(&self) -> (u32, u32) {
-        (400, 300)
+        (600, 400)
     }
 }
 
