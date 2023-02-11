@@ -20,8 +20,7 @@ struct Args {
 fn main() -> wry::Result<()> {
     let args = Args::parse();
 
-    let platform = get_translator(args.platform);
-    show(platform, args.text)
+    show(get_translator(args.platform), args.text)
 }
 
 fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
