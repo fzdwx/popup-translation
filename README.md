@@ -1,6 +1,6 @@
 # Popup translation
 
-A simple translation tool is realized by providing the ability of webview through wry.
+A translation tool is realized by providing the ability of webview through wry.
 
 ![img.png](.github/img.png)
 
@@ -22,7 +22,7 @@ A simple translation tool is realized by providing the ability of webview throug
 ## 📖 Thanks
 
 1. [manateelazycat - popweb](https://github.com/manateelazycat/popweb/blob/main/extension/dict/popweb-dict.el)
-2. [wry][https://github.com/tauri-apps/wry]
+2. [wry](https://github.com/tauri-apps/wry)
 
 ## License
 
