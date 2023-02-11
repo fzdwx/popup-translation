@@ -2,6 +2,8 @@
 
 A simple translation tool is realized by providing the ability of webview through wry.
 
+![img.png](.github/img.png)
+
 ## 💥 Supported platforms
 
 1. [Bing](https://www.bing.com/)
@@ -11,9 +13,9 @@ A simple translation tool is realized by providing the ability of webview throug
 
 ## 🦹 TODO
 
-- [] Position Options( current version is fixed)
+- [ ] Position Options( current version is fixed)
     - e.g: `top_left`, `top_center`, `top_right`, `center` ...
-- [] HotKey
+- [ ] HotKey
     - open
     - close
 
