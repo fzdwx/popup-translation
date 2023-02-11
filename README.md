@@ -1,13 +1,21 @@
 # Popup translation
 
-通过 wry 提供 webview 的能力，实现了一个简单的翻译工具。
+A simple translation tool is realized by providing the ability of webview through wry.
 
-## 💥 支持的平台
+## 💥 Supported platforms
 
-1. [必应](https://www.bing.com/)
-2. [有道](https://www.youdao.com/)
+1. [Bing](https://www.bing.com/)
+2. [Youdao](https://www.youdao.com/)
 3. [YouGlish](https://youglish.com/)
-4. [海词](https://dict.cn/)
+4. [Dict](https://dict.cn/)
+
+## 🦹 TODO
+
+- [] Position Options( current version is fixed)
+    - e.g: `top_left`, `top_center`, `top_right`, `center` ...
+- [] HotKey
+    - open
+    - close
 
 ## 📖 Thanks
 
