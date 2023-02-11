@@ -4,6 +4,12 @@ A translation tool is realized by providing the ability of webview through wry.
 
 ![img.png](.github/img.png)
 
+## 📦 Install
+
+```shell
+cargo install --git https://github.com/fzdwx/popup-translation
+```
+
 ## 💥 Supported platforms
 
 1. [Bing](https://www.bing.com/)
