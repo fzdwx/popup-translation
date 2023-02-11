@@ -21,6 +21,20 @@ fanyi --help
 3. [YouGlish](https://youglish.com/)
 4. [Dict](https://dict.cn/)
 
+## 🕹️ Integrated
+
+### nvim
+
+```lua
+map("n", "<leader>fy", function()
+    local word = vim.fn.expand("<cWORD>")
+    local cmd = { "fanyi", word }
+    vim.fn.jobstart(cmd, { detach = true })
+end, { desc = "qwe" })
+```
+
+![gif](https://user-images.githubusercontent.com/65269574/218270052-0338693e-31fd-458b-ac03-f668b6ffd8d2.gif)
+
 ## 🦹 TODO
 
 - [ ] Position Options( current version is fixed)

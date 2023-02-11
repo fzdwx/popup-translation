@@ -12,7 +12,7 @@ struct Args {
     /// Text to be translated
     text: String,
 
-    /// Platform to be used. Default is bing, available platforms are: bing, dictcn, youdao, youglish
+    /// Platform to be used, available platforms are: bing, dictcn, youdao, youglish
     #[arg(short, long, default_value = "bing")]
     platform: String,
 }
