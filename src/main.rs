@@ -22,7 +22,6 @@ use crate::{
 use clap::{arg, Parser};
 
 mod translation;
-mod args;
 mod clipboard;
 
 
