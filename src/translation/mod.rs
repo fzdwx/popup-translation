@@ -4,10 +4,10 @@ mod youglish;
 mod bing;
 
 use wry::application::dpi::LogicalSize;
-use crate::platform::bing::Bing;
-use crate::platform::dictcn::Dictcn;
-use crate::platform::youdao::YouDao;
-use crate::platform::youglish::Youglish;
+use crate::translation::bing::Bing;
+use crate::translation::dictcn::Dictcn;
+use crate::translation::youdao::YouDao;
+use crate::translation::youglish::Youglish;
 
 pub trait Translator {
     fn name(&self) -> String;

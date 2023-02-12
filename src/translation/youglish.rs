@@ -1,4 +1,4 @@
-use crate::platform::Translator;
+use crate::translation::Translator;
 
 #[derive(Copy, Clone)]
 pub struct Youglish {}
