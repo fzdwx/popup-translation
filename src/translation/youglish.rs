@@ -9,7 +9,7 @@ impl Translator for Youglish {
     }
 
     fn url(&self, word: String) -> String {
-        format!("https://youglish.com/pronounce/{}/english?", word)
+        format!("https://youglish.com/pronounce/{word}/english?")
     }
 
     fn js_code(&self) -> String {

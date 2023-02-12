@@ -9,7 +9,7 @@ impl Translator for Bing {
     }
 
     fn url(&self, word: String) -> String {
-        format!("http://www.bing.com/dict/search?mkt=zh-cn&q={}", word)
+        format!("http://www.bing.com/dict/search?mkt=zh-cn&q={word}")
     }
 
     fn js_code(&self) -> String {

@@ -9,7 +9,7 @@ impl Translator for Dictcn {
     }
 
     fn url(&self, word: String) -> String {
-        format!("http://dict.cn/{}", word)
+        format!("http://dict.cn/{word}")
     }
 
     fn js_code(&self) -> String {

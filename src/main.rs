@@ -86,8 +86,8 @@ fn main() -> wry::Result<()> {
                 }
 
                 if hotkey_id == shortcut_show.clone().id() {
-                    let (id, webview) = show(&event_loop, get_translator(args.platform()), args.text());
-                    prev_id = Some(id.clone());
+                    let (id, webview) = show(event_loop, get_translator(args.platform()), args.text());
+                    prev_id = Some(id);
                     webviews.insert(id, webview);
                 }
             }
