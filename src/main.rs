@@ -1,39 +1,120 @@
-use clap::Parser;
-use wry::application::dpi::PhysicalPosition;
-use wry::application::error::ExternalError;
-use crate::platform::{get_translator, Translator};
+use wry::{
+    application::{
+        event::{Event, StartCause, WindowEvent},
+        event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget},
+        window::WindowBuilder,
+        dpi::{Position, PhysicalPosition},
+        error::ExternalError,
+        global_shortcut::ShortcutManager,
+        accelerator::Accelerator,
+    },
+    webview::WebViewBuilder,
+    application::window::WindowId,
+    webview::WebView,
+};
+use std::{
+    collections::HashMap,
+    str::FromStr,
+};
+use crate::{
+    translation::{get_translator, Translator},
+};
+use clap::{arg, Parser};
 
-mod platform;
+mod translation;
+mod args;
+mod clipboard;
 
-/// Simple program to greet a person
-#[derive(Parser, Debug)]
+
+/// Popup translation
+#[derive(Parser, Debug, Clone)]
 #[command(author, version, about, long_about = None)]
-struct Args {
-    /// Text to be translated
-    text: String,
+pub struct Args {
+    /// Text to be translated, if is None, then is daemon mode.
+    text: Option<String>,
 
     /// Platform to be used, available platforms are: bing, dictcn, youdao, youglish
     #[arg(short, long, default_value = "bing")]
     platform: String,
 }
 
-fn main() -> wry::Result<()> {
-    let args = Args::parse();
+impl Args {
+    /// get text. If text is not set, read from clipboard
+    pub fn text(&self) -> String {
+        self.text.clone().unwrap_or(clipboard::read_text().unwrap_or_default())
+    }
 
-    show(get_translator(args.platform), args.text)
+    /// get platform
+    pub fn platform(&self) -> String {
+        self.platform.clone()
+    }
+
+    /// If set, the translation will be shown once and the program will exit
+    pub fn run_once(&self) -> bool {
+        self.text.is_some()
+    }
 }
 
-fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
-    use wry::{
-        application::{
-            event::{Event, StartCause, WindowEvent},
-            event_loop::{ControlFlow, EventLoop},
-            window::WindowBuilder,
-            dpi::{Position},
-        },
-        webview::WebViewBuilder,
-    };
+fn main() -> wry::Result<()> {
+    let args: Args = Args::parse();
+    let mut prev_id = None;
+    let mut webviews = HashMap::new();
 
+    let event_loop = EventLoop::new();
+
+    let mut hotkey_manager = ShortcutManager::new(&event_loop);
+    let shortcut_show = Accelerator::from_str("Ctrl+alt+c").unwrap();
+    hotkey_manager.register(shortcut_show.clone()).unwrap();
+
+    if args.run_once() {
+        let (id, webview) = show(&event_loop, get_translator(args.platform()), args.text());
+        webviews.insert(id, webview);
+    }
+
+    event_loop.run(move |event, event_loop, control_flow| {
+        let args = args.clone();
+
+        *control_flow = ControlFlow::Wait;
+
+        match event {
+            Event::NewEvents(StartCause::Init) => {
+                println!("Popup translation has started!")
+            }
+            Event::GlobalShortcutEvent(hotkey_id) => {
+                // // remove previous window
+                if let Some(id) = prev_id {
+                    webviews.remove(&id);
+                }
+
+                if hotkey_id == shortcut_show.clone().id() {
+                    let (id, webview) = show(&event_loop, get_translator(args.platform()), args.text());
+                    prev_id = Some(id.clone());
+                    webviews.insert(id, webview);
+                }
+            }
+
+            Event::WindowEvent {
+                event, window_id, ..
+            } => match event {
+                WindowEvent::CloseRequested => {
+                    webviews.remove(&window_id);
+
+                    if args.run_once() {
+                        *control_flow = ControlFlow::Exit
+                    }
+
+                    // if webviews.is_empty() {
+                    //     *control_flow = ControlFlow::Exit
+                    // }
+                }
+                _ => (),
+            },
+            _ => (),
+        }
+    });
+}
+
+fn show<T: 'static>(event_loop: &EventLoopWindowTarget<T>, translator: Box<dyn Translator>, word: String) -> (WindowId, WebView) {
     #[cfg(target_os = "macos")]
         let user_agent_string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15";
     #[cfg(target_os = "windows")]
@@ -41,36 +122,26 @@ fn show(translator: Box<dyn Translator>, word: String) -> wry::Result<()> {
     #[cfg(target_os = "linux")]
         let user_agent_string = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
 
-    let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title(translator.name())
         .with_inner_size(translator.inner_size())
         .with_resizable(false)
         .with_focused(true)
         .with_position(Position::Physical(position(event_loop.cursor_position())))
-        .build(&event_loop)?;
+        .build(event_loop)
+        .unwrap();
 
-    let _webview = WebViewBuilder::new(window)?
-        .with_url(translator.url(word).as_str())?
+    let window_id = window.id();
+    let webview = WebViewBuilder::new(window)
+        .unwrap()
+        .with_url(translator.url(word).as_str())
+        .unwrap()
         .with_user_agent(user_agent_string)
         .with_initialization_script(translator.js_code().as_str())
-        .build()?;
+        .build()
+        .unwrap();
 
-
-    event_loop.run(move |event, _, control_flow| {
-        *control_flow = ControlFlow::Wait;
-
-        match event {
-            Event::NewEvents(StartCause::Init) => {
-                println!("Popup translation has started!")
-            }
-            Event::WindowEvent {
-                event: WindowEvent::CloseRequested,
-                ..
-            } => *control_flow = ControlFlow::Exit,
-            _ => (),
-        }
-    });
+    (window_id, webview)
 }
 
 fn position(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {

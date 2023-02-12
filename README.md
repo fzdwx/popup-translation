@@ -9,9 +9,15 @@ A translation tool is realized by providing the ability of webview through wry.
 ```shell
 cargo install --git https://github.com/fzdwx/popup-translation
 
+# once
 fanyi hello
 fanyi -p youdao 你好
+
+# daemon mode, read from clipboard, `ctrl+shift+c` to translate
+fanyi
+
 fanyi --help
+
 ```
 
 ## 💥 Supported platforms
@@ -40,8 +46,9 @@ end, { desc = "qwe" })
 - [ ] Position Options( current version is fixed)
     - e.g: `top_left`, `top_center`, `top_right`, `center` ...
 - [ ] HotKey
-    - open
-    - close
+    - [x] open
+      - [ ] read from clipboard
+    - [ ] close
 
 ## 📖 Thanks
 

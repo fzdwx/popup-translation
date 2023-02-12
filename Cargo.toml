@@ -1,6 +1,6 @@
 [package]
 name = "popup-translation"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "🧼 A popup translation tool."
 authors = ["fzdwx <likelovec@gmail.com>"]
@@ -22,5 +22,6 @@ path = "./src/main.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+arboard = "3.2.0"
 clap = { version = "4.1.4", features = ["derive"] }
 wry = "0.26.0"

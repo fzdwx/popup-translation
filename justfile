@@ -3,6 +3,9 @@
 run args: release
     ./target/release/fanyi {{args}}
 
+rund: release
+    ./target/release/fanyi
+
 
 release:
   cargo build --release
