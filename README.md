@@ -2,7 +2,7 @@
 
 A translation tool is realized by providing the ability of webview through wry.
 
-![img.png](.github/img.png)
+![img.png](.github/one.gif)
 
 ## 🚀 Getting Started
 
@@ -17,7 +17,6 @@ fanyi -p youdao 你好
 fanyi
 
 fanyi --help
-
 ```
 
 ## 💥 Supported platforms
@@ -47,8 +46,9 @@ end, { desc = "qwe" })
     - e.g: `top_left`, `top_center`, `top_right`, `center` ...
 - [ ] HotKey
     - [x] open
-      - [ ] read from clipboard
+      - [x] read from clipboard
     - [ ] close
+- [ ] Only one webview is used throughout
 
 ## 📖 Thanks
 
