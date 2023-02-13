@@ -1,8 +1,9 @@
-use std::time::Duration;
-use x11_clipboard::Clipboard;
 
 #[cfg(target_os = "linux")]
 pub fn read_text() -> Result<String, String> {
+    use std::time::Duration;
+    use x11_clipboard::Clipboard;
+
     let clipboard = Clipboard::new().unwrap();
     if let Ok(curr) = clipboard.load(
         clipboard.getter.atoms.primary,
@@ -12,9 +13,9 @@ pub fn read_text() -> Result<String, String> {
     ) {
         let curr = String::from_utf8_lossy(&curr)
             .trim_matches('\u{0}')
-            .trim();
+            .trim().to_string();
         if !curr.is_empty() {
-            Ok(curr.to_owned())
+            Ok(curr.clone())
         } else {
             read_text_cross()
         }
