@@ -12,7 +12,8 @@ pub fn read_text() -> Result<String, String> {
     ) {
         let curr = String::from_utf8_lossy(&curr)
             .trim_matches('\u{0}')
-            .trim().to_string();
+            .trim()
+            .to_string();
         if !curr.is_empty() {
             Ok(curr)
         } else {
@@ -23,7 +24,6 @@ pub fn read_text() -> Result<String, String> {
     }
 }
 
-
 #[cfg(target_os = "macos")]
 pub fn read_text() -> Result<String, String> {
     read_text_cross()
@@ -33,7 +33,6 @@ pub fn read_text() -> Result<String, String> {
 pub fn read_text() -> Result<String, String> {
     read_text_cross()
 }
-
 
 fn read_text_cross() -> Result<String, String> {
     let mut clipboard = arboard::Clipboard::new().unwrap();

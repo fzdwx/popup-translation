@@ -1,29 +1,23 @@
+use crate::translation::{get_translator, Translator};
+use clap::{arg, Parser};
+use std::{collections::HashMap, str::FromStr};
 use wry::{
+    application::window::WindowId,
     application::{
+        accelerator::Accelerator,
+        dpi::{PhysicalPosition, Position},
+        error::ExternalError,
         event::{Event, StartCause, WindowEvent},
         event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget},
-        window::WindowBuilder,
-        dpi::{Position, PhysicalPosition},
-        error::ExternalError,
         global_shortcut::ShortcutManager,
-        accelerator::Accelerator,
+        window::WindowBuilder,
     },
-    webview::WebViewBuilder,
-    application::window::WindowId,
     webview::WebView,
+    webview::WebViewBuilder,
 };
-use std::{
-    collections::HashMap,
-    str::FromStr,
-};
-use crate::{
-    translation::{get_translator, Translator},
-};
-use clap::{arg, Parser};
 
-mod translation;
 mod clipboard;
-
+mod translation;
 
 /// Popup translation
 #[derive(Parser, Debug, Clone)]
@@ -44,7 +38,9 @@ pub struct Args {
 impl Args {
     /// get text. If text is not set, read from clipboard
     pub fn text(&self) -> String {
-        self.text.clone().unwrap_or(clipboard::read_text().unwrap_or_default())
+        self.text
+            .clone()
+            .unwrap_or(clipboard::read_text().unwrap_or_default())
     }
 
     /// get platform
@@ -90,7 +86,8 @@ fn main() -> wry::Result<()> {
                 }
 
                 if hotkey_id == shortcut_show.clone().id() {
-                    let (id, webview) = show(event_loop, get_translator(args.platform()), args.text());
+                    let (id, webview) =
+                        show(event_loop, get_translator(args.platform()), args.text());
                     prev_id = Some(id);
                     webviews.insert(id, webview);
                 }
@@ -117,7 +114,11 @@ fn main() -> wry::Result<()> {
     });
 }
 
-fn show<T: 'static>(event_loop: &EventLoopWindowTarget<T>, translator: Box<dyn Translator>, word: String) -> (WindowId, WebView) {
+fn show<T: 'static>(
+    event_loop: &EventLoopWindowTarget<T>,
+    translator: Box<dyn Translator>,
+    word: String,
+) -> (WindowId, WebView) {
     #[cfg(target_os = "macos")]
         let user_agent_string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15";
     #[cfg(target_os = "windows")]
@@ -149,11 +150,7 @@ fn show<T: 'static>(event_loop: &EventLoopWindowTarget<T>, translator: Box<dyn T
 
 fn position(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
     match pos {
-        Ok(ph) => {
-            PhysicalPosition::new(ph.x as i32, ph.y as i32)
-        }
-        Err(_) => {
-            PhysicalPosition::new(0, 0)
-        }
+        Ok(ph) => PhysicalPosition::new(ph.x as i32, ph.y as i32),
+        Err(_) => PhysicalPosition::new(0, 0),
     }
 }

@@ -1,15 +1,13 @@
-mod youdao;
-mod dictcn;
-mod youglish;
 mod bing;
+mod dictcn;
+mod youdao;
+mod youglish;
 
-use wry::application::dpi::{LogicalSize};
 use crate::{
-    translation::bing::Bing,
-    translation::dictcn::Dictcn,
-    translation::youdao::YouDao,
+    translation::bing::Bing, translation::dictcn::Dictcn, translation::youdao::YouDao,
     translation::youglish::Youglish,
 };
+use wry::application::dpi::LogicalSize;
 
 pub trait Translator {
     fn name(&self) -> String;
