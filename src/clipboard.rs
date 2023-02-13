@@ -1,4 +1,3 @@
-
 #[cfg(target_os = "linux")]
 pub fn read_text() -> Result<String, String> {
     use std::time::Duration;
@@ -15,7 +14,7 @@ pub fn read_text() -> Result<String, String> {
             .trim_matches('\u{0}')
             .trim().to_string();
         if !curr.is_empty() {
-            Ok(curr.clone())
+            Ok(curr)
         } else {
             read_text_cross()
         }

@@ -4,6 +4,19 @@ A translation tool is realized by providing the ability of webview through wry.
 
 ![img.png](.github/one.gif)
 
+## 💫 Features
+
+1. The pop-up window function realized by using the webview capability provided by wry
+2. Read text from the clipboard and translate it
+    - Translation of selected text is supported under **Linux(x11)**, i.e. does not need to be copied to the clipboard
+    - **Windows** and **MacOS** are not supported yet https://github.com/fzdwx/popup-translation/issues/3
+3. Pass in text from the command line for translation
+4. Support multiple translation platforms
+    1. [Bing](https://www.bing.com/)
+    2. [Youdao](https://www.youdao.com/)
+    3. [YouGlish](https://youglish.com/)
+    4. [Dict](https://dict.cn/)
+
 ## 🚀 Getting Started
 
 ```shell
@@ -16,22 +29,11 @@ fanyi -p youdao 你好
 # daemon mode, read from clipboard, `ctrl+shift+c` to translate
 fanyi
 
+# overwrite show window hotkey
+fanyi --show "Alt+s"
+
 fanyi --help
-
 ```
-
-## 💫 Features
-
-1. The pop-up window function realized by using the webview capability provided by wry
-2. Read text from the clipboard and translate it
-    - Translation of selected text is supported under **Linux(x11)**, i.e. does not need to be copied to the clipboard.
-    - **Windows** and **MacOS** are not supported yet https://github.com/fzdwx/popup-translation/issues/3
-3. Pass in text from the command line for translation
-4. Support multiple translation platforms
-    1. [Bing](https://www.bing.com/)
-    2. [Youdao](https://www.youdao.com/)
-    3. [YouGlish](https://youglish.com/)
-    4. [Dict](https://dict.cn/)
 
 ## 🕹️ Integrated
 

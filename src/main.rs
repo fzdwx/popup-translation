@@ -35,6 +35,10 @@ pub struct Args {
     /// Platform to be used, available platforms are: bing, dictcn, youdao, youglish
     #[arg(short, long, default_value = "bing")]
     platform: String,
+
+    /// Brings up the shortcut key for the translation window
+    #[arg(long, default_value = "Ctrl+Alt+c")]
+    show: String,
 }
 
 impl Args {
@@ -62,7 +66,7 @@ fn main() -> wry::Result<()> {
     let event_loop = EventLoop::new();
 
     let mut hotkey_manager = ShortcutManager::new(&event_loop);
-    let shortcut_show = Accelerator::from_str("Ctrl+alt+c").unwrap();
+    let shortcut_show = Accelerator::from_str(args.show.as_str()).unwrap();
     hotkey_manager.register(shortcut_show.clone()).unwrap();
 
     if args.run_once() {
