@@ -1,17 +1,16 @@
 # Popup translation
 
-A translation tool is realized by providing the ability of webview through wry.
+通过 wry 打开一个 webview 窗口，然后打开某个翻译平台的网页翻译内容，并通过 js 代码屏蔽掉不需要的内容，专注于翻译内容本身
 
 ![img.png](.github/one.gif)
 
 ## 💫 Features
 
-1. The pop-up window function realized by using the webview capability provided by wry
-2. Read text from the clipboard and translate it
-    - Translation of selected text is supported under **Linux(x11)**, i.e. does not need to be copied to the clipboard
-    - **Windows** and **MacOS** are not supported yet https://github.com/fzdwx/popup-translation/issues/3
-3. Pass in text from the command line for translation
-4. Support multiple translation platforms
+1. 利用wry提供的网页视图功能实现的弹窗功能
+2. 从剪贴板读取文本并翻译
+    - 在 *Linux(x11)* 下支持所选文本的翻译，即不需要复制到剪贴板(尚不支持 **Windows** 和 **MacOS**) https://github.com/fzdwx/popup-translation/issues/3
+3. 从命令行传入文本进行翻译
+4. 支持多种翻译平台
     1. [Bing](https://www.bing.com/)
     2. [Youdao](https://www.youdao.com/)
     3. [YouGlish](https://youglish.com/)
@@ -51,17 +50,17 @@ end, { desc = "qwe" })
 
 ## 🦹 TODO
 
-- [ ] Position Options( current version is fixed)
+- [ ] 弹窗位置选项(当前是固定获取鼠标附近)
     - e.g: `top_left`, `top_center`, `top_right`, `center` ...
-- [ ] HotKey
+- [ ] 热键
     - [x] open
-        - [x] read from clipboard
-        - [ ] read from selection
+        - [x] 从粘贴板读取数据
+        - [ ] 读取鼠标选择的数据
             - [x] Linux
             - [ ] Windows
             - [ ] MacOS
     - [ ] close
-- [ ] Only one webview is used throughout
+- [ ] 全程只使用一个 webview
 
 ## 📖 Thanks
 
