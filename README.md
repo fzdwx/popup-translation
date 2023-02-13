@@ -1,12 +1,12 @@
 # Popup translation
 
-通过 wry 打开一个 webview 窗口，然后打开某个翻译平台的网页翻译内容，并通过 js 代码屏蔽掉不需要的内容，专注于翻译内容本身
+通过 wry 打开一个 webview 窗口，然后打开某个翻译平台的网页翻译内容，并通过 js 代码屏蔽掉不需要的内容，专注于翻译内容本身。
 
 ![img.png](.github/one.gif)
 
 ## 💫 Features
 
-1. 利用wry提供的网页视图功能实现的弹窗功能
+1. 利用 wry 提供的网页视图功能实现的弹窗功能
 2. 从剪贴板读取文本并翻译
     - 在 *Linux(x11)* 下支持所选文本的翻译，即不需要复制到剪贴板(尚不支持 **Windows** 和 **MacOS**) https://github.com/fzdwx/popup-translation/issues/3
 3. 从命令行传入文本进行翻译
@@ -21,14 +21,14 @@
 ```shell
 cargo install --git https://github.com/fzdwx/popup-translation
 
-# once
+# 命令行直接设置翻译文本，只运行一次
 fanyi hello
 fanyi -p youdao 你好
 
-# daemon mode, read from clipboard, `ctrl+shift+c` to translate
+# 守护模式，可以一直翻译，`ctrl+shift+c` 打开窗口
 fanyi
 
-# overwrite show window hotkey
+# 覆盖快捷键，使用 `alt+s` 打开窗口
 fanyi --show "Alt+s"
 
 fanyi --help
