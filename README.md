@@ -57,7 +57,7 @@ end, { desc = "qwe" })
         - [x] 从粘贴板读取数据
         - [ ] 读取鼠标选择的数据
             - [x] Linux
-            - [ ] Windows
+            - [x] Windows
             - [ ] MacOS
     - [ ] close
 - [ ] 全程只使用一个 webview
