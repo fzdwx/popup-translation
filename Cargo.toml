@@ -22,7 +22,6 @@ path = "./src/main.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-arboard = "3.2.0"
 clap = { version = "4.1.4", features = ["derive"] }
 wry = "0.26.0"
 x11-clipboard = "0.7.0"
