@@ -1,5 +1,3 @@
-use wry::application::clipboard::Clipboard;
-
 #[cfg(target_os = "linux")]
 pub fn read_text() -> Result<String, String> {
     use std::time::Duration;

@@ -1,6 +1,6 @@
 [package]
 name = "popup-translation"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 description = "🧼 A popup translation tool."
 authors = ["fzdwx <likelovec@gmail.com>"]
@@ -27,4 +27,4 @@ wry = "0.26.0"
 x11-clipboard = "0.7.0"
 
 [target.'cfg(windows)'.dependencies]
-enigo = { git = "https://github.com/enigo-rs/enigo" }
+enigo = "0.0.14"

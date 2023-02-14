@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2 2023/02/14
+
+1. Support read from selection Windows(Simulate 'ctrl c' once before reading the contents of the
+   clipboard) https://github.com/fzdwx/popup-translation/pull/4
+2. Support for setting the window display position `fanyi --position=100,100`
+
 ## v0.2.1 2023/02/13
 
 1. Support overwrite show shortcut

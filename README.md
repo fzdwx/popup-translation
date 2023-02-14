@@ -30,7 +30,10 @@ fanyi -p youdao 你好
 fanyi
 
 # 覆盖快捷键，使用 `alt+s` 打开窗口
-fanyi --show "Alt+s"
+fanyi --show=alt+s
+
+# 设置窗口显示位置，默认为鼠标附近
+fanyi --position=100,100
 
 fanyi --help
 ```
