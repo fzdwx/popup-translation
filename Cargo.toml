@@ -26,3 +26,6 @@ arboard = "3.2.0"
 clap = { version = "4.1.4", features = ["derive"] }
 wry = "0.26.0"
 x11-clipboard = "0.7.0"
+
+[target.'cfg(windows)'.dependencies]
+enigo = { git = "https://github.com/enigo-rs/enigo" }
