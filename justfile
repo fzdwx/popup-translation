@@ -16,5 +16,5 @@ install:
 lint:
   cargo clippy
 
-example:
-  cargo run --example exname -- arg1
+pub:
+    cargo publish
