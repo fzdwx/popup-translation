@@ -9,7 +9,7 @@ keywords = ["popup", "translation", "tool", "rust", "wry", "clap", "fanyi"]
 categories = ["command-line-utilities", "translation"]
 readme = "README.md"
 license = "MIT"
-license-file = "https://github.com/fzdwx/popup-translation/blob/main/LICENSE.txt"
+license-file = "LICENSE.txt"
 
 [[bin]]
 name = "fanyi"
