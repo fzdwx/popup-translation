@@ -1,0 +1,17 @@
+curl 'https://www2.deepl.com/jsonrpc?method=LMT_handle_jobs' \
+-H 'authority: www2.deepl.com' \
+-H 'accept: */*' \
+-H 'accept-language: zh,en;q=0.9' \
+-H 'content-type: application/json' \
+-H 'cookie: LMTBID=v2|829668db-5501-40c0-bbdb-fa547ed3c35b|6c948d1088c4a8456dcbbac83b836d7f; dapUid=4a6aaf83-4113-497f-bd27-4f1bfe258164; dapVn=1; userRecommendations=; userCountry=HK; releaseGroups=469.DM-541.2.2_470.DM-542.2.2_471.DM-547.2.2_475.DM-544.2.2_604.DM-595.2.2_605.DM-585.2.3_606.DWFA-165.2.3_612.DM-538.2.2_633.DM-695.2.2_778.DM-705.2.2_863.DM-601.2.2_865.TG-1004.1.3_866.DM-592.2.2_867.DM-684.2.4_975.DM-609.2.2_976.DM-667.2.2_1084.TG-1207.2.3_1086.TC-104.2.7_1092.SEO-44.2.2_1096.TC-419.2.3_1097.TC-435.2.5_1119.B2B-251.1.2_1202.DF-2381.2.3_1205.DAL-176.2.3_1207.DWFA-96.2.2_1219.DAL-136.2.3_1223.DAL-179.1.2_1224.DAL-186.1.2_1245.SEO-113.2.3_1246.DM-793.2.2_1330.DF-3073.2.2_1332.DM-709.1.1_1437.DM-850.2.2_1438.DM-768.2.2_1442.DF-2765.2.2_1443.DF-3042.2.2_1444.DWFA-362.2.2_1446.DF-3238.2.2_1459.DWFA-338.2.2_1460.TC-502.2.1_1483.DM-821.2.1_1570.TC-576.2.2_1577.DM-594.1.2_1582.ACL-11.1.1_1583.DM-807.1.2_1584.DM-721.1.1_1585.DM-900.2.1_1767.B2B-364.1.1_1776.B2B-345.1.1_1627.AAEXP-968.2.1_220.DF-1925.1.9_1328.DWFA-285.2.2_1631.AAEXP-972.1.1_1626.AAEXP-967.1.1_774.DWFA-212.2.2_1641.AAEXP-982.1.1_1634.AAEXP-975.1.1_1629.AAEXP-970.2.1_1645.AAEXP-986.1.1_1643.AAEXP-984.1.1_1636.AAEXP-977.1.1_1628.AAEXP-969.1.1_1639.AAEXP-980.1.1_1630.AAEXP-971.2.1_1642.AAEXP-983.1.1_1327.DWFA-391.2.2_1638.AAEXP-979.1.1_1632.AAEXP-973.1.1_1635.AAEXP-976.2.1_1637.AAEXP-978.1.1_1640.AAEXP-981.1.1_1633.AAEXP-974.1.1_1644.AAEXP-985.1.1; __cf_bm=Dv4xXJdjrPVpcrJdjLw1HNPI3Rgn_3SVdC3dQKrKkjY-1676336790-0-AbvvPx/XbUhot7jTWnzl51QDiXGp1AbabKfhGm0hBfo8rx4rpd1FuqoYKuo+j8YH17N3d2Mjy4z0stzB2zXaRSQ=' \
+-H 'origin: https://www.deepl.com' \
+-H 'referer: https://www.deepl.com/' \
+-H 'sec-ch-ua: "Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"' \
+-H 'sec-ch-ua-mobile: ?0' \
+-H 'sec-ch-ua-platform: "Linux"' \
+-H 'sec-fetch-dest: empty' \
+-H 'sec-fetch-mode: cors' \
+-H 'sec-fetch-site: same-site' \
+-H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36' \
+--data-raw '{"jsonrpc":"2.0","method": "LMT_handle_jobs","params":{"jobs":[{"kind":"default","sentences":[{"text":"Look up our workspace.","id":0,"prefix":""}],"raw_en_context_before":[],"raw_en_context_after":[],"preferred_num_beams":4}],"lang":{"preference":{"weight":{"DE":0.13295,"EN":24.03088,"ES":0.40786,"FR":0.23508,"IT":0.16939,"JA":0.0801,"NL":0.17589,"PL":0.13981,"PT":0.18383,"RU":0.07091,"ZH":1.82191,"RO":0.0982,"BG":0.05953,"CS":0.08771,"DA":0.11445,"EL":0.04867,"ET":0.08909,"FI":0.10182,"HU":0.09909,"ID":0.1037,"LV":0.05872,"LT":0.0786,"SK":0.09925,"SL":0.07394,"SV":0.10941,"TR":0.06838,"UK":0.05967,"KO":0.07061,"NB":0.15875},"default":"default"},"source_lang_user_selected":"auto","target_lang":"ZH"},"priority":1,"commonJobParams":{"mode":"translate","browserType":1,"formality":null},"timestamp":1676337082337},"id":65010016}' \
+--compressed

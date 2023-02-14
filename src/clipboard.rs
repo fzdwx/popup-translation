@@ -4,15 +4,16 @@ pub fn read_text() -> Result<String, String> {
     use x11_clipboard::Clipboard;
 
     let clipboard = Clipboard::new().unwrap();
-    if
-        let Ok(curr) = clipboard.load(
-            clipboard.getter.atoms.primary,
-            clipboard.getter.atoms.utf8_string,
-            clipboard.getter.atoms.property,
-            Duration::from_millis(100)
-        )
-    {
-        let curr = String::from_utf8_lossy(&curr).trim_matches('\u{0}').trim().to_string();
+    if let Ok(curr) = clipboard.load(
+        clipboard.getter.atoms.primary,
+        clipboard.getter.atoms.utf8_string,
+        clipboard.getter.atoms.property,
+        Duration::from_millis(100),
+    ) {
+        let curr = String::from_utf8_lossy(&curr)
+            .trim_matches('\u{0}')
+            .trim()
+            .to_string();
         if !curr.is_empty() {
             Ok(curr)
         } else {
@@ -30,7 +31,7 @@ pub fn read_text() -> Result<String, String> {
 
 #[cfg(target_os = "windows")]
 pub fn read_text() -> Result<String, String> {
-    use enigo::{ Enigo, Key, KeyboardControllable };
+    use enigo::{Enigo, Key, KeyboardControllable};
     // simulate keyboard operation `Ctrl+c`
     let mut enigo = Enigo::new();
 
@@ -43,8 +44,9 @@ pub fn read_text() -> Result<String, String> {
 }
 
 fn read_text_cross() -> Result<String, String> {
-    let mut clipboard = arboard::Clipboard::new().unwrap();
-    clipboard.get_text().map_err(|err| err.to_string())
+    wry::application::clipboard::Clipboard::new()
+        .read_text()
+        .ok_or("Unsupported clipboard".to_string())
 }
 
 // fn write_text(text: String) -> Result<(), String> {

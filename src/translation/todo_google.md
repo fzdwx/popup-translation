@@ -1,0 +1,13 @@
+curl 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=zh-CN&dj=1&dt=t&dt=bd&dt=qc&dt=rm&dt=ex&dt=at&dt=ss&dt=rw&dt=ld&q=Look%20up%20our%20workspace.&tk=855086.855086' \
+-H 'authority: translate.googleapis.com' \
+-H 'accept: */*' \
+-H 'accept-language: zh,en;q=0.9' \
+-H 'sec-ch-ua: "Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"' \
+-H 'sec-ch-ua-mobile: ?0' \
+-H 'sec-ch-ua-platform: "Linux"' \
+-H 'sec-fetch-dest: empty' \
+-H 'sec-fetch-mode: cors' \
+-H 'sec-fetch-site: none' \
+-H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36' \
+-H 'x-client-data: CIW2yQEIo7bJAQipncoBCP3zygEIkqHLAQj8qswBCJr+zAEIwIbNAQ==' \
+--compressed

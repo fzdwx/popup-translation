@@ -8,7 +8,8 @@
 
 1. 利用 wry 提供的网页视图功能实现的弹窗功能
 2. 从剪贴板读取文本并翻译
-    - 在 *Linux(x11)* 下支持所选文本的翻译，即不需要复制到剪贴板(尚不支持 **Windows** 和 **MacOS**) https://github.com/fzdwx/popup-translation/issues/3
+    - 在 *Linux(x11)* 下支持所选文本的翻译，即不需要复制到剪贴板(尚不支持**MacOS**) https://github.com/fzdwx/popup-translation/issues/3
+    - 在 *Windows* 模拟一次 `ctrl+c` 后，在读取剪贴板的内容
 3. 从命令行传入文本进行翻译
 4. 支持多种翻译平台
     1. [Bing](https://www.bing.com/)
@@ -19,6 +20,8 @@
 ## 🚀 Getting Started
 
 ```shell
+cargo install popup-translation
+# or 
 cargo install --git https://github.com/fzdwx/popup-translation
 
 # 命令行直接设置翻译文本，只运行一次
@@ -29,7 +32,10 @@ fanyi -p youdao 你好
 fanyi
 
 # 覆盖快捷键，使用 `alt+s` 打开窗口
-fanyi --show "Alt+s"
+fanyi --show=alt+s
+
+# 设置窗口显示位置，默认为鼠标附近
+fanyi --position=100,100
 
 fanyi --help
 ```

@@ -11,7 +11,7 @@ use wry::application::dpi::LogicalSize;
 
 pub trait Translator {
     fn name(&self) -> String;
-    fn url(&self, word: String) -> String;
+    fn url(&self, text: String) -> String;
     fn js_code(&self) -> String;
 
     fn inner_size(&self) -> LogicalSize<u32> {

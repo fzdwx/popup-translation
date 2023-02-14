@@ -1,11 +1,12 @@
 use crate::translation::{ get_translator, Translator };
 use clap::{ arg, Parser };
+use std::num::ParseIntError;
 use std::{ collections::HashMap, str::FromStr };
 use wry::{
     application::window::WindowId,
     application::{
         accelerator::Accelerator,
-        dpi::{ PhysicalPosition, Position },
+        dpi::PhysicalPosition,
         error::ExternalError,
         event::{ Event, StartCause, WindowEvent },
         event_loop::{ ControlFlow, EventLoop, EventLoopWindowTarget },
@@ -27,29 +28,23 @@ pub struct Args {
     text: Option<String>,
 
     /// Platform to be used, available platforms are: bing, dictcn, youdao, youglish
+    ///
+    /// --platform=bing
     #[arg(short, long, default_value = "bing")]
     platform: String,
 
     /// Brings up the shortcut key for the translation window
+    ///
+    /// --show=alt+s
     #[arg(long, default_value = "Ctrl+Alt+c")]
     show: String,
-}
 
-impl Args {
-    /// get text. If text is not set, read from clipboard
-    pub fn text(&self) -> Option<String> {
-        self.text.clone()
-    }
-
-    /// get platform
-    pub fn platform(&self) -> String {
-        self.platform.clone()
-    }
-
-    /// If set, the translation will be shown once and the program will exit
-    pub fn run_once(&self) -> bool {
-        self.text.is_some()
-    }
+    /// Override the position for the initial window launched by this process.
+    ///
+    /// --position=10,10   => x=10, y=10
+    /// --position=123,asd => cursor position
+    #[arg(long, verbatim_doc_comment, value_parser = PositionArg::parse, default_value = "cursor")]
+    position: PositionArg,
 }
 
 fn main() -> wry::Result<()> {
@@ -60,15 +55,16 @@ fn main() -> wry::Result<()> {
     let event_loop = EventLoop::new();
 
     let mut hotkey_manager = ShortcutManager::new(&event_loop);
-    let shortcut_show = Accelerator::from_str(args.show.as_str()).unwrap();
+    let shortcut_show = Accelerator::from_str(args.show()).unwrap();
     hotkey_manager.register(shortcut_show.clone()).unwrap();
 
     if args.run_once() {
-        let text = match args.text() {
-            Some(text) => text,
-            None => { clipboard::read_text().unwrap_or_default() }
-        };
-        let (id, webview) = show(&event_loop, get_translator(args.platform()), text);
+        let (id, webview) = show(
+            &event_loop,
+            get_translator(args.platform()),
+            args.text(),
+            args.position()
+        );
         webviews.insert(id, webview);
     }
 
@@ -80,17 +76,18 @@ fn main() -> wry::Result<()> {
         match event {
             Event::NewEvents(StartCause::Init) => { println!("Popup translation has started!") }
             Event::GlobalShortcutEvent(hotkey_id) => {
-                // // remove previous window
+                // remove previous window
                 if let Some(id) = prev_id {
                     webviews.remove(&id);
                 }
 
                 if hotkey_id == shortcut_show.clone().id() {
-                    let text = match args.text() {
-                        Some(text) => text,
-                        None => { clipboard::read_text().unwrap_or_default() }
-                    };
-                    let (id, webview) = show(event_loop, get_translator(args.platform()), text);
+                    let (id, webview) = show(
+                        event_loop,
+                        get_translator(args.platform()),
+                        args.text(),
+                        args.position()
+                    );
                     prev_id = Some(id);
                     webviews.insert(id, webview);
                 }
@@ -119,7 +116,8 @@ fn main() -> wry::Result<()> {
 fn show<T: 'static>(
     event_loop: &EventLoopWindowTarget<T>,
     translator: Box<dyn Translator>,
-    word: String
+    text: String,
+    position: PositionArg
 ) -> (WindowId, WebView) {
     #[cfg(target_os = "macos")]
     let user_agent_string =
@@ -136,14 +134,14 @@ fn show<T: 'static>(
         .with_inner_size(translator.inner_size())
         .with_resizable(false)
         .with_focused(true)
-        .with_position(Position::Physical(position(event_loop.cursor_position())))
+        .with_position(position.to_wry_position(|| event_loop.cursor_position()))
         .build(event_loop)
         .unwrap();
 
     let window_id = window.id();
     let webview = WebViewBuilder::new(window)
         .unwrap()
-        .with_url(translator.url(word).as_str())
+        .with_url(translator.url(text).as_str())
         .unwrap()
         .with_user_agent(user_agent_string)
         .with_initialization_script(translator.js_code().as_str())
@@ -153,9 +151,83 @@ fn show<T: 'static>(
     (window_id, webview)
 }
 
-fn position(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
-    match pos {
-        Ok(ph) => PhysicalPosition::new(ph.x as i32, ph.y as i32),
-        Err(_) => PhysicalPosition::new(0, 0),
+#[derive(Debug, Clone, Default)]
+pub enum PositionArg {
+    Coordinate(i32, i32),
+
+    #[default]
+    Cursor,
+}
+
+impl PositionArg {
+    pub fn parse(str: &str) -> Result<Self, ParseIntError> {
+        let mut pairs = str.split(',');
+
+        let x = pairs.next().unwrap_or_default();
+        let y = pairs.next().unwrap_or_default();
+
+        if x.is_empty() || y.is_empty() {
+            return Ok(Self::Cursor);
+        }
+
+        let x = match x.parse::<i32>() {
+            Ok(x) => x,
+            Err(_) => {
+                return Ok(Self::Cursor);
+            }
+        };
+
+        let y = match y.parse::<i32>() {
+            Ok(y) => y,
+            Err(_) => {
+                return Ok(Self::Cursor);
+            }
+        };
+
+        Ok(Self::Coordinate(x, y))
+    }
+
+    /// convert to wry position
+    pub fn to_wry_position<T>(&self, x: T) -> PhysicalPosition<i32>
+        where T: FnOnce() -> Result<PhysicalPosition<f64>, ExternalError>
+    {
+        match self {
+            Self::Coordinate(x, y) => PhysicalPosition::new(*x, *y),
+            Self::Cursor => Self::position_map(x()),
+        }
+    }
+
+    fn position_map(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
+        match pos {
+            Ok(ph) => PhysicalPosition::new(ph.x as i32, ph.y as i32),
+            Err(_) => PhysicalPosition::new(0, 0),
+        }
+    }
+}
+
+impl Args {
+    /// get text. If text is not set, read from clipboard
+    pub fn text(&self) -> String {
+        self.text.clone().unwrap_or(clipboard::read_text().unwrap_or_default())
+    }
+
+    /// get platform
+    pub fn platform(&self) -> String {
+        self.platform.clone()
+    }
+
+    /// If set, the translation will be shown once and the program will exit
+    pub fn run_once(&self) -> bool {
+        self.text.is_some()
+    }
+
+    /// get shortcut to show translation
+    pub fn show(&self) -> &str {
+        self.show.as_str()
+    }
+
+    /// get position
+    pub fn position(&self) -> PositionArg {
+        self.position.clone()
     }
 }
