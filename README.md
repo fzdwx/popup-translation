@@ -20,6 +20,8 @@
 ## 🚀 Getting Started
 
 ```shell
+cargo install popup-translation
+# or 
 cargo install --git https://github.com/fzdwx/popup-translation
 
 # 命令行直接设置翻译文本，只运行一次
