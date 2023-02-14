@@ -1,14 +1,14 @@
-use crate::translation::{get_translator, Translator};
-use clap::{arg, Parser};
-use std::{collections::HashMap, str::FromStr};
+use crate::translation::{ get_translator, Translator };
+use clap::{ arg, Parser };
+use std::{ collections::HashMap, str::FromStr };
 use wry::{
     application::window::WindowId,
     application::{
         accelerator::Accelerator,
-        dpi::{PhysicalPosition, Position},
+        dpi::{ PhysicalPosition, Position },
         error::ExternalError,
-        event::{Event, StartCause, WindowEvent},
-        event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget},
+        event::{ Event, StartCause, WindowEvent },
+        event_loop::{ ControlFlow, EventLoop, EventLoopWindowTarget },
         global_shortcut::ShortcutManager,
         window::WindowBuilder,
     },
@@ -37,10 +37,8 @@ pub struct Args {
 
 impl Args {
     /// get text. If text is not set, read from clipboard
-    pub fn text(&self) -> String {
-        self.text
-            .clone()
-            .unwrap_or(clipboard::read_text().unwrap_or_default())
+    pub fn text(&self) -> Option<String> {
+        self.text.clone()
     }
 
     /// get platform
@@ -66,7 +64,11 @@ fn main() -> wry::Result<()> {
     hotkey_manager.register(shortcut_show.clone()).unwrap();
 
     if args.run_once() {
-        let (id, webview) = show(&event_loop, get_translator(args.platform()), args.text());
+        let text = match args.text() {
+            Some(text) => text,
+            None => { clipboard::read_text().unwrap_or_default() }
+        };
+        let (id, webview) = show(&event_loop, get_translator(args.platform()), text);
         webviews.insert(id, webview);
     }
 
@@ -76,9 +78,7 @@ fn main() -> wry::Result<()> {
         *control_flow = ControlFlow::Wait;
 
         match event {
-            Event::NewEvents(StartCause::Init) => {
-                println!("Popup translation has started!")
-            }
+            Event::NewEvents(StartCause::Init) => { println!("Popup translation has started!") }
             Event::GlobalShortcutEvent(hotkey_id) => {
                 // // remove previous window
                 if let Some(id) = prev_id {
@@ -86,29 +86,31 @@ fn main() -> wry::Result<()> {
                 }
 
                 if hotkey_id == shortcut_show.clone().id() {
-                    let (id, webview) =
-                        show(event_loop, get_translator(args.platform()), args.text());
+                    let text = match args.text() {
+                        Some(text) => text,
+                        None => { clipboard::read_text().unwrap_or_default() }
+                    };
+                    let (id, webview) = show(event_loop, get_translator(args.platform()), text);
                     prev_id = Some(id);
                     webviews.insert(id, webview);
                 }
             }
 
-            Event::WindowEvent {
-                event, window_id, ..
-            } => match event {
-                WindowEvent::CloseRequested => {
-                    webviews.remove(&window_id);
+            Event::WindowEvent { event, window_id, .. } =>
+                match event {
+                    WindowEvent::CloseRequested => {
+                        webviews.remove(&window_id);
 
-                    if args.run_once() {
-                        *control_flow = ControlFlow::Exit
+                        if args.run_once() {
+                            *control_flow = ControlFlow::Exit;
+                        }
+
+                        // if webviews.is_empty() {
+                        //     *control_flow = ControlFlow::Exit
+                        // }
                     }
-
-                    // if webviews.is_empty() {
-                    //     *control_flow = ControlFlow::Exit
-                    // }
+                    _ => (),
                 }
-                _ => (),
-            },
             _ => (),
         }
     });
@@ -117,14 +119,17 @@ fn main() -> wry::Result<()> {
 fn show<T: 'static>(
     event_loop: &EventLoopWindowTarget<T>,
     translator: Box<dyn Translator>,
-    word: String,
+    word: String
 ) -> (WindowId, WebView) {
     #[cfg(target_os = "macos")]
-        let user_agent_string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15";
+    let user_agent_string =
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15";
     #[cfg(target_os = "windows")]
-        let user_agent_string = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
+    let user_agent_string =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
     #[cfg(target_os = "linux")]
-        let user_agent_string = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
+    let user_agent_string =
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
 
     let window = WindowBuilder::new()
         .with_title(translator.name())
