@@ -442,15 +442,14 @@ checksum = "0bd4b30a6560bbd9b4620f4de34c3f14f60848e58a9b7216801afcb4c7b31c3c"
 [[package]]
 name = "enigo"
 version = "0.0.14"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95ce8d7672e87b3155fd5e8a9226276da5c833e15bc879c7b98a78f743b67814"
+source = "git+https://github.com/enigo-rs/enigo#f110c5cfed25eb9fa1febc89a18e67464b9cdec4"
 dependencies = [
  "core-graphics 0.18.0",
  "libc",
  "objc",
  "pkg-config",
  "unicode-segmentation",
- "winapi",
+ "windows 0.44.0",
 ]
 
 [[package]]
@@ -1953,7 +1952,7 @@ dependencies = [
  "tao-macros",
  "unicode-segmentation",
  "uuid",
- "windows",
+ "windows 0.39.0",
  "windows-implement",
  "x11-dl",
 ]
@@ -2208,7 +2207,7 @@ checksum = "b4a769c9f1a64a8734bde70caafac2b96cada12cd4aefa49196b3a386b8b4178"
 dependencies = [
  "webview2-com-macros",
  "webview2-com-sys",
- "windows",
+ "windows 0.39.0",
  "windows-implement",
 ]
 
@@ -2233,7 +2232,7 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror",
- "windows",
+ "windows 0.39.0",
  "windows-bindgen",
  "windows-metadata",
 ]
@@ -2290,6 +2289,15 @@ dependencies = [
  "windows_i686_msvc 0.39.0",
  "windows_x86_64_gnu 0.39.0",
  "windows_x86_64_msvc 0.39.0",
+]
+
+[[package]]
+name = "windows"
+version = "0.44.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e745dab35a0c4c77aa3ce42d595e13d2003d6902d6b08c9ef5fc326d08da12b"
+dependencies = [
+ "windows-targets",
 ]
 
 [[package]]
@@ -2454,7 +2462,7 @@ dependencies = [
  "webkit2gtk",
  "webkit2gtk-sys",
  "webview2-com",
- "windows",
+ "windows 0.39.0",
  "windows-implement",
 ]
 

@@ -67,7 +67,6 @@ fn main() -> wry::Result<()> {
         );
         webviews.insert(id, webview);
     }
-
     event_loop.run(move |event, event_loop, control_flow| {
         let args = args.clone();
 
@@ -208,7 +207,7 @@ impl PositionArg {
 impl Args {
     /// get text. If text is not set, read from clipboard
     pub fn text(&self) -> String {
-        self.text.clone().unwrap_or(clipboard::read_text().unwrap_or_default())
+        self.text.clone().unwrap_or_else(|| clipboard::read_text().unwrap())
     }
 
     /// get platform
