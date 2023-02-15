@@ -212,7 +212,7 @@ impl Args {
     pub fn text(&self) -> String {
         self.text
             .clone()
-            .unwrap_or(clipboard::read_text().unwrap_or_default())
+            .unwrap_or_else(|| clipboard::read_text().unwrap_or_default())
     }
 
     /// get platform
