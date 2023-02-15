@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.3 2023/02/15
+
+1. Fix windows command line text parse error https://github.com/fzdwx/popup-translation/pull/8
+2. Upgrade wry to `0.27.0`
+
 ## v0.2.2 2023/02/14
 
 1. Support read from selection Windows(Simulate 'ctrl c' once before reading the contents of the
