@@ -209,7 +209,7 @@ impl PositionArg {
 impl Args {
     /// get text. If text is not set, read from clipboard
     pub fn text(&self) -> String {
-        self.text.clone().unwrap_or(clipboard::read_text().unwrap_or_default())
+        self.text.clone().unwrap_or_else(|| clipboard::read_text().unwrap_or_default())
     }
 
     /// get platform
