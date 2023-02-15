@@ -10,6 +10,7 @@ categories = ["command-line-utilities", "translation"]
 readme = "README.md"
 license = "MIT"
 license-file = "LICENSE.txt"
+default-run = "fanyi"
 
 [[bin]]
 name = "fanyi"
