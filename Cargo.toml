@@ -10,6 +10,7 @@ categories = ["command-line-utilities", "translation"]
 readme = "README.md"
 license = "MIT"
 license-file = "LICENSE.txt"
+default-run = "fanyi"
 
 [[bin]]
 name = "fanyi"
@@ -27,4 +28,5 @@ wry = "0.26.0"
 x11-clipboard = "0.7.0"
 
 [target.'cfg(windows)'.dependencies]
+#enigo = "0.0.14"
 enigo = { git = "https://github.com/enigo-rs/enigo" }

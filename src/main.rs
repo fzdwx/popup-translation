@@ -56,7 +56,6 @@ fn main() -> wry::Result<()> {
 
     let mut hotkey_manager = ShortcutManager::new(&event_loop);
     let shortcut_show = Accelerator::from_str(args.show()).unwrap();
-    hotkey_manager.register(shortcut_show.clone()).unwrap();
 
     if args.run_once() {
         let (id, webview) = show(
@@ -66,6 +65,8 @@ fn main() -> wry::Result<()> {
             args.position()
         );
         webviews.insert(id, webview);
+    } else {
+        hotkey_manager.register(shortcut_show.clone()).unwrap();
     }
     event_loop.run(move |event, event_loop, control_flow| {
         let args = args.clone();
