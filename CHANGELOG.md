@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.4 2023/02/18
+
+1. Add more Position options `PresetPosition`
+    - --Position=top-left, top-center , top-right, bottom-left, bottom-center , bottom-right, center
+    - --Position=tl, tc, tr, bl, bc, br, c
+2. Pin `x11-clipboard` under linux
+
 ## v0.2.3 2023/02/15
 
 1. Fix windows command line text parse error https://github.com/fzdwx/popup-translation/pull/8

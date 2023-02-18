@@ -2,6 +2,7 @@ use crate::translation::{get_translator, Translator};
 use clap::{arg, Parser};
 use std::num::ParseIntError;
 use std::{collections::HashMap, str::FromStr};
+use wry::application::platform::unix::EventLoopWindowTargetExtUnix;
 use wry::{
     application::window::WindowId,
     application::{
@@ -43,6 +44,14 @@ pub struct Args {
     ///
     /// --position=10,10   => x=10, y=10
     /// --position=123,asd => cursor position
+    /// --position=cursor  => cursor position
+    /// --position=tr      => top right
+    /// --position=tl      => top left
+    /// --position=tc      => top center
+    /// --position=c       => center
+    /// --position=br      => bottom right
+    /// --position=bc      => bottom center
+    /// --position=bl      => bottom left
     #[arg(long, verbatim_doc_comment, value_parser = PositionArg::parse, default_value = "cursor")]
     position: PositionArg,
 }
@@ -135,9 +144,22 @@ fn show<T: 'static>(
         .with_inner_size(translator.inner_size())
         .with_resizable(false)
         .with_focused(true)
-        .with_position(position.to_wry_position(|| event_loop.cursor_position()))
+        // .with_position(position.to_wry_position(|| event_loop.cursor_position()))
         .build(event_loop)
         .unwrap();
+
+    let windows_size = if let Some(monitor) = window.current_monitor() {
+        let size = monitor.size();
+        (size.width as i32, size.height as i32)
+    } else {
+        (0, 0)
+    };
+
+    window.set_outer_position(position.to_wry_position(
+        || event_loop.cursor_position(),
+        windows_size,
+        translator.size(),
+    ));
 
     let window_id = window.id();
     let webview = WebViewBuilder::new(window)
@@ -152,17 +174,68 @@ fn show<T: 'static>(
     (window_id, webview)
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub enum PositionArg {
     Coordinate(i32, i32),
 
     #[default]
     Cursor,
+
+    Preset(PresetPosition),
+}
+
+/// Preset position
+///
+/// top-left tl
+/// top-center tc
+/// top-right tr
+/// bottom-left bl
+/// bottom-right br
+#[derive(Debug, Clone, Default, PartialEq)]
+pub enum PresetPosition {
+    /// top-left tl
+    TopLeft,
+    /// top-center tc
+    #[default]
+    TopRight,
+    /// top-right tr
+    TopCenter,
+    /// center c
+    Center,
+    /// bottom-left bl
+    BottomLeft,
+    /// bottom-center bc
+    BottomCenter,
+    /// bottom-right br
+    BottomRight,
 }
 
 impl PositionArg {
     pub fn parse(str: &str) -> Result<Self, ParseIntError> {
+        if str == "top-left" || str == "tl" {
+            return Ok(Self::Preset(PresetPosition::TopLeft));
+        }
+        if str == "top-center" || str == "tc" {
+            return Ok(Self::Preset(PresetPosition::TopCenter));
+        }
+        if str == "top-right" || str == "tr" {
+            return Ok(Self::Preset(PresetPosition::TopRight));
+        }
+
+        if str == "bottom-left" || str == "bl" {
+            return Ok(Self::Preset(PresetPosition::BottomLeft));
+        }
+        if str == "bottom-center" || str == "bc" {
+            return Ok(Self::Preset(PresetPosition::BottomCenter));
+        }
+        if str == "bottom-right" || str == "br" {
+            return Ok(Self::Preset(PresetPosition::BottomRight));
+        }
+
         let mut pairs = str.split(',');
+        if pairs.clone().count() != 2 {
+            return Ok(Self::Cursor);
+        }
 
         let x = pairs.next().unwrap_or_default();
         let y = pairs.next().unwrap_or_default();
@@ -189,13 +262,53 @@ impl PositionArg {
     }
 
     /// convert to wry position
-    pub fn to_wry_position<T>(&self, x: T) -> PhysicalPosition<i32>
+    pub fn to_wry_position<T>(
+        &self,
+        current_cursor_fn: T,
+        windows_size: (i32, i32),
+        translator_window_size: (u32, u32),
+    ) -> PhysicalPosition<i32>
     where
         T: FnOnce() -> Result<PhysicalPosition<f64>, ExternalError>,
     {
+        let translator_window_size = (
+            translator_window_size.0 as i32,
+            translator_window_size.1 as i32,
+        );
         match self {
             Self::Coordinate(x, y) => PhysicalPosition::new(*x, *y),
-            Self::Cursor => Self::position_map(x()),
+            Self::Cursor => Self::position_map(current_cursor_fn()),
+            Self::Preset(p) => match p {
+                PresetPosition::TopLeft => PhysicalPosition::new(0, 0),
+                PresetPosition::TopCenter => {
+                    let (w, _) = windows_size;
+                    let (tw, _) = translator_window_size;
+                    PhysicalPosition::new((w - tw) / 2, 0)
+                }
+                PresetPosition::TopRight => {
+                    let (w, _) = windows_size;
+                    let (tw, _) = translator_window_size;
+                    PhysicalPosition::new(w - tw, 0)
+                }
+                PresetPosition::Center => {
+                    let (w, h) = windows_size;
+                    let (tw, th) = translator_window_size;
+                    PhysicalPosition::new((w + tw) / 2, (h - th) / 2)
+                }
+                PresetPosition::BottomLeft => {
+                    let (_, h) = windows_size;
+                    PhysicalPosition::new(0, h)
+                }
+                PresetPosition::BottomCenter => {
+                    let (w, h) = windows_size;
+                    let (tw, th) = translator_window_size;
+                    PhysicalPosition::new((w - tw) / 2, h - th)
+                }
+                PresetPosition::BottomRight => {
+                    let (w, h) = windows_size;
+                    PhysicalPosition::new(w, h)
+                }
+            },
         }
     }
 
@@ -233,5 +346,52 @@ impl Args {
     /// get position
     pub fn position(&self) -> PositionArg {
         self.position.clone()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_position_arg_parse() {
+        let pos = PositionArg::parse("1,2").unwrap();
+        assert_eq!(pos, PositionArg::Coordinate(1, 2));
+
+        let pos = PositionArg::parse("1,2,3").unwrap();
+        assert_eq!(pos, PositionArg::Cursor);
+
+        let pos = PositionArg::parse("1").unwrap();
+        assert_eq!(pos, PositionArg::Cursor);
+
+        let pos = PositionArg::parse("").unwrap();
+        assert_eq!(pos, PositionArg::Cursor);
+
+        let pos = PositionArg::parse("top-left").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::TopLeft));
+
+        let pos = PositionArg::parse("tl").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::TopLeft));
+
+        let pos = PositionArg::parse("top-right").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::TopRight));
+
+        let pos = PositionArg::parse("tr").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::TopRight));
+
+        let pos = PositionArg::parse("bottom-left").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::BottomLeft));
+
+        let pos = PositionArg::parse("bl").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::BottomLeft));
+
+        let pos = PositionArg::parse("bottom-right").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::BottomRight));
+
+        let pos = PositionArg::parse("br").unwrap();
+        assert_eq!(pos, PositionArg::Preset(PresetPosition::BottomRight));
+
+        let pos = PositionArg::parse("br,1").unwrap();
+        assert_eq!(pos, PositionArg::Cursor);
     }
 }

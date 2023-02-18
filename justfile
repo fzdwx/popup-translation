@@ -6,6 +6,10 @@ run args: release
 rund: release
     ./target/release/fanyi
 
+test:
+  cargo test
+
+
 
 release:
   cargo build --release
