@@ -1,9 +1,9 @@
-use crate::translation::Translator;
+use crate::translation::WebViewTranslator;
 
 #[derive(Copy, Clone)]
 pub struct Youglish {}
 
-impl Translator for Youglish {
+impl WebViewTranslator for Youglish {
     fn name(&self) -> String {
         "youglish".into()
     }

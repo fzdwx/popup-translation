@@ -1,9 +1,9 @@
-use crate::translation::Translator;
+use crate::translation::WebViewTranslator;
 
 #[derive(Copy, Clone)]
 pub struct Dictcn {}
 
-impl Translator for Dictcn {
+impl WebViewTranslator for Dictcn {
     fn name(&self) -> String {
         "dictcn".into()
     }

@@ -91,7 +91,7 @@ fn main() -> wry::Result<()> {
 
 fn show<T: 'static>(
     event_loop: &EventLoopWindowTarget<T>,
-    translator: Box<dyn Translator>,
+    translator: Translator,
     text: String,
     position: PositionArg,
 ) -> (WindowId, WebView) {
@@ -125,14 +125,20 @@ fn show<T: 'static>(
     ));
 
     let window_id = window.id();
+
     let webview = WebViewBuilder::new(window)
         .unwrap()
-        .with_url(translator.url(text).as_str())
-        .unwrap()
-        .with_user_agent(user_agent_string)
-        .with_initialization_script(translator.js_code().as_str())
-        .build()
-        .unwrap();
+        .with_user_agent(user_agent_string);
+
+    let webview = match translator {
+        Translator::WebView(translator) => webview
+            .with_url(translator.url(text).as_str())
+            .unwrap()
+            .with_initialization_script(translator.js_code().as_str())
+            .build(),
+        Translator::Html => webview.build(),
+    }
+    .unwrap();
 
     (window_id, webview)
 }

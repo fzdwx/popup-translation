@@ -1,9 +1,9 @@
-use crate::translation::Translator;
+use crate::translation::WebViewTranslator;
 
 #[derive(Copy, Clone)]
 pub struct Bing {}
 
-impl Translator for Bing {
+impl WebViewTranslator for Bing {
     fn name(&self) -> String {
         "bing".into()
     }

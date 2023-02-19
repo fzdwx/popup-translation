@@ -1,9 +1,9 @@
-use crate::translation::Translator;
+use crate::translation::WebViewTranslator;
 
 #[derive(Copy, Clone)]
 pub struct YouDao {}
 
-impl Translator for YouDao {
+impl WebViewTranslator for YouDao {
     fn name(&self) -> String {
         "youdao".into()
     }

@@ -9,27 +9,48 @@ use crate::{
 };
 use wry::application::dpi::LogicalSize;
 
-pub trait Translator {
-    fn name(&self) -> String;
-    fn url(&self, text: String) -> String;
-    fn js_code(&self) -> String;
+pub enum Translator {
+    WebView(Box<dyn WebViewTranslator>),
+    Html,
+}
 
-    fn inner_size(&self) -> LogicalSize<u32> {
+impl Translator {
+    pub fn name(&self) -> String {
+        match self {
+            Translator::WebView(translator) => translator.name(),
+            Translator::Html => "html".into(), // todo
+        }
+    }
+
+    pub fn size(&self) -> (u32, u32) {
+        match self {
+            Translator::WebView(translator) => translator.size(),
+            Translator::Html => (600, 400), // todo
+        }
+    }
+
+    pub fn inner_size(&self) -> LogicalSize<u32> {
         let (w, h) = self.size();
         LogicalSize::new(w, h)
     }
+}
 
+pub trait WebViewTranslator {
+    fn name(&self) -> String;
     fn size(&self) -> (u32, u32) {
         (600, 400)
     }
+
+    fn url(&self, text: String) -> String;
+    fn js_code(&self) -> String;
 }
 
-pub fn get_translator(name: String) -> Box<dyn Translator> {
+pub fn get_translator(name: String) -> Translator {
     match name.as_str() {
-        "youdao" => Box::new(YouDao {}),
-        "dictcn" => Box::new(Dictcn {}),
-        "youglish" => Box::new(Youglish {}),
-        "bing" => Box::new(Bing {}),
-        _ => Box::new(Bing {}),
+        "youdao" => Translator::WebView(Box::new(YouDao {})),
+        "dictcn" => Translator::WebView(Box::new(Dictcn {})),
+        "youglish" => Translator::WebView(Box::new(Youglish {})),
+        "bing" => Translator::WebView(Box::new(Bing {})),
+        _ => Translator::WebView(Box::new(Bing {})),
     }
 }
