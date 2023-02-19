@@ -1,13 +1,12 @@
 mod bing;
+mod default_api;
 mod dictcn;
 mod youdao;
 mod youglish;
-mod default_api;
 
 use crate::{
-    translation::bing::Bing, translation::dictcn::Dictcn, translation::youdao::YouDao,
-    translation::youglish::Youglish,
-    translation::default_api::DefaultApiTranslator,
+    translation::bing::Bing, translation::default_api::DefaultApiTranslator,
+    translation::dictcn::Dictcn, translation::youdao::YouDao, translation::youglish::Youglish,
 };
 use wry::application::dpi::LogicalSize;
 use wry::webview::{WebView, WebViewBuilder};
@@ -17,7 +16,7 @@ pub enum Translator {
     /// load specific url and run js code clean view with translate
     Url(Box<dyn UrlTranslator>),
     /// request api to translate
-    Api(Box<dyn GenericTranslator>),
+    Api(Box<dyn ApiTranslator>),
 }
 
 impl Translator {
@@ -38,16 +37,15 @@ impl Translator {
     pub fn build_webview(&self, webview: WebViewBuilder, text: String) -> WebView {
         return match self {
             Translator::Url(translator) => webview
-                .with_url(translator.translate(text).as_str())
+                .with_url(translator.url(text).as_str())
                 .unwrap()
                 .with_initialization_script(translator.js_code().as_str())
                 .build(),
-            Translator::Api(translator) => webview
-                .with_html(translator.translate(text))
-                .unwrap()
-                .build(),
+            Translator::Api(translator) => {
+                webview.with_html(translator.html(text)).unwrap().build()
+            }
         }
-            .unwrap();
+        .unwrap();
     }
 
     pub fn inner_size(&self) -> LogicalSize<u32> {
@@ -61,15 +59,17 @@ pub trait GenericTranslator {
     fn size(&self) -> (u32, u32) {
         (600, 400)
     }
-
-    /// translate text
-    fn translate(&self, text: String) -> String;
 }
 
 pub trait UrlTranslator: GenericTranslator {
     fn js_code(&self) -> String;
+    /// format url
+    fn url(&self, text: String) -> String;
 }
 
+pub trait ApiTranslator: GenericTranslator {
+    fn html(&self, text: String) -> String;
+}
 
 pub fn get_translator(name: String) -> Translator {
     match name.as_str() {
