@@ -130,15 +130,5 @@ fn show<T: 'static>(
         .unwrap()
         .with_user_agent(user_agent_string);
 
-    let webview = match translator {
-        Translator::WebView(translator) => webview
-            .with_url(translator.url(text).as_str())
-            .unwrap()
-            .with_initialization_script(translator.js_code().as_str())
-            .build(),
-        Translator::Html => webview.build(),
-    }
-    .unwrap();
-
-    (window_id, webview)
+    (window_id, translator.build_webview(webview, text))
 }

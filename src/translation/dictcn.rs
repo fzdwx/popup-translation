@@ -1,17 +1,19 @@
-use crate::translation::WebViewTranslator;
+use crate::translation::{GenericTranslator, UrlTranslator};
 
 #[derive(Copy, Clone)]
 pub struct Dictcn {}
 
-impl WebViewTranslator for Dictcn {
+impl GenericTranslator for Dictcn {
     fn name(&self) -> String {
         "dictcn".into()
     }
 
-    fn url(&self, word: String) -> String {
-        format!("http://dict.cn/{word}")
+    fn translate(&self, text: String) -> String {
+        format!("http://dict.cn/{text}")
     }
+}
 
+impl UrlTranslator for Dictcn {
     fn js_code(&self) -> String {
         include_str!("../js/dictcn.js").to_string()
     }
