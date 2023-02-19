@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.0 2023/02/19
+
+1. Support `openai` translation `fanyi -p=ai -k=xxx hello`, the key is required
+2. Refactor `translation`, add `Api` and `Url` type
+3. Fix position bug (`center` position is not correct)
+
 ## v0.2.4 2023/02/18
 
 1. Add more Position options `PresetPosition`

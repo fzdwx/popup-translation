@@ -1,12 +1,14 @@
+mod ai_gpt;
 mod bing;
 mod default_api;
 mod dictcn;
 mod youdao;
 mod youglish;
 
+use crate::translation::ai_gpt::AiGPT;
 use crate::{
-    translation::bing::Bing, translation::default_api::DefaultApiTranslator,
-    translation::dictcn::Dictcn, translation::youdao::YouDao, translation::youglish::Youglish,
+    translation::bing::Bing, translation::dictcn::Dictcn, translation::youdao::YouDao,
+    translation::youglish::Youglish,
 };
 use wry::application::dpi::LogicalSize;
 use wry::webview::{WebView, WebViewBuilder};
@@ -71,13 +73,13 @@ pub trait ApiTranslator: GenericTranslator {
     fn html(&self, text: String) -> String;
 }
 
-pub fn get_translator(name: String) -> Translator {
+pub fn get_translator(name: String, key: Option<String>) -> Result<Translator, String> {
     match name.as_str() {
-        "youdao" => Translator::Url(Box::new(YouDao {})),
-        "dictcn" => Translator::Url(Box::new(Dictcn {})),
-        "youglish" => Translator::Url(Box::new(Youglish {})),
-        "bing" => Translator::Url(Box::new(Bing {})),
-        "api" => Translator::Api(Box::new(DefaultApiTranslator {})),
-        _ => Translator::Url(Box::new(Bing {})),
+        "youdao" => Ok(Translator::Url(Box::new(YouDao {}))),
+        "dictcn" => Ok(Translator::Url(Box::new(Dictcn {}))),
+        "youglish" => Ok(Translator::Url(Box::new(Youglish {}))),
+        "bing" => Ok(Translator::Url(Box::new(Bing {}))),
+        "ai" => AiGPT::new(key).map(|t| Translator::Api(Box::new(t))),
+        _ => Ok(Translator::Url(Box::new(Bing {}))),
     }
 }

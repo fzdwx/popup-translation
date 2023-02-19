@@ -17,6 +17,7 @@
     2. [Youdao](https://www.youdao.com/)
     3. [YouGlish](https://youglish.com/)
     4. [Dict](https://dict.cn/)
+    5. [openai](https://openai.com/) `fanyi -p ai --key=xxx hello`
 
 ## 🚀 Getting Started
 

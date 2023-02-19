@@ -1,4 +1,5 @@
 use crate::clipboard;
+use crate::translation::{get_translator, Translator};
 use clap::{arg, Parser};
 use std::num::ParseIntError;
 use wry::{application::dpi::PhysicalPosition, application::error::ExternalError};
@@ -10,9 +11,10 @@ pub struct Args {
     /// Text to be translated, if is None, then is daemon mode.
     text: Option<String>,
 
-    /// Platform to be used, available platforms are: bing, dictcn, youdao, youglish
+    /// Platform to be used, available platforms are: bing, dictcn, youdao, youglish, ai(openai gpt)
     ///
     /// --platform=bing
+    /// -p ai
     #[arg(short, long, default_value = "bing")]
     platform: String,
 
@@ -36,6 +38,14 @@ pub struct Args {
     /// --position=bl      => bottom left
     #[arg(long, verbatim_doc_comment, value_parser = PositionArg::parse, default_value = "cursor")]
     position: PositionArg,
+
+    /// call the translation api,you need to provide the api key.
+    ///
+    /// e.g: ai: -p=ai -k=xxx
+    ///
+    /// --key=xxx
+    #[arg(short, long)]
+    key: Option<String>,
 }
 
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -183,9 +193,13 @@ impl Args {
             .unwrap_or_else(|| clipboard::read_text().unwrap_or_default())
     }
 
-    /// get platform
-    pub fn platform(&self) -> String {
-        self.platform.clone()
+    pub fn translator(&self) -> Translator {
+        match get_translator(self.platform.clone(), self.key.clone()) {
+            Ok(t) => t,
+            Err(err) => {
+                panic!("Failed to get translator: {}", err)
+            }
+        }
     }
 
     /// If set, the translation will be shown once and the program will exit

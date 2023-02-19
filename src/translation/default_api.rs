@@ -1,5 +1,4 @@
-use crate::translation::ApiTranslator;
-use crate::translation::GenericTranslator;
+use crate::{translation::ApiTranslator, translation::GenericTranslator};
 
 pub struct DefaultApiTranslator {}
 

@@ -1,5 +1,5 @@
 use crate::args::{Args, PositionArg};
-use crate::translation::{get_translator, Translator};
+use crate::translation::Translator;
 use clap::Parser;
 use std::{collections::HashMap, str::FromStr};
 use wry::{
@@ -30,12 +30,7 @@ fn main() -> wry::Result<()> {
     let shortcut_show = Accelerator::from_str(args.show()).unwrap();
 
     if args.run_once() {
-        let (id, webview) = show(
-            &event_loop,
-            get_translator(args.platform()),
-            args.text(),
-            args.position(),
-        );
+        let (id, webview) = show(&event_loop, args.translator(), args.text(), args.position());
         webviews.insert(id, webview);
     } else {
         hotkey_manager.register(shortcut_show.clone()).unwrap();
@@ -57,12 +52,8 @@ fn main() -> wry::Result<()> {
                 }
 
                 if hotkey_id == shortcut_show.clone().id() {
-                    let (id, webview) = show(
-                        event_loop,
-                        get_translator(args.platform()),
-                        args.text(),
-                        args.position(),
-                    );
+                    let (id, webview) =
+                        show(event_loop, args.translator(), args.text(), args.position());
                     prev_id = Some(id);
                     webviews.insert(id, webview);
                 }
@@ -107,6 +98,7 @@ fn show<T: 'static>(
         .with_inner_size(translator.inner_size())
         .with_resizable(false)
         .with_focused(true)
+        .with_visible(false)
         // .with_position(position.to_wry_position(|| event_loop.cursor_position()))
         .build(event_loop)
         .unwrap();
@@ -130,5 +122,8 @@ fn show<T: 'static>(
         .unwrap()
         .with_user_agent(user_agent_string);
 
-    (window_id, translator.build_webview(webview, text))
+    let web_view = translator.build_webview(webview, text);
+    web_view.window().set_visible(true);
+
+    (window_id, web_view)
 }
