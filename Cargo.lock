@@ -1708,6 +1708,7 @@ dependencies = [
  "clap",
  "enigo",
  "reqwest",
+ "serde",
  "serde_json",
  "wry",
  "x11-clipboard",

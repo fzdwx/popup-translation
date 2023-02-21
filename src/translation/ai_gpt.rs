@@ -59,7 +59,7 @@ fn request(text: String, api_key: String) -> Result<String, String> {
             "model": "text-davinci-003",
             "prompt":prompt.join(" "),
         }))
-        .header("Authorization", format!("Bearer {}", api_key))
+        .header("Authorization", format!("Bearer {api_key}"))
         .send()
         .unwrap();
 
@@ -71,6 +71,6 @@ fn request(text: String, api_key: String) -> Result<String, String> {
         let text = body["choices"][0]["text"].as_str().unwrap().to_string();
         Ok(text)
     } else {
-        Err(format!("Error: {}", status_code))
+        Err(format!("Error: {status_code}"))
     }
 }

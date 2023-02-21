@@ -2,6 +2,7 @@ mod ai_gpt;
 mod bing;
 mod default_api;
 mod dictcn;
+mod google_api;
 mod youdao;
 mod youglish;
 
@@ -12,6 +13,7 @@ use crate::{
 };
 use wry::application::dpi::LogicalSize;
 use wry::webview::{WebView, WebViewBuilder};
+use crate::translation::google_api::GoogleApi;
 
 /// Translator
 pub enum Translator {
@@ -47,7 +49,7 @@ impl Translator {
                 webview.with_html(translator.html(text)).unwrap().build()
             }
         }
-        .unwrap();
+            .unwrap();
     }
 
     pub fn inner_size(&self) -> LogicalSize<u32> {
@@ -80,6 +82,7 @@ pub fn get_translator(name: String, key: Option<String>) -> Result<Translator, S
         "youglish" => Ok(Translator::Url(Box::new(Youglish {}))),
         "bing" => Ok(Translator::Url(Box::new(Bing {}))),
         "ai" => AiGPT::new(key).map(|t| Translator::Api(Box::new(t))),
+        "google" => Ok(Translator::Api(Box::new(GoogleApi {}))),
         _ => Ok(Translator::Url(Box::new(Bing {}))),
     }
 }
