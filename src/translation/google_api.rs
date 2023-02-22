@@ -62,12 +62,31 @@ impl ApiTranslator for GoogleApi {
     }
 }
 
+/// 判断一句话是中文多还是英文多
+fn is_chinese(text: &str) -> bool {
+    let mut count = 0;
+    for c in text.chars() {
+        if c.is_ascii_alphabetic() {
+            count += 1;
+        }
+    }
+    count < text.len() / 2
+}
+
+/// 根据语言判断翻译的语言
+fn get_tl(text: &str) -> String {
+    if is_chinese(text) {
+        "en".to_string()
+    } else {
+        "zh-CN".to_string()
+    }
+}
+
 /// request google translate api
 fn request(text: String) -> Result<TranslationResponse, Error> {
-    let url = format!(
-        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=zh-CN&dj=1&dt=t&dt=bd&dt=qc&dt=rm&dt=ex&dt=at&dt=ss&dt=rw&dt=ld&q={}&tk=855086.855086",
-        text
-    );
+    let tl = get_tl(&text);
+    let query = format!("?client=gtx&sl=auto&tl={tl}&dj=1&dt=t&dt=bd&dt=qc&dt=rm&dt=ex&dt=at&dt=ss&dt=rw&dt=ld&q={text}");
+    let url = format!("https://translate.googleapis.com/translate_a/single{query}");
     reqwest::blocking::Client::new()
         .get(url)
         .send()?
@@ -78,10 +97,10 @@ fn request(text: String) -> Result<TranslationResponse, Error> {
 struct TranslationResponse {
     sentences: Vec<Sentence>,
     src: String,
-    alternative_translations: Vec<AlternativeTranslation>,
+    alternative_translations: Option<Vec<AlternativeTranslation>>,
     confidence: f32,
     ld_result: LDResult,
-    examples: Examples,
+    examples: Option<Examples>,
 }
 
 impl TranslationResponse {
@@ -99,7 +118,6 @@ impl TranslationResponse {
         }
     }
 }
-
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Sentence {

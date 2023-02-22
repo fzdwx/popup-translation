@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.1 2023/02/1
+
+1. Support google translate `fanyi -p=google hello`
+
 ## v0.3.0 2023/02/19
 
 1. Support `openai` translation `fanyi -p=ai -k=xxx hello`, the key is required
