@@ -38,6 +38,17 @@ impl Translator {
         }
     }
 
+    pub fn icon(&self) -> &'static [u8] {
+        match self {
+            Translator::Url(t) => {
+                t.icon()
+            }
+            Translator::Api(t) => {
+                t.icon()
+            }
+        }
+    }
+
     pub fn build_webview(&self, webview: WebViewBuilder, text: String) -> WebView {
         return match self {
             Translator::Url(translator) => webview
@@ -46,7 +57,9 @@ impl Translator {
                 .with_initialization_script(translator.js_code().as_str())
                 .build(),
             Translator::Api(translator) => {
-                webview.with_html(translator.html(text)).unwrap().build()
+                webview.with_html(translator.html(text))
+                    .unwrap()
+                    .build()
             }
         }
             .unwrap();
@@ -60,6 +73,9 @@ impl Translator {
 
 pub trait GenericTranslator {
     fn name(&self) -> String;
+    fn icon(&self) -> &'static [u8] {
+        include_bytes!("../asset/empty.png")
+    }
     fn size(&self) -> (u32, u32) {
         (600, 400)
     }
@@ -82,7 +98,7 @@ pub fn get_translator(name: String, key: Option<String>) -> Result<Translator, S
         "youglish" => Ok(Translator::Url(Box::new(Youglish {}))),
         "bing" => Ok(Translator::Url(Box::new(Bing {}))),
         "ai" => AiGPT::new(key).map(|t| Translator::Api(Box::new(t))),
-        "google" => Ok(Translator::Api(Box::new(GoogleApi {}))),
+        "google" => Ok(Translator::Api(Box::new(GoogleApi::new()))),
         _ => Ok(Translator::Url(Box::new(Bing {}))),
     }
 }

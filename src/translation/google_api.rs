@@ -18,45 +18,44 @@ use crate::translation::{ApiTranslator, GenericTranslator};
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
 
-pub struct GoogleApi {}
+
+const ICON: &[u8] = include_bytes!("../asset/google.png");
+
+pub struct GoogleApi {
+    html: String,
+}
+
+impl GoogleApi {
+    pub fn new() -> Self {
+        Self {
+            html: include_str!("../html/google.html").to_string()
+        }
+    }
+}
 
 impl GenericTranslator for GoogleApi {
     fn name(&self) -> String {
         "google".into()
     }
+
+    fn icon(&self) -> &'static [u8] {
+        ICON
+    }
 }
 
 impl ApiTranslator for GoogleApi {
     fn html(&self, text: String) -> String {
+        let html = format!("{}", self.html);
         match request(text) {
             Ok(resp) => {
                 let (orig, trans) = resp.get_info();
-                format!(r#"
-                 <div class="translation">
-                    <div class="translation__title">
-                        <span class="translation__title__name">google:</span>
-                        <span class="translation__title__success">{orig}</span>
-                    </div>
-                    <div class="translation__content">
-                        <div class="translation__content__text">
-                            <span class="translation__content__text__success">{trans}</span>
-                        </div>
-                    </div>
-                "#)
+                html.replace("$orig", orig.as_str())
+                    .replace("$trans", trans.as_str())
+                    .replace("$class", "ok")
             }
             Err(err) => {
-                format!(r#"
-                <div class="translation">
-                    <div class="translation__title">
-                        <span class="translation__title__name">google</span>
-                        <span class="translation__title__error">error</span>
-                    </div>
-                    <div class="translation__content">
-                        <div class="translation__content__text">
-                            <span class="translation__content__text__error">{err}</span>
-                        </div>
-                    </div>
-                "#)
+                html.replace("$err", err.to_string().as_str())
+                    .replace("$class", "err")
             }
         }
     }
@@ -181,5 +180,13 @@ mod tests {
         let res = request("hello".into());
         println!("{:#?}", res);
         // assert!(res.is_ok());
+    }
+
+    #[test]
+    fn test_ico() {
+        // load ./assets/google.ico
+        // to base64
+        let ico = include_str!("../asset/google.txt");
+        println!("{}", ico);
     }
 }

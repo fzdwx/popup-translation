@@ -1,9 +1,14 @@
 #![feature(result_option_inspect)]
 
+extern crate core;
+
+use std::{
+    borrow::Cow,
+    str::FromStr,
+};
 use crate::args::{Args, PositionArg};
 use crate::translation::Translator;
 use clap::Parser;
-use std::str::FromStr;
 use wry::{
     application::window::WindowId,
     application::{
@@ -16,6 +21,7 @@ use wry::{
     webview::WebView,
     webview::WebViewBuilder,
 };
+use wry::http::Response;
 
 mod args;
 mod clipboard;
@@ -55,7 +61,7 @@ fn main() -> wry::Result<()> {
             }
 
             Event::WindowEvent {
-                event,  ..
+                event, ..
             } => match event {
                 WindowEvent::CloseRequested => {
                     _current_webview = None;
@@ -108,10 +114,30 @@ fn show<T: 'static>(
     ));
 
     let window_id = window.id();
+    let icon = translator.icon();
 
     let webview = WebViewBuilder::new(window)
         .unwrap()
-        .with_user_agent(user_agent_string);
+        .with_user_agent(user_agent_string)
+        .with_devtools(true)
+        .with_custom_protocol("wry".into(), move |request| {
+            let uri = request.uri().to_string();
+            let url = uri.strip_prefix("wry://").unwrap().strip_suffix("/").unwrap();
+
+            println!("{}", url);
+            let content = match url {
+                "icon" => { icon }
+                _ => {
+                    b""
+                }
+            };
+
+
+            Response::builder()
+                .status(200)
+                .body(Cow::from(content))
+                .map_err(Into::into)
+        });
 
     let web_view = translator.build_webview(webview, text);
     web_view.window().set_visible(true);
