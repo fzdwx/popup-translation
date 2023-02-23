@@ -1,7 +1,9 @@
+#![feature(result_option_inspect)]
+
 use crate::args::{Args, PositionArg};
 use crate::translation::Translator;
 use clap::Parser;
-use std::{collections::HashMap, str::FromStr};
+use std::str::FromStr;
 use wry::{
     application::window::WindowId,
     application::{
@@ -19,19 +21,18 @@ mod args;
 mod clipboard;
 mod translation;
 
+#[warn(unused_assignments)]
 fn main() -> wry::Result<()> {
     let args: Args = Args::parse();
-    let mut prev_id = None;
-    let mut webviews = HashMap::new();
-
+    let mut _current_webview = None;
     let event_loop = EventLoop::new();
 
     let mut hotkey_manager = ShortcutManager::new(&event_loop);
     let shortcut_show = Accelerator::from_str(args.show()).unwrap();
 
     if args.run_once() {
-        let (id, webview) = show(&event_loop, args.translator(), args.text(), args.position());
-        webviews.insert(id, webview);
+        let (_id, webview) = show(&event_loop, args.translator(), args.text(), args.position());
+        _current_webview = Some(webview);
     } else {
         hotkey_manager.register(shortcut_show.clone()).unwrap();
     }
@@ -46,32 +47,21 @@ fn main() -> wry::Result<()> {
                 println!("Popup translation has started!")
             }
             Event::GlobalShortcutEvent(hotkey_id) => {
-                // remove previous window
-                if let Some(id) = prev_id {
-                    webviews.remove(&id);
-                }
-
                 if hotkey_id == shortcut_show.clone().id() {
-                    let (id, webview) =
+                    let (_id, webview) =
                         show(event_loop, args.translator(), args.text(), args.position());
-                    prev_id = Some(id);
-                    webviews.insert(id, webview);
+                    _current_webview = Some(webview);
                 }
             }
 
             Event::WindowEvent {
-                event, window_id, ..
+                event,  ..
             } => match event {
                 WindowEvent::CloseRequested => {
-                    webviews.remove(&window_id);
-
+                    _current_webview = None;
                     if args.run_once() {
                         *control_flow = ControlFlow::Exit
                     }
-
-                    // if webviews.is_empty() {
-                    //     *control_flow = ControlFlow::Exit
-                    // }
                 }
                 _ => (),
             },
@@ -96,6 +86,7 @@ fn show<T: 'static>(
     let window = WindowBuilder::new()
         .with_title(translator.name())
         .with_inner_size(translator.inner_size())
+        .with_decorations(false)
         .with_resizable(false)
         .with_focused(true)
         .with_visible(false)
