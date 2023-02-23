@@ -13,11 +13,9 @@
 /// -H 'x-client-data: CIW2yQEIo7bJAQipncoBCP3zygEIkqHLAQj8qswBCJr+zAEIwIbNAQ==' \
 /// --compressed
 ///
-
 use crate::translation::{ApiTranslator, GenericTranslator};
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
-
 
 const ICON: &[u8] = include_bytes!("../asset/google.png");
 
@@ -28,7 +26,7 @@ pub struct GoogleApi {
 impl GoogleApi {
     pub fn new() -> Self {
         Self {
-            html: include_str!("../html/google.html").to_string()
+            html: include_str!("../html/google.html").to_string(),
         }
     }
 }
@@ -53,10 +51,9 @@ impl ApiTranslator for GoogleApi {
                     .replace("$trans", trans.as_str())
                     .replace("$class", "ok")
             }
-            Err(err) => {
-                html.replace("$err", err.to_string().as_str())
-                    .replace("$class", "err")
-            }
+            Err(err) => html
+                .replace("$err", err.to_string().as_str())
+                .replace("$class", "err"),
         }
     }
 }
@@ -86,10 +83,7 @@ fn request(text: String) -> Result<TranslationResponse, Error> {
     let tl = get_tl(&text);
     let query = format!("?client=gtx&sl=auto&tl={tl}&dj=1&dt=t&dt=bd&dt=qc&dt=rm&dt=ex&dt=at&dt=ss&dt=rw&dt=ld&q={text}");
     let url = format!("https://translate.googleapis.com/translate_a/single{query}");
-    reqwest::blocking::Client::new()
-        .get(url)
-        .send()?
-        .json()
+    reqwest::blocking::Client::new().get(url).send()?.json()
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -107,10 +101,14 @@ impl TranslationResponse {
         if let Some(sentence) = self.sentences.first() {
             let orig = if let Some(orig) = &sentence.orig {
                 orig.to_string()
-            } else { "".to_string() };
+            } else {
+                "".to_string()
+            };
             let trans = if let Some(trans) = &sentence.trans {
                 trans.to_string()
-            } else { "".to_string() };
+            } else {
+                "".to_string()
+            };
             (orig, trans)
         } else {
             ("".to_string(), "".to_string())
@@ -186,7 +184,7 @@ mod tests {
     fn test_ico() {
         // load ./assets/google.ico
         // to base64
-        let ico = include_str!("../asset/google.txt");
-        println!("{}", ico);
+        // let ico = include_str!("../asset/google.txt");
+        // println!("{}", ico);
     }
 }

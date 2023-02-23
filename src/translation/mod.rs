@@ -7,13 +7,13 @@ mod youdao;
 mod youglish;
 
 use crate::translation::ai_gpt::AiGPT;
+use crate::translation::google_api::GoogleApi;
 use crate::{
     translation::bing::Bing, translation::dictcn::Dictcn, translation::youdao::YouDao,
     translation::youglish::Youglish,
 };
 use wry::application::dpi::LogicalSize;
 use wry::webview::{WebView, WebViewBuilder};
-use crate::translation::google_api::GoogleApi;
 
 /// Translator
 pub enum Translator {
@@ -40,12 +40,8 @@ impl Translator {
 
     pub fn icon(&self) -> &'static [u8] {
         match self {
-            Translator::Url(t) => {
-                t.icon()
-            }
-            Translator::Api(t) => {
-                t.icon()
-            }
+            Translator::Url(t) => t.icon(),
+            Translator::Api(t) => t.icon(),
         }
     }
 
@@ -57,12 +53,10 @@ impl Translator {
                 .with_initialization_script(translator.js_code().as_str())
                 .build(),
             Translator::Api(translator) => {
-                webview.with_html(translator.html(text))
-                    .unwrap()
-                    .build()
+                webview.with_html(translator.html(text)).unwrap().build()
             }
         }
-            .unwrap();
+        .unwrap();
     }
 
     pub fn inner_size(&self) -> LogicalSize<u32> {

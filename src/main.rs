@@ -2,13 +2,11 @@
 
 extern crate core;
 
-use std::{
-    borrow::Cow,
-    str::FromStr,
-};
 use crate::args::{Args, PositionArg};
 use crate::translation::Translator;
 use clap::Parser;
+use std::{borrow::Cow, str::FromStr};
+use wry::http::Response;
 use wry::{
     application::window::WindowId,
     application::{
@@ -21,7 +19,6 @@ use wry::{
     webview::WebView,
     webview::WebViewBuilder,
 };
-use wry::http::Response;
 
 mod args;
 mod clipboard;
@@ -60,9 +57,7 @@ fn main() -> wry::Result<()> {
                 }
             }
 
-            Event::WindowEvent {
-                event, ..
-            } => match event {
+            Event::WindowEvent { event, .. } => match event {
                 WindowEvent::CloseRequested => {
                     _current_webview = None;
                     if args.run_once() {
@@ -122,16 +117,17 @@ fn show<T: 'static>(
         .with_devtools(true)
         .with_custom_protocol("wry".into(), move |request| {
             let uri = request.uri().to_string();
-            let url = uri.strip_prefix("wry://").unwrap().strip_suffix("/").unwrap();
+            let url = uri
+                .strip_prefix("wry://")
+                .unwrap()
+                .strip_suffix("/")
+                .unwrap();
 
             println!("{}", url);
             let content = match url {
-                "icon" => { icon }
-                _ => {
-                    b""
-                }
+                "icon" => icon,
+                _ => b"",
             };
-
 
             Response::builder()
                 .status(200)
