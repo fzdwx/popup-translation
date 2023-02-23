@@ -6,7 +6,7 @@ use crate::args::{Args, PositionArg};
 use crate::translation::Translator;
 use clap::Parser;
 use std::{borrow::Cow, str::FromStr};
-use wry::http::Response;
+use wry::http::{header, Response};
 use wry::{
     application::window::WindowId,
     application::{
@@ -19,6 +19,7 @@ use wry::{
     webview::WebView,
     webview::WebViewBuilder,
 };
+use wry::http::response::Builder;
 
 mod args;
 mod clipboard;
@@ -71,6 +72,8 @@ fn main() -> wry::Result<()> {
     });
 }
 
+const EMPTY: &[u8] = b"HELLO";
+
 fn show<T: 'static>(
     event_loop: &EventLoopWindowTarget<T>,
     translator: Translator,
@@ -88,7 +91,7 @@ fn show<T: 'static>(
         .with_title(translator.name())
         .with_inner_size(translator.inner_size())
         .with_decorations(false)
-        .with_resizable(false)
+        // .with_resizable(false)
         .with_focused(true)
         .with_visible(false)
         // .with_position(position.to_wry_position(|| event_loop.cursor_position()))
@@ -118,19 +121,19 @@ fn show<T: 'static>(
         .with_custom_protocol("wry".into(), move |request| {
             let uri = request.uri().to_string();
             let url = uri
-                .strip_prefix("wry://")
-                .unwrap()
-                .strip_suffix("/")
+                .strip_prefix("wry://dev/")
                 .unwrap();
 
-            println!("{}", url);
-            let content = match url {
-                "icon" => icon,
-                _ => b"",
+            let (content, resp) = match url {
+                "icon" => {
+                    (icon, common_resp("image/png"))
+                }
+                _ => {
+                    (EMPTY, common_resp("text/plain"))
+                }
             };
 
-            Response::builder()
-                .status(200)
+            resp
                 .body(Cow::from(content))
                 .map_err(Into::into)
         });
@@ -139,4 +142,15 @@ fn show<T: 'static>(
     web_view.window().set_visible(true);
 
     (window_id, web_view)
+}
+
+fn common_resp(content_type: &str) -> Builder {
+    Response::builder()
+        .header("Origin", "http://localhost/")
+        .header(header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        .header(header::CONTENT_TYPE, content_type)
+        .header("Access-Control-Request-Method", "*")
+        .header("Access-Control-Allow-Methods", "*")
+        .header("Access-Control-Allow-Headers", "*")
+        .status(200)
 }

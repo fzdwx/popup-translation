@@ -1,6 +1,6 @@
 <style>
     .icon {
-        background-image: url("wry://icon");
+        background-image: url("wry://dev/icon");
         background-size: 48px 48px;
         width: 48px;
         height: 48px;
@@ -16,7 +16,8 @@
 <div class="body">
     <div class="legend">
         <span class="icon"></span>
-
+        <input>
+        <button id="tBtn">翻译</button>
         <div id="success">
             <div> 原文: $orig</div>
             <div> 译文: $trans</div>
@@ -38,6 +39,17 @@
             document.getElementById('error').style.visibility = 'visible';
             document.getElementById('success').style.visibility = 'hidden';
         }
+    }
+
+
+    document.getElementById('tBtn').onclick = function () {
+        fetch('wry://dev/qweqwe', {
+            mode: 'no-cors',
+        }).then(res => {
+            x
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     clear()
