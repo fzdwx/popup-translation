@@ -74,7 +74,7 @@ impl Translator {
 pub trait GenericTranslator {
     fn name(&self) -> String;
     fn icon(&self) -> &'static [u8] {
-        include_bytes!("../asset/empty.png")
+        b""
     }
     fn size(&self) -> (u32, u32) {
         (600, 400)
