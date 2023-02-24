@@ -2,7 +2,6 @@ use crate::clipboard;
 use crate::translation::{get_translator, Translator};
 use clap::{arg, Parser};
 use std::num::ParseIntError;
-use wry::application::monitor::MonitorHandle;
 use wry::{application::dpi::PhysicalPosition, application::error::ExternalError};
 
 /// Popup translation
@@ -133,7 +132,7 @@ impl PositionArg {
         current_cursor_fn: T,
         windows_size: (i32, i32),
         translator_window_size: (u32, u32),
-        current_monitor: Option<MonitorHandle>,
+        start: (i32, i32),
     ) -> PhysicalPosition<i32>
     where
         T: FnOnce() -> Result<PhysicalPosition<f64>, ExternalError>,
@@ -143,14 +142,7 @@ impl PositionArg {
             translator_window_size.1 as i32,
         );
         let (w, h) = windows_size;
-
-        let mut start = if let Some(m) = current_monitor {
-            let pos = m.position();
-
-            (pos.x, pos.y)
-        } else {
-            (0, 0)
-        };
+        let (mut x, mut y) = start;
 
         match self {
             Self::Coordinate(x, y) => PhysicalPosition::new(*x, *y),
@@ -159,35 +151,34 @@ impl PositionArg {
                 match p {
                     PresetPosition::TopLeft => {}
                     PresetPosition::TopCenter => {
-                        start.0 += (w - tw) / 2;
+                        x += (w - tw) / 2;
                     }
                     PresetPosition::TopRight => {
-                        start.0 += w - tw;
+                        x += w - tw;
                     }
                     PresetPosition::Center => {
-                        start.0 += (w - tw) / 2;
-                        start.1 += (h - th) / 2;
+                        x += (w - tw) / 2;
+                        y += (h - th) / 2;
                     }
                     PresetPosition::BottomLeft => {
-                        start.1 += h;
+                        y += h;
                     }
                     PresetPosition::BottomCenter => {
-                        start.0 += (w - tw) / 2;
-                        start.1 += h - th;
+                        x += (w - tw) / 2;
+                        y += h - th;
                     }
                     PresetPosition::BottomRight => {
-                        start.0 += w;
-                        start.1 += h;
+                        x += w;
+                        y += h;
                     }
                 };
 
-                PhysicalPosition::new(start.0, start.1)
+                PhysicalPosition::new(x, y)
             }
         }
     }
 
     fn position_map(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
-        println!("{:?}", pos);
         match pos {
             Ok(ph) => PhysicalPosition::new(ph.x as i32, ph.y as i32),
             Err(_) => PhysicalPosition::new(0, 0),

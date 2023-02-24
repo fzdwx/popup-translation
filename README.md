@@ -8,8 +8,7 @@
 
 1. 利用 wry 提供的网页视图功能实现的弹窗功能
 2. 从剪贴板读取文本并翻译
-    - 在 *Linux(x11)* 下支持所选文本的翻译，即不需要复制到剪贴板(尚不支持**MacOS
-      **) https://github.com/fzdwx/popup-translation/issues/3
+    - 在 *Linux(x11)* 下支持所选文本的翻译，即不需要复制到剪贴板(尚不支持**MacOS**) <https://github.com/fzdwx/popup-translation/issues/3>
     - 在 *Windows* 模拟一次 `ctrl+c` 后，在读取剪贴板的内容
 3. 从命令行传入文本进行翻译
 4. 支持多种翻译平台
@@ -67,16 +66,16 @@ end, { desc = "qwe" })
 ## 🦹 TODO
 
 - [x] 弹窗位置选项(当前是固定获取鼠标附近)
-    - --Position=top-left, top-center , top-right, bottom-left, bottom-center , bottom-right, center
-    - --Position=tl, tc, tr, bl, bc, br, c
+  - --Position=top-left, top-center , top-right, bottom-left, bottom-center , bottom-right, center
+  - --Position=tl, tc, tr, bl, bc, br, c
 - [ ] 热键
-    - [x] open
-        - [x] 从粘贴板读取数据
-        - [ ] 读取鼠标选择的数据
-            - [x] Linux
-            - [x] Windows
-            - [ ] MacOS
-    - [ ] close
+  - [x] open
+    - [x] 从粘贴板读取数据
+    - [ ] 读取鼠标选择的数据
+      - [x] Linux
+      - [x] Windows
+      - [ ] MacOS
+  - [ ] close
 - [ ] 全程只使用一个 webview
 
 ## 📖 Thanks

@@ -2,6 +2,7 @@ use crate::args::{Args, PositionArg};
 use crate::translation::Translator;
 use clap::Parser;
 use std::{borrow::Cow, str::FromStr};
+use wry::http::response::Builder;
 use wry::http::{header, Response};
 use wry::{
     application::window::WindowId,
@@ -15,7 +16,6 @@ use wry::{
     webview::WebView,
     webview::WebViewBuilder,
 };
-use wry::http::response::Builder;
 
 mod args;
 mod clipboard;
@@ -23,7 +23,7 @@ mod translation;
 
 #[warn(unused_assignments)]
 fn main() -> wry::Result<()> {
-    let args: Args = Args::parse();
+    let args  = Args::parse();
     let mut _current_webview = None;
     let event_loop = EventLoop::new();
 
@@ -90,22 +90,24 @@ fn show<T: 'static>(
         .with_resizable(false)
         .with_focused(true)
         .with_visible(false)
-        // .with_position(position.to_wry_position(|| event_loop.cursor_position()))
         .build(event_loop)
         .unwrap();
 
-    let windows_size = if let Some(monitor) = window.current_monitor() {
+    let size_and_pos = if let Some(monitor) = window.current_monitor() {
         let size = monitor.size();
-        (size.width as i32, size.height as i32)
+        let pos = monitor.position();
+
+        println!("{:?}", pos);
+        ((size.width as i32, size.height as i32), (pos.x, pos.y))
     } else {
-        (0, 0)
+        ((0, 0), (0, 0))
     };
 
     window.set_outer_position(position.to_wry_position(
         || event_loop.cursor_position(),
-        windows_size,
+        size_and_pos.0,
         translator.size(),
-        window.current_monitor()
+        size_and_pos.1,
     ));
 
     let window_id = window.id();
@@ -117,22 +119,14 @@ fn show<T: 'static>(
         .with_devtools(true)
         .with_custom_protocol("wry".into(), move |request| {
             let uri = request.uri().to_string();
-            let url = uri
-                .strip_prefix("wry://dev/")
-                .unwrap();
+            let url = uri.strip_prefix("wry://dev/").unwrap();
 
             let (content, resp) = match url {
-                "icon" => {
-                    (icon, common_resp("image/png"))
-                }
-                _ => {
-                    (EMPTY, common_resp("text/plain"))
-                }
+                "icon" => (icon, common_resp("image/png")),
+                _ => (EMPTY, common_resp("text/plain")),
             };
 
-            resp
-                .body(Cow::from(content))
-                .map_err(Into::into)
+            resp.body(Cow::from(content)).map_err(Into::into)
         });
 
     let web_view = translator.build_webview(webview, text);

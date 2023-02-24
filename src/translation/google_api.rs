@@ -14,7 +14,7 @@
 /// --compressed
 ///
 use crate::translation::{ApiTranslator, GenericTranslator};
-use reqwest::Error;
+use reqwest::{blocking::Client, Error};
 use serde::{Deserialize, Serialize};
 
 const ICON: &[u8] = include_bytes!("../asset/google.png");
@@ -83,7 +83,8 @@ fn request(text: String) -> Result<TranslationResponse, Error> {
     let tl = get_tl(&text);
     let query = format!("?client=gtx&sl=auto&tl={tl}&dj=1&dt=t&dt=bd&dt=qc&dt=rm&dt=ex&dt=at&dt=ss&dt=rw&dt=ld&q={text}");
     let url = format!("https://translate.googleapis.com/translate_a/single{query}");
-    reqwest::blocking::Client::new().get(url).send()?.json()
+
+    Client::new().get(url).send()?.json()
 }
 
 #[derive(Debug, Deserialize, Serialize)]
