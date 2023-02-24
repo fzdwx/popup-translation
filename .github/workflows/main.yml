@@ -98,4 +98,4 @@ jobs:
           files: CHANGELOG.md
           prerelease: ${{ steps.ref-type.outputs.value != 'release' }}
         env:
-          GITHUB_TOKEN: ${{ secrets. }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
