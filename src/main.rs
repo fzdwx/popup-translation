@@ -1,7 +1,3 @@
-#![feature(result_option_inspect)]
-
-extern crate core;
-
 use crate::args::{Args, PositionArg};
 use crate::translation::Translator;
 use clap::Parser;
