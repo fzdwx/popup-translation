@@ -86,7 +86,7 @@ fn show<T: 'static>(
     let window = WindowBuilder::new()
         .with_title(translator.name())
         .with_inner_size(translator.inner_size())
-        .with_decorations(false)
+        // .with_decorations(false)
         .with_resizable(false)
         .with_focused(true)
         .with_visible(false)
