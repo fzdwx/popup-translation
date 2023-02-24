@@ -1,9 +1,11 @@
 name: Build App
 on:
-  push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - "*"
+  release:
+    types: [created]
+#  push:
+     Sequence of patterns matched against refs/tags
+#    tags:
+#      - "*"
 
 jobs:
   release:
