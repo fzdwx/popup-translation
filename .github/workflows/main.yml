@@ -1,83 +1,63 @@
-name: Release
-
+name: Build App
 on:
   push:
+    # Sequence of patterns matched against refs/tags
     tags:
-      - '*'
-
-defaults:
-  run:
-    shell: bash
+      - "*"
 
 jobs:
   release:
+    name: release ${{ matrix.target }}
+    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        target:
-          - aarch64-apple-darwin
-          - aarch64-unknown-linux-musl
-          - armv7-unknown-linux-musleabihf
-          - x86_64-apple-darwin
-          - x86_64-pc-windows-msvc
-          - x86_64-unknown-linux-musl
         include:
-          - target: aarch64-apple-darwin
-            os: macos-latest
-            target_rustflags: ''
-          - target: aarch64-unknown-linux-musl
-            os: ubuntu-latest
-            target_rustflags: '--codegen linker=aarch64-linux-gnu-gcc'
-          - target: armv7-unknown-linux-musleabihf
-            os: ubuntu-latest
-            target_rustflags: '--codegen linker=arm-linux-gnueabihf-gcc'
-          - target: x86_64-apple-darwin
-            os: macos-latest
-            target_rustflags: ''
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-            target_rustflags: ''
+          - target: x86_64-pc-windows-gnu
+            archive: zip
           - target: x86_64-unknown-linux-musl
-            os: ubuntu-latest
-            target_rustflags: ''
-
-    runs-on: ${{matrix.os}}
+            archive: tar.gz tar.xz tar.zst
+          - target: x86_64-apple-darwin
+            archive: zip
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install Rust Toolchain Components
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
+          toolchain: ${{ matrix.rust }}
           profile: minimal
+          override: true
           target: ${{ matrix.target }}
-          toolchain: stable
 
-      - name: Install AArch64 Toolchain
-        if: ${{ matrix.target == 'aarch64-unknown-linux-musl' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install gcc-aarch64-linux-gnu
-      - name: Install ARM7 Toolchain
-        if: ${{ matrix.target == 'armv7-unknown-linux-musleabihf' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install gcc-arm-linux-gnueabihf
-
-      - name: Package
-        id: package
-        env:
-          TARGET: ${{ matrix.target }}
-          REF: ${{ github.ref }}
-          OS: ${{ matrix.os }}
-          TARGET_RUSTFLAGS: ${{ matrix.target_rustflags }}
-        run: ./bin/package
-        shell: bash
-
-      - name: Publish Archive
-        uses: softprops/action-gh-release@v0.1.5
-        if: ${{ startsWith(github.ref, 'refs/tags/prev') }}
+      - name: install dependencies (ubuntu only)
+        if: matrix.os == 'ubuntu-20.04'
+        uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          draft: true
-          prerelease: true
+          packages: libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev gnome-video-effects gnome-video-effects-extra
+          version: 1.1
+      - name: rust cache restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            src/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Compile and release
+        uses: rust-build/rust-build.action@v1.4.2
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          RUSTTARGET: ${{ matrix.target }}
+          ARCHIVE_TYPES: ${{ matrix.archive }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Binary
+          path: |
+            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
+            ${{ steps.compile.outputs.BUILT_CHECKSUM }}
