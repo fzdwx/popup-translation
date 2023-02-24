@@ -91,7 +91,7 @@ fn show<T: 'static>(
         .with_title(translator.name())
         .with_inner_size(translator.inner_size())
         .with_decorations(false)
-        // .with_resizable(false)
+        .with_resizable(false)
         .with_focused(true)
         .with_visible(false)
         // .with_position(position.to_wry_position(|| event_loop.cursor_position()))
