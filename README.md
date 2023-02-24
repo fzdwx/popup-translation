@@ -25,6 +25,8 @@
 ```shell
 cargo install --git https://github.com/fzdwx/popup-translation
 
+# 或者在 release 页面下载(目前只提供 windows 以及 macos 的预编译程序) https://github.com/fzdwx/popup-translation/releases
+
 # 命令行直接设置翻译文本，只运行一次
 fanyi hello
 fanyi -p youdao 你好
