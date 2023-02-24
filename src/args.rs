@@ -2,6 +2,7 @@ use crate::clipboard;
 use crate::translation::{get_translator, Translator};
 use clap::{arg, Parser};
 use std::num::ParseIntError;
+use wry::application::monitor::MonitorHandle;
 use wry::{application::dpi::PhysicalPosition, application::error::ExternalError};
 
 /// Popup translation
@@ -132,52 +133,61 @@ impl PositionArg {
         current_cursor_fn: T,
         windows_size: (i32, i32),
         translator_window_size: (u32, u32),
+        current_monitor: Option<MonitorHandle>,
     ) -> PhysicalPosition<i32>
     where
         T: FnOnce() -> Result<PhysicalPosition<f64>, ExternalError>,
     {
-        let translator_window_size = (
+        let (tw, th) = (
             translator_window_size.0 as i32,
             translator_window_size.1 as i32,
         );
+        let (w, h) = windows_size;
+
+        let mut start = if let Some(m) = current_monitor {
+            let pos = m.position();
+
+            (pos.x, pos.y)
+        } else {
+            (0, 0)
+        };
+
         match self {
             Self::Coordinate(x, y) => PhysicalPosition::new(*x, *y),
             Self::Cursor => Self::position_map(current_cursor_fn()),
-            Self::Preset(p) => match p {
-                PresetPosition::TopLeft => PhysicalPosition::new(0, 0),
-                PresetPosition::TopCenter => {
-                    let (w, _) = windows_size;
-                    let (tw, _) = translator_window_size;
-                    PhysicalPosition::new((w - tw) / 2, 0)
-                }
-                PresetPosition::TopRight => {
-                    let (w, _) = windows_size;
-                    let (tw, _) = translator_window_size;
-                    PhysicalPosition::new(w - tw, 0)
-                }
-                PresetPosition::Center => {
-                    let (w, h) = windows_size;
-                    let (tw, th) = translator_window_size;
-                    PhysicalPosition::new((w - tw) / 2, (h - th) / 2)
-                }
-                PresetPosition::BottomLeft => {
-                    let (_, h) = windows_size;
-                    PhysicalPosition::new(0, h)
-                }
-                PresetPosition::BottomCenter => {
-                    let (w, h) = windows_size;
-                    let (tw, th) = translator_window_size;
-                    PhysicalPosition::new((w - tw) / 2, h - th)
-                }
-                PresetPosition::BottomRight => {
-                    let (w, h) = windows_size;
-                    PhysicalPosition::new(w, h)
-                }
-            },
+            Self::Preset(p) => {
+                match p {
+                    PresetPosition::TopLeft => {}
+                    PresetPosition::TopCenter => {
+                        start.0 += (w - tw) / 2;
+                    }
+                    PresetPosition::TopRight => {
+                        start.0 += w - tw;
+                    }
+                    PresetPosition::Center => {
+                        start.0 += (w - tw) / 2;
+                        start.1 += (h - th) / 2;
+                    }
+                    PresetPosition::BottomLeft => {
+                        start.1 += h;
+                    }
+                    PresetPosition::BottomCenter => {
+                        start.0 += (w - tw) / 2;
+                        start.1 += h - th;
+                    }
+                    PresetPosition::BottomRight => {
+                        start.0 += w;
+                        start.1 += h;
+                    }
+                };
+
+                PhysicalPosition::new(start.0, start.1)
+            }
         }
     }
 
     fn position_map(pos: Result<PhysicalPosition<f64>, ExternalError>) -> PhysicalPosition<i32> {
+        println!("{:?}", pos);
         match pos {
             Ok(ph) => PhysicalPosition::new(ph.x as i32, ph.y as i32),
             Err(_) => PhysicalPosition::new(0, 0),

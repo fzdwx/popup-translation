@@ -105,6 +105,7 @@ fn show<T: 'static>(
         || event_loop.cursor_position(),
         windows_size,
         translator.size(),
+        window.current_monitor()
     ));
 
     let window_id = window.id();
