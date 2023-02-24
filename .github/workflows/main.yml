@@ -1,6 +1,6 @@
 on:
   release:
-    types: [created, edited, prereleased, released]
+    types: [created]
 
 jobs:
   release:
