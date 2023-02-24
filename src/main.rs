@@ -97,7 +97,6 @@ fn show<T: 'static>(
         let size = monitor.size();
         let pos = monitor.position();
 
-        println!("{:?}", pos);
         ((size.width as i32, size.height as i32), (pos.x, pos.y))
     } else {
         ((0, 0), (0, 0))
