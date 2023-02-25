@@ -1,5 +1,6 @@
 use crate::args::{Args, PositionArg};
 use crate::translation::Translator;
+use args::ua;
 use clap::Parser;
 use std::{borrow::Cow, str::FromStr};
 use wry::http::response::Builder;
@@ -76,13 +77,6 @@ fn show<T: 'static>(
     text: String,
     position: PositionArg,
 ) -> (WindowId, WebView) {
-    #[cfg(target_os = "macos")]
-        let user_agent_string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15";
-    #[cfg(target_os = "windows")]
-        let user_agent_string = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
-    #[cfg(target_os = "linux")]
-        let user_agent_string = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
-
     let window = WindowBuilder::new()
         .with_title(translator.name())
         .with_inner_size(translator.inner_size())
@@ -114,7 +108,7 @@ fn show<T: 'static>(
 
     let webview = WebViewBuilder::new(window)
         .unwrap()
-        .with_user_agent(user_agent_string)
+        .with_user_agent(ua().as_str())
         .with_devtools(true)
         .with_custom_protocol("wry".into(), move |request| {
             let uri = request.uri().to_string();
