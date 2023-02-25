@@ -206,7 +206,7 @@ impl Args {
         match get_translator(self.platform.clone(), self.key.clone()) {
             Ok(t) => t,
             Err(err) => {
-                panic!("Failed to get translator: {}", err)
+                panic!("Failed to get translator: {err}")
             }
         }
     }

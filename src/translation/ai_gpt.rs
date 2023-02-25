@@ -36,8 +36,8 @@ impl ApiTranslator for AiGPT {
             <div id="translation">translation: {}</div>
         </div>
         "#,
-            text.clone(),
-            result.clone()
+            text,
+            result
         );
     }
 }

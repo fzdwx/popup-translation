@@ -22,7 +22,6 @@ mod args;
 mod clipboard;
 mod translation;
 
-#[warn(unused_assignments)]
 fn main() -> wry::Result<()> {
     let args = Args::parse();
     let mut _current_webview = None;
@@ -38,7 +37,7 @@ fn main() -> wry::Result<()> {
             args.text(),
             args.position(),
             args.debug(),
-            args.resizeable()
+            args.resizeable(),
         );
         _current_webview = Some(webview);
     } else {
@@ -62,7 +61,7 @@ fn main() -> wry::Result<()> {
                         args.text(),
                         args.position(),
                         args.debug(),
-                        args.resizeable()
+                        args.resizeable(),
                     );
                     _current_webview = Some(webview);
                 }
