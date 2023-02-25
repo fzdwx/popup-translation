@@ -24,7 +24,7 @@ mod translation;
 
 #[warn(unused_assignments)]
 fn main() -> wry::Result<()> {
-    let args  = Args::parse();
+    let args = Args::parse();
     let mut _current_webview = None;
     let event_loop = EventLoop::new();
 
@@ -32,7 +32,13 @@ fn main() -> wry::Result<()> {
     let shortcut_show = Accelerator::from_str(args.show()).unwrap();
 
     if args.run_once() {
-        let (_id, webview) = show(&event_loop, args.translator(), args.text(), args.position());
+        let (_id, webview) = show(
+            &event_loop,
+            args.translator(),
+            args.text(),
+            args.position(),
+            args.dev(),
+        );
         _current_webview = Some(webview);
     } else {
         hotkey_manager.register(shortcut_show.clone()).unwrap();
@@ -49,8 +55,13 @@ fn main() -> wry::Result<()> {
             }
             Event::GlobalShortcutEvent(hotkey_id) => {
                 if hotkey_id == shortcut_show.clone().id() {
-                    let (_id, webview) =
-                        show(event_loop, args.translator(), args.text(), args.position());
+                    let (_id, webview) = show(
+                        event_loop,
+                        args.translator(),
+                        args.text(),
+                        args.position(),
+                        args.dev(),
+                    );
                     _current_webview = Some(webview);
                 }
             }
@@ -76,6 +87,7 @@ fn show<T: 'static>(
     translator: Translator,
     text: String,
     position: PositionArg,
+    debug: bool,
 ) -> (WindowId, WebView) {
     let window = WindowBuilder::new()
         .with_title(translator.name())
@@ -109,7 +121,7 @@ fn show<T: 'static>(
     let webview = WebViewBuilder::new(window)
         .unwrap()
         .with_user_agent(ua().as_str())
-        .with_devtools(true)
+        .with_devtools(debug)
         .with_custom_protocol("wry".into(), move |request| {
             let uri = request.uri().to_string();
             let url = uri.strip_prefix("wry://dev/").unwrap();

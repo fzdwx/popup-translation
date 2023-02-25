@@ -46,6 +46,10 @@ pub struct Args {
     /// --key=xxx
     #[arg(short, long)]
     key: Option<String>,
+
+    /// enable devtool on webview
+    #[arg(short, long)]
+    debug: bool,
 }
 
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -216,6 +220,11 @@ impl Args {
     /// get position
     pub fn position(&self) -> PositionArg {
         self.position.clone()
+    }
+
+    /// enable debug ?
+    pub fn dev(&self) -> bool {
+        self.debug
     }
 }
 
