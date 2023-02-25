@@ -37,7 +37,8 @@ fn main() -> wry::Result<()> {
             args.translator(),
             args.text(),
             args.position(),
-            args.dev(),
+            args.debug(),
+            args.resizeable()
         );
         _current_webview = Some(webview);
     } else {
@@ -60,7 +61,8 @@ fn main() -> wry::Result<()> {
                         args.translator(),
                         args.text(),
                         args.position(),
-                        args.dev(),
+                        args.debug(),
+                        args.resizeable()
                     );
                     _current_webview = Some(webview);
                 }
@@ -88,12 +90,13 @@ fn show<T: 'static>(
     text: String,
     position: PositionArg,
     debug: bool,
+    resizeable: bool,
 ) -> (WindowId, WebView) {
     let window = WindowBuilder::new()
         .with_title(translator.name())
         .with_inner_size(translator.inner_size())
         // .with_decorations(false)
-        .with_resizable(false)
+        .with_resizable(resizeable)
         .with_focused(true)
         .with_visible(false)
         .build(event_loop)

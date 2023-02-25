@@ -50,6 +50,10 @@ pub struct Args {
     /// enable devtool on webview
     #[arg(short, long)]
     debug: bool,
+
+    /// enable window resize
+    #[arg(short, long)]
+    resizeable: bool,
 }
 
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -223,8 +227,13 @@ impl Args {
     }
 
     /// enable debug ?
-    pub fn dev(&self) -> bool {
+    pub fn debug(&self) -> bool {
         self.debug
+    }
+
+    /// enbale windows resize
+    pub fn resizeable(&self) -> bool {
+        self.resizeable
     }
 }
 
