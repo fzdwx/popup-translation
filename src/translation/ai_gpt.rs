@@ -1,4 +1,4 @@
-use crate::translation::{ApiTranslator, GenericTranslator};
+use crate::translation::GenericTranslator;
 use reqwest::blocking::Client;
 use serde_json::json;
 
@@ -19,10 +19,8 @@ impl GenericTranslator for AiGPT {
     fn name(&self) -> String {
         "AiGPT".to_string()
     }
-}
 
-impl ApiTranslator for AiGPT {
-    fn html(&self, text: String) -> String {
+    fn url(&self, text: String) -> String {
         let result = match request(text.clone(), self.key.clone()) {
             Ok(s) => s,
             Err(s) => s,
@@ -36,8 +34,7 @@ impl ApiTranslator for AiGPT {
             <div id="translation">translation: {}</div>
         </div>
         "#,
-            text,
-            result
+            text, result
         );
     }
 }

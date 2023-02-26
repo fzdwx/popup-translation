@@ -1,4 +1,4 @@
-use crate::translation::{GenericTranslator, UrlTranslator};
+use crate::translation::GenericTranslator;
 
 #[derive(Copy, Clone)]
 pub struct Bing {}
@@ -11,9 +11,7 @@ impl GenericTranslator for Bing {
     fn size(&self) -> (u32, u32) {
         (545, 400)
     }
-}
 
-impl UrlTranslator for Bing {
     fn js_code(&self) -> String {
         include_str!("../js/bing.js").to_string()
     }

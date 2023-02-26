@@ -82,6 +82,7 @@ fn main() -> wry::Result<()> {
 }
 
 const EMPTY: &[u8] = b"HELLO";
+const GOOGLE: &[u8] = include_bytes!("./html/google.html");
 
 fn show<T: 'static>(
     event_loop: &EventLoopWindowTarget<T>,
@@ -126,10 +127,16 @@ fn show<T: 'static>(
         .with_devtools(debug)
         .with_custom_protocol("wry".into(), move |request| {
             let uri = request.uri().to_string();
-            let url = uri.strip_prefix("wry://dev/").unwrap();
+            let path = uri
+                .strip_prefix("wry://dev/")
+                .unwrap()
+                .split("?")
+                .collect::<Vec<&str>>();
+            let url = path[0];
 
             let (content, resp) = match url {
                 "icon" => (icon, common_resp("image/png")),
+                "google" => (GOOGLE, common_resp("text/html")),
                 _ => (EMPTY, common_resp("text/plain")),
             };
 

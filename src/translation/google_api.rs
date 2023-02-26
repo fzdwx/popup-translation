@@ -13,7 +13,7 @@
 /// -H 'x-client-data: CIW2yQEIo7bJAQipncoBCP3zygEIkqHLAQj8qswBCJr+zAEIwIbNAQ==' \
 /// --compressed
 ///
-use crate::translation::{ApiTranslator, GenericTranslator};
+use crate::translation::GenericTranslator;
 use reqwest::{blocking::Client, Error};
 use serde::{Deserialize, Serialize};
 
@@ -29,19 +29,7 @@ impl GoogleApi {
             html: include_str!("../html/google.html").to_string(),
         }
     }
-}
 
-impl GenericTranslator for GoogleApi {
-    fn name(&self) -> String {
-        "google".into()
-    }
-
-    fn icon(&self) -> &'static [u8] {
-        ICON
-    }
-}
-
-impl ApiTranslator for GoogleApi {
     fn html(&self, text: String) -> String {
         let html = format!("{}", self.html);
         match request(text) {
@@ -55,6 +43,24 @@ impl ApiTranslator for GoogleApi {
                 .replace("$err", err.to_string().as_str())
                 .replace("$class", "err"),
         }
+    }
+}
+
+impl GenericTranslator for GoogleApi {
+    fn name(&self) -> String {
+        "google".into()
+    }
+
+    fn icon(&self) -> &'static [u8] {
+        ICON
+    }
+
+    fn js_code(&self) -> String {
+        "".to_string()
+    }
+
+    fn url(&self, text: String) -> String {
+        format!("wry://dev/google?q={text}")
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::translation::{GenericTranslator, UrlTranslator};
+use crate::translation::GenericTranslator;
 
 #[derive(Copy, Clone)]
 pub struct YouDao {}
@@ -11,9 +11,7 @@ impl GenericTranslator for YouDao {
     fn size(&self) -> (u32, u32) {
         (655, 400)
     }
-}
 
-impl UrlTranslator for YouDao {
     fn js_code(&self) -> String {
         include_str!("../js/youdao.js").to_string()
     }
