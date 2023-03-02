@@ -1,4 +1,4 @@
-use crate::translation::GenericTranslator;
+use crate::translation::{Content, GenericTranslator};
 use reqwest::blocking::Client;
 use serde_json::json;
 
@@ -20,12 +20,13 @@ impl GenericTranslator for AiGPT {
         "AiGPT".to_string()
     }
 
-    fn url(&self, text: String) -> String {
+    fn content(&self, text: String) -> Content {
         let result = match request(text.clone(), self.key.clone()) {
             Ok(s) => s,
             Err(s) => s,
         };
-        return format!(
+
+        return Content::Text(format!(
             r#"
          <style>
          </style>
@@ -35,7 +36,7 @@ impl GenericTranslator for AiGPT {
         </div>
         "#,
             text, result
-        );
+        ));
     }
 }
 
@@ -44,17 +45,13 @@ fn request(text: String, api_key: String) -> Result<String, String> {
     let prompt = vec!["translate to auto(if zh then en, if en then zh)", &text];
 
     let response = client
-        .post("https://api.openai.com/v1/completions")
+        .post("https://api.openai.com/v1/chat/completions")
         .json(&json!({
-            "top_p": 1,
-            "stop": "```",
-            "temperature": 0,
-            "suffix": "\n```",
-            "max_tokens": 1000,
-            "presence_penalty": 0,
-            "frequency_penalty": 0,
-            "model": "text-davinci-003",
-            "prompt":prompt.join(" "),
+            "model": "gpt-3.5-turbo",
+            "messages":[{
+                "role":"user",
+                "content":prompt.join(" ")
+            }],
         }))
         .header("Authorization", format!("Bearer {api_key}"))
         .send()
@@ -65,7 +62,10 @@ fn request(text: String, api_key: String) -> Result<String, String> {
     if status_code.is_success() {
         let body = response.text().unwrap();
         let body: serde_json::Value = serde_json::from_str(&body).unwrap();
-        let text = body["choices"][0]["text"].as_str().unwrap().to_string();
+        let text = body["choices"][0]["message"]["content"]
+            .as_str()
+            .unwrap_or("")
+            .to_owned();
         Ok(text)
     } else {
         Err(format!("Error: {status_code}"))
