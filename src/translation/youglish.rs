@@ -1,4 +1,4 @@
-use crate::translation::GenericTranslator;
+use crate::translation::{Content, GenericTranslator};
 
 #[derive(Copy, Clone)]
 pub struct Youglish {}
@@ -12,7 +12,7 @@ impl GenericTranslator for Youglish {
         include_str!("../js/youglish.js").into()
     }
 
-    fn url(&self, text: String) -> String {
-        format!("https://youglish.com/pronounce/{text}/english?")
+    fn content(&self, text: String) -> Content {
+        Content::Url(format!("https://youglish.com/pronounce/{text}/english?"))
     }
 }

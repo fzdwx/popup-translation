@@ -1,4 +1,4 @@
-use crate::translation::GenericTranslator;
+use crate::translation::{Content, GenericTranslator};
 
 #[derive(Copy, Clone)]
 pub struct Bing {}
@@ -16,7 +16,9 @@ impl GenericTranslator for Bing {
         include_str!("../js/bing.js").to_string()
     }
 
-    fn url(&self, text: String) -> String {
-        format!("http://www.bing.com/dict/search?mkt=zh-cn&q={text}")
+    fn content(&self, text: String) -> Content {
+        Content::Url(format!(
+            "http://www.bing.com/dict/search?mkt=zh-cn&q={text}"
+        ))
     }
 }

@@ -33,12 +33,14 @@ impl Translator {
     }
 
     pub fn build_webview(&self, webview: WebViewBuilder, text: String) -> WebView {
-        webview
-            .with_url(self.inner.url(text).as_str())
-            .unwrap()
-            .with_initialization_script(self.inner.js_code().as_str())
-            .build()
-            .unwrap()
+        match self.inner.content(text) {
+            Content::Text(text) => webview.with_html(text),
+            Content::Url(url) => webview.with_url(url.as_str()),
+        }
+        .unwrap()
+        .with_initialization_script(self.inner.js_code().as_str())
+        .build()
+        .unwrap()
     }
 
     pub fn inner_size(&self) -> LogicalSize<u32> {
@@ -61,11 +63,12 @@ pub trait GenericTranslator {
     }
 
     /// format url
-    fn url(&self, text: String) -> String;
+    fn content(&self, text: String) -> Content;
+}
 
-    fn conetnt(&self, text: String) -> String {
-        text
-    }
+pub enum Content {
+    Text(String),
+    Url(String),
 }
 
 pub fn get_translator(name: String, key: Option<String>) -> Result<Translator, String> {

@@ -13,7 +13,7 @@
 /// -H 'x-client-data: CIW2yQEIo7bJAQipncoBCP3zygEIkqHLAQj8qswBCJr+zAEIwIbNAQ==' \
 /// --compressed
 ///
-use crate::translation::GenericTranslator;
+use crate::translation::{Content, GenericTranslator};
 use reqwest::{blocking::Client, Error};
 use serde::{Deserialize, Serialize};
 
@@ -59,8 +59,8 @@ impl GenericTranslator for GoogleApi {
         "".to_string()
     }
 
-    fn url(&self, text: String) -> String {
-        format!("wry://dev/google?q={text}")
+    fn content(&self, text: String) -> Content {
+        Content::Url(format!("wry://dev/google?q={text}"))
     }
 }
 

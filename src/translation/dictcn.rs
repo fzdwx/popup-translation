@@ -1,4 +1,4 @@
-use crate::translation::GenericTranslator;
+use crate::translation::{Content, GenericTranslator};
 
 #[derive(Copy, Clone)]
 pub struct Dictcn {}
@@ -12,7 +12,7 @@ impl GenericTranslator for Dictcn {
         include_str!("../js/dictcn.js").to_string()
     }
 
-    fn url(&self, text: String) -> String {
-        format!("http://dict.cn/{text}")
+    fn content(&self, text: String) -> Content {
+        Content::Url(format!("http://dict.cn/{text}"))
     }
 }
