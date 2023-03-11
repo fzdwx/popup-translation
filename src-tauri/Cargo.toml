@@ -1,10 +1,10 @@
 [package]
 name = "popup-translation"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+version = "0.0.1"
+description = "一个划词翻译软件"
+authors = ["fzdwx"]
+license = "MIT"
+repository = "https://github.com/fzdwx/popup-translation"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -13,11 +13,20 @@ edition = "2021"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = ["shell-open"] }
+tauri = { version = "1.2", features = ["clipboard", "shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+clipboard = "0.5.0"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
 # DO NOT REMOVE!!
 custom-protocol = ["tauri/custom-protocol"]
+
+
+[target."cfg(target_os = \"linux\")".dependencies]
+x11-clipboard = "0.7.0"
+
+[target.'cfg(not(linux))'.dependencies]
+#enigo = "0.0.14"
+enigo = { git = "https://github.com/enigo-rs/enigo" }

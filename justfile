@@ -2,3 +2,7 @@
 
 hello:
   echo "hello world"
+
+# run app
+dev:
+  cargo tauri dev

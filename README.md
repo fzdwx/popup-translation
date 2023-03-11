@@ -10,6 +10,8 @@ Tauri Version
 2. cargo
 3. tauri-cli `cargo install tauri-cli`
 
+启动项目:
+
 ```shell
 pnpm install
 cargo tauri dev
