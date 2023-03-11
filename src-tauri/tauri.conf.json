@@ -19,6 +19,9 @@
       },
       "globalShortcut": {
         "all": true
+      },
+      "dialog": {
+        "all": true
       }
     },
     "bundle": {
@@ -45,7 +48,8 @@
         "resizable": false,
         "title": "Translation",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "focus": true
       }
     ]
   }
