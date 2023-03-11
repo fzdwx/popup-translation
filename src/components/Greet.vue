@@ -13,7 +13,6 @@ async function greet() {
     .catch(err => {
       console.log(err);
     })
-
 }
 </script>
 
