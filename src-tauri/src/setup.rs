@@ -3,17 +3,19 @@ use std::error::Error;
 use tauri::{App, GlobalShortcutManager, Manager};
 
 pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
-    let window = app.get_window("main").unwrap();
-    window.hide()?;
+    let main_window = app.get_window("main").unwrap();
+    main_window.hide()?;
 
-    let handle = app.app_handle();
+    let handle = app.handle();
     let mut shortcur = app.global_shortcut_manager();
 
     shortcur.register("alt+s", move || {
-        if window.is_visible().unwrap() {
-            window.hide().unwrap();
+        if main_window.is_visible().unwrap() {
+            main_window.hide().unwrap();
         } else {
-            window.show().unwrap();
+            main_window.show().unwrap();
+            main_window.set_focus().unwrap();
+            handle.emit_all("refresh-translation", "ttt").unwrap();
         }
     })?;
 

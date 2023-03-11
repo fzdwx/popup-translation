@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { listen, Event } from "@tauri-apps/api/event";
 import { ref } from "vue";
 import { getSelectionText } from "../command/core"
 
 const greetMsg = ref("");
-const name = ref("");
+
+/**
+ * 刷新翻译
+ */
+const unListenRefreshTranslation = listen('refresh-translation', async (event: Event<string>) => {
+  greet()
+})
 
 async function greet() {
   await getSelectionText()
@@ -14,6 +21,7 @@ async function greet() {
       console.log(err);
     })
 }
+
 </script>
 
 <template>
