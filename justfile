@@ -6,3 +6,7 @@ hello:
 # run app
 dev:
   cargo tauri dev
+
+# build app
+build:
+  cargo tauri build
