@@ -1703,7 +1703,7 @@ dependencies = [
 
 [[package]]
 name = "popup-translation"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "clap",
  "enigo",
