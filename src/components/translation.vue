@@ -6,15 +6,19 @@ import { deepl } from "../platform/deepl"
 import loding from "./loding.vue"
 
 interface TranslationInfo {
-  sorce: string
+  source: string
+  sourceLoading: boolean
+
   target: string
-  loaded: boolean
+  targetLoading: boolean
 }
 
 const translationInfo: TranslationInfo = reactive({
-  sorce: "",
+  source: "",
+  sourceLoading: false,
+
   target: "",
-  loaded: false,
+  targetLoading: false,
 })
 
 /**
@@ -25,14 +29,19 @@ const unListenRefreshTranslation = listen('refresh-translation', async (event: E
 })
 
 async function greet() {
+  translationInfo.source = ""
+  translationInfo.sourceLoading = true
+
+  translationInfo.target = ""
+  translationInfo.targetLoading = true
+
   await getSelectionText()
     .then(val => {
-      translationInfo.sorce = val.toString()
-
-      translationInfo.loaded = true
-      deepl(translationInfo.sorce, "auto", "zh").then(text => {
+      translationInfo.source = val.toString()
+      translationInfo.sourceLoading = false
+      deepl(translationInfo.source, "auto", "zh").then(text => {
         translationInfo.target = text
-        translationInfo.loaded = false
+        translationInfo.targetLoading = false
       })
 
     })
@@ -47,10 +56,14 @@ async function greet() {
   <div>
     <button type="button" @click="greet()">测试获取光标选择文本功能</button>
     <div>
-      {{ translationInfo.sorce }}
+      <loding :load="translationInfo.sourceLoading">
+        <div>
+          {{ translationInfo.source }}
+        </div>
+      </loding>
     </div>
     <div>
-      <loding :loaded="translationInfo.loaded">
+      <loding :load="translationInfo.targetLoading">
         <div>
           {{ translationInfo.target }}
         </div>

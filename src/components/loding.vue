@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
 const props = defineProps<{
-  loaded: boolean
+  load: boolean
 }>()
 
 </script>
 
 <template>
-  <div v-if="props.loaded">
+  <div v-if="props.load">
     <span class="loader" />
   </div>
   <div v-else>
