@@ -15,7 +15,7 @@ const props = defineProps<{
   </div>
 </template>
 
-<style scoped>
+<style>
 .loader {
   width: 100%;
   height: 4.8px;
