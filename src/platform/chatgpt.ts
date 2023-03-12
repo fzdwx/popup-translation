@@ -18,7 +18,7 @@ async function freegpt(query: string, to: string) {
         "role": 'user',
         "content": assistantPrompt,
       },
-      { "role": 'user', "content": query },
+      { "role": 'user', "content": `Content to be translated :${query}` },
     ],
   }))
 

@@ -1,7 +1,5 @@
 import { getClient, Body } from '@tauri-apps/api/http'
 
-const client = await getClient()
-
 const supportedLanguages = [
   ["auto", "auto"],
   ["english", "EN"],
@@ -10,7 +8,8 @@ const supportedLanguages = [
 
 const langMap = new Map<string, string>(supportedLanguages.map(lang => [lang[0], lang[1]]));
 
-const postJson = (url: string, data: string) => {
+const postJson = async (url: string, data: string) => {
+  const client = await getClient()
   return client.post<Object>(url, Body.text(data), {
     headers: {
       'Content-Type': 'application/json',
