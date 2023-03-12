@@ -1,13 +1,5 @@
 import { getClient, Body } from '@tauri-apps/api/http'
 
-const supportedLanguages = [
-  ["auto", "auto"],
-  ["english", "EN"],
-  ["chinese", "ZH"],
-];
-
-const langMap = new Map<string, string>(supportedLanguages.map(lang => [lang[0], lang[1]]));
-
 const postJson = async (url: string, data: string) => {
   const client = await getClient()
   return client.post<Object>(url, Body.text(data), {
@@ -18,4 +10,13 @@ const postJson = async (url: string, data: string) => {
   })
 }
 
-export { supportedLanguages, langMap, postJson };
+const get = async (url: string) => {
+  const client = await getClient()
+  return client.get<Object>(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+    }
+  })
+}
+
+export { postJson, get };

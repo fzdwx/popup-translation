@@ -4,20 +4,30 @@ import { reactive } from "vue";
 import { getSelectionText } from "../command/core";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
+import { google } from "../platform/google";
 import Card from "./card.vue";
 
 import deeplImage from "../assets/deepl.png";
 import chatgptImage from "../assets/chatgpt.png";
+import googleImage from "../assets/google.ico";
 
 interface TranslationItem {
   text: string;
   loading: boolean;
 }
 
+const resetItem = () => {
+  return {
+    text: "",
+    loading: true,
+  } as TranslationItem;
+};
+
 interface TranslationInfo {
   source: TranslationItem;
   deepl: TranslationItem;
   chatgpt: TranslationItem;
+  google: TranslationItem;
 }
 
 const state: TranslationInfo = reactive({
@@ -35,6 +45,11 @@ const state: TranslationInfo = reactive({
     text: "",
     loading: false,
   },
+
+  google: {
+    text: "",
+    loading: false,
+  },
 });
 
 /**
@@ -47,29 +62,38 @@ const unListenRefreshTranslation = listen(
   }
 );
 
+async function refresh(source: TranslationItem) {
+  deepl(source.text, "auto", "chinese")
+    .then((text) => {
+      state.deepl.text = text;
+      state.deepl.loading = false;
+    })
+    .catch((err) => {
+      console.log("deepl error", err);
+    });
+
+  freegpt(source.text, "chinese").then((text) => {
+    state.chatgpt.text = text;
+    state.chatgpt.loading = false;
+  });
+
+  google(source.text, "auto", "chinese").then((text) => {
+    state.google.text = text;
+    state.google.loading = false;
+  });
+}
+
 async function greet() {
-  state.source.text = "";
-  state.source.loading = true;
-
-  state.deepl.text = "";
-  state.deepl.loading = true;
-
-  state.chatgpt.text = "";
-  state.chatgpt.loading = true;
+  state.source = resetItem();
+  state.chatgpt = resetItem();
+  state.deepl = resetItem();
+  state.google = resetItem();
 
   await getSelectionText()
     .then((val) => {
       state.source.text = val.toString();
       state.source.loading = false;
-      deepl(state.source.text, "auto", "chinese").then((text) => {
-        state.deepl.text = text;
-        state.deepl.loading = false;
-      });
-
-      freegpt(state.source.text, "chinese").then((text) => {
-        state.chatgpt.text = text;
-        state.chatgpt.loading = false;
-      });
+      refresh(state.source);
     })
     .catch((err) => {
       console.log(err);
@@ -86,6 +110,13 @@ async function greet() {
       title="Chatgpt"
       :text="state.chatgpt.text"
       :load="state.chatgpt.loading"
+    />
+    <Card
+      class="mtop20"
+      :img-src="googleImage"
+      title="Google"
+      :text="state.google.text"
+      :load="state.google.loading"
     />
     <Card
       class="mtop20"

@@ -1,8 +1,15 @@
 // inspired by https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate/blob/main/node_js_implementation/deepl.js
 // MIT License
 
-import { langMap, postJson } from './core'
+import { postJson } from './core'
 
+const supportedLanguages = [
+  ["auto", "auto"],
+  ["english", "EN"],
+  ["chinese", "ZH"],
+];
+
+const langMap = new Map<string, string>(supportedLanguages.map(lang => [lang[0], lang[1]]));
 
 function initData(source_lang: string, target_lang: string) {
   return {
@@ -49,7 +56,7 @@ async function deepl(query: string, from: string, to: string): Promise<string> {
   const targetLanguage = langMap.get(to);
 
   const source_lang = sourceLanguage || 'auto';
-  const target_lang = targetLanguage || 'zh';
+  const target_lang = targetLanguage || 'ZH';
   const translate_text = query || '';
   const url = 'https://www2.deepl.com/jsonrpc';
   let id = getRandomNumber()

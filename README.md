@@ -7,12 +7,13 @@
    - Macos 以及 Windows 是通过模拟一次复制操作,然后在读取粘贴板实现
 2. 显示隐藏/窗口 `alt+s`
 3. 支持的平台
+   - Google
    - Deepl
    - Chatgpt
 
 ## Installation
 
-https://github.com/fzdwx/popup-translation/releases
+<https://github.com/fzdwx/popup-translation/releases>
 
 ## Developer
 
@@ -31,7 +32,7 @@ cargo tauri dev
 
 ## Screenshots
 
-![image](https://user-images.githubusercontent.com/65269574/224536231-b1d9409f-cfa6-4bff-9566-c94e1047a02c.png)
+![image](https://user-images.githubusercontent.com/65269574/224546773-76488890-97a9-44fe-921d-8ac72c8e2096.png)
 
 ![gif](https://github.com/fzdwx/popup-translation/raw/tauri/.github/show.gif)
 
