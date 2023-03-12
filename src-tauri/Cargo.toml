@@ -1,6 +1,6 @@
 [package]
 name = "popup-translation"
-version = "1.0.0"
+version = "1.0.1"
 description = "一个划词翻译软件"
 authors = ["fzdwx"]
 license = "MIT"
