@@ -7,6 +7,16 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     main_window.hide()?;
     main_window.set_decorations(false)?;
 
+    // 仅在 macOS 下执行
+    #[cfg(target_os = "macos")]
+    window_vibrancy::apply_vibrancy(&main_window, NSVisualEffectMaterial::FullScreenUI)
+        .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+
+    // 仅在 windows 下执行
+    #[cfg(target_os = "windows")]
+    window_vibrancy::apply_blur(&main_window, Some((18, 18, 18, 125)))
+        .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
+
     // WindowBuilder::new(
     //     &app.handle(),
     //     "core",

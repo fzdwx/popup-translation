@@ -21,6 +21,11 @@ async function freegpt(query: string, to: string) {
     ],
   }))
 
+  if (resp.status == 429) {
+    console.log(resp);
+    throw Error("To Many request")
+  }
+
   const rs: string[] = []
   //@ts-ignore
   resp.data.choices.forEach((item) => {
