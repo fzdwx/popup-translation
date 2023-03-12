@@ -10,6 +10,10 @@
    - Deepl
    - Chatgpt
 
+## Installation
+
+https://github.com/fzdwx/popup-translation/releases
+
 ## Developer
 
 环境:
