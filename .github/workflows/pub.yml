@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-20.04, windows-latest]
+        platform: [ macos-latest, ubuntu-20.04, windows-latest ]
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -52,6 +52,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6.0.2
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: install dependencies (ubuntu only)
@@ -71,7 +74,7 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-20.04
-    needs: [create-release, build-tauri]
+    needs: [ create-release, build-tauri ]
 
     steps:
       - name: publish release
