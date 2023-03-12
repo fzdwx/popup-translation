@@ -1,41 +1,8 @@
 // inspired by https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate/blob/main/node_js_implementation/deepl.js
 // MIT License
 
-import { getClient, Body } from '@tauri-apps/api/http'
+import { langMap, postJson } from './core'
 
-const client = await getClient()
-
-const supportedLanguages = [
-  ["auto", "auto"],
-  ["de", "DE"],
-  ["en", "EN"],
-  ["es", "ES"],
-  ["fr", "FR"],
-  ["it", "IT"],
-  ["ja", "JA"],
-  ["ko", "KO"],
-  ["nl", "NL"],
-  ["pl", "PL"],
-  ["pt", "PT"],
-  ["ru", "RU"],
-  ["zh", "ZH"],
-  ["zh", "ZH"],
-  ["bg", "BG"],
-  ["cs", "CS"],
-  ["da", "DA"],
-  ["el", "EL"],
-  ["et", "ET"],
-  ["fi", "FI"],
-  ["hu", "HU"],
-  ["lt", "LT"],
-  ["lv", "LV"],
-  ["ro", "RO"],
-  ["sk", "SK"],
-  ["sl", "SL"],
-  ["sv", "SV"]
-];
-
-const langMap = new Map<string, string>(supportedLanguages.map(lang => [lang[0], lang[1]]));
 
 function initData(source_lang: string, target_lang: string) {
   return {
@@ -70,27 +37,19 @@ function getRandomNumber() {
 function getTimeStamp(iCount: number) {
   const ts = Date.now();
   if (iCount !== 0) {
-    iCount = iCount + 1; https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate/blob/main/node_js_implementation/deepl.js
+    iCount = iCount + 1;
     return ts - (ts % iCount) + iCount;
   } else {
     return ts;
   }
 }
 
-async function postData(url: string, data: string) {
-  return await client.post<Object>(url, Body.text(data), {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-}
-
 async function deepl(query: string, from: string, to: string): Promise<string> {
-  const targetLanguage = langMap.get(to);
   const sourceLanguage = langMap.get(from);
+  const targetLanguage = langMap.get(to);
 
-  const source_lang = sourceLanguage || 'AUTO';
-  const target_lang = targetLanguage || 'ZH';
+  const source_lang = sourceLanguage || 'auto';
+  const target_lang = targetLanguage || 'zh';
   const translate_text = query || '';
   const url = 'https://www2.deepl.com/jsonrpc';
   let id = getRandomNumber()
@@ -109,7 +68,7 @@ async function deepl(query: string, from: string, to: string): Promise<string> {
     post_str = post_str.replace('"method":"', '"method": "');
   }
 
-  const response = await postData(url, post_str);
+  const response = await postJson(url, post_str);
 
   //@ts-ignore
   // console.log("deepl", response.data.result.texts[0].text);

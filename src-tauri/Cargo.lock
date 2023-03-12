@@ -1936,7 +1936,7 @@ dependencies = [
 
 [[package]]
 name = "popup-translation"
-version = "0.0.1"
+version = "1.0.0"
 dependencies = [
  "clipboard",
  "enigo",

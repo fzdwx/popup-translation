@@ -10,7 +10,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="mtop20">
+  <div>
     <!-- title -->
     <div class="title-container">
       <img class="ico" :src="props.imgSrc" />
@@ -52,11 +52,6 @@ const props = defineProps<{
   border-radius: 8px;
   border: 1px solid transparent;
   overflow: auto;
-}
-
-.mtop20 {
-  margin: 0 auto;
-  margin-top: 20px;
 }
 
 .text {

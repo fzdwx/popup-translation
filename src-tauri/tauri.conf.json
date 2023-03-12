@@ -16,7 +16,8 @@
       "http": {
         "all": true,
         "scope": [
-          " https://www2.deepl.com/jsonrpc"
+          " https://www2.deepl.com/jsonrpc",
+          "https://chatgpt-api.shn.hk/v1"
         ]
       },
       "shell": {
