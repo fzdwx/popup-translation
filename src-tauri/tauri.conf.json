@@ -13,6 +13,12 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "http": {
+        "all": true,
+        "scope": [
+          " https://www2.deepl.com/jsonrpc"
+        ]
+      },
       "shell": {
         "all": false,
         "open": true

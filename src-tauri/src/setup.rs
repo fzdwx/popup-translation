@@ -6,6 +6,13 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let main_window = app.get_window("main").unwrap();
     main_window.hide()?;
 
+    // WindowBuilder::new(
+    //     &app.handle(),
+    //     "core",
+    //     tauri::WindowUrl::App("http://www.bing.com/dict/search".into()),
+    // )
+    // .build();
+
     let handle = app.handle();
     let mut shortcur = app.global_shortcut_manager();
 

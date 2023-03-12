@@ -2,14 +2,16 @@
 import { listen, Event } from "@tauri-apps/api/event";
 import { reactive } from "vue";
 import { getSelectionText } from "../command/core"
-import Bing from "./bing.vue";
+import { deepl } from "../platform/deepl"
 
 interface TranslationInfo {
-  text: string
+  sorce: string
+  target: string
 }
 
 const translationInfo: TranslationInfo = reactive({
-  text: ""
+  sorce: "",
+  target: ""
 })
 
 /**
@@ -22,7 +24,12 @@ const unListenRefreshTranslation = listen('refresh-translation', async (event: E
 async function greet() {
   await getSelectionText()
     .then(val => {
-      translationInfo.text = val.toString()
+      translationInfo.sorce = val.toString()
+
+      deepl(translationInfo.sorce, "auto", "zh").then(text => {
+        translationInfo.target = text
+      })
+
     })
     .catch(err => {
       console.log(err);
@@ -32,8 +39,13 @@ async function greet() {
 </script>
 
 <template>
-  <div class="card">
+  <div>
     <button type="button" @click="greet()">测试获取光标选择文本功能</button>
-    <Bing :text="translationInfo.text" />
+    <div>
+      {{ translationInfo.sorce }}
+    </div>
+    <div>
+      {{ translationInfo.target }}
+    </div>
   </div>
 </template>
