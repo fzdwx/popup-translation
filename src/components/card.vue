@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Loding from "./loding.vue";
+import Loading from "./common/Loading.vue";
 
 const props = defineProps<{
   imgSrc: string;
@@ -18,15 +18,15 @@ const props = defineProps<{
     </div>
     <!-- content  -->
     <div class="text-container target-height">
-      <Loding :load="props.load">
+      <Loading :load="props.load">
         <!-- 
           if load then show loading
           else show text
-         -->
+        -->
         <div class="text">
           {{ props.text }}
         </div>
-      </Loding>
+      </Loading>
     </div>
   </div>
 </template>

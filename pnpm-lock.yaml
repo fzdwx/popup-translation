@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@tabler/icons-vue': ^2.10.0
   '@tauri-apps/api': ^1.2.0
   '@tauri-apps/cli': ^1.2.2
   '@types/node': ^18.7.10
@@ -11,6 +12,7 @@ specifiers:
   vue-tsc: ^1.0.11
 
 dependencies:
+  '@tabler/icons-vue': 2.10.0_vue@3.2.47
   '@tauri-apps/api': 1.2.0
   vue: 3.2.47
 
@@ -244,6 +246,19 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@tabler/icons-vue/2.10.0_vue@3.2.47:
+    resolution: {integrity: sha512-iXRMlg4Roq6vSYMn0Ugb3siDSQMj7w05hhSl3YyfCd1JQm5YpdHgMwAXsT5mKXVVQy4q7q/Ym59qSkAIfRGLBQ==}
+    peerDependencies:
+      vue: '>=3.0.1'
+    dependencies:
+      '@tabler/icons': 2.10.0
+      vue: 3.2.47
+    dev: false
+
+  /@tabler/icons/2.10.0:
+    resolution: {integrity: sha512-rj9xrHTSw7bPpylx8g9xhhUgO9NYKX1wGnGrMaFS5CQ9KS+jhwhKFqbZaQKhXNhpvI0cLEEW6GaRXdrC3iBs1A==}
+    dev: false
 
   /@tauri-apps/api/1.2.0:
     resolution: {integrity: sha512-lsI54KI6HGf7VImuf/T9pnoejfgkNoXveP14pVV7XarrQ46rOejIVJLFqHI9sRReJMGdh2YuCoI3cc/yCWCsrw==}

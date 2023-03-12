@@ -1,12 +1,27 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Greet from "./components/translation.vue";
+import { reactive, provide,  watchEffect } from 'vue'
+import Translation from "./components/translation.vue";
+import Nav from "./components/Nav.vue";
+import { Platform } from "./types/type";
+const plat = reactive({
+  current: Platform.YouDao,
+});
+
+const takes = reactive({
+  isTakes: false,
+});
+// watchEffect(()=>{
+//   console.log(takes.isTakes);
+// });
+provide("plat", plat);
 </script>
 
 <template>
+  <div class="header">
+    <Nav :plat = plat :takes= takes />
+  </div>
   <div class="container">
-    <Greet />
+    <Translation />
   </div>
 </template>
 

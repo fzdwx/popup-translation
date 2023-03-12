@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { listen, Event } from "@tauri-apps/api/event";
-import { reactive } from "vue";
+import { inject, provide, reactive, ref, watchEffect } from "vue";
 import { getSelectionText } from "../command/core";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
@@ -10,6 +10,11 @@ import Card from "./card.vue";
 import deeplImage from "../assets/deepl.png";
 import chatgptImage from "../assets/chatgpt.png";
 import googleImage from "../assets/google.ico";
+import Textbox from "./common/Textbox.vue";
+import Button from "./common/Button.vue";
+import { IconTransformFilled,IconCalendar } from "@tabler/icons-vue";
+import { IconCopy } from "@tabler/icons-vue";
+import { Platform } from "../types/type";
 
 interface TranslationItem {
   text: string;
@@ -51,6 +56,9 @@ const state: TranslationInfo = reactive({
     loading: false,
   },
 });
+
+// const takes = inject<{isTakes: boolean}>("isTakes");
+const platform = inject<{current: Platform}>("plat");
 
 /**
  * 刷新翻译
@@ -99,12 +107,46 @@ async function greet() {
       console.log(err);
     });
 }
+
+// watchEffect(() => {
+  // if (takes?.isTakes) {
+    // TODO
+    // 划屏取词
+  // }
+// });
+const getTextInputVal = (text: string) => {
+  if (text === "") {
+    console.log(2); 
+    return;
+  }else {
+    state.source.text = text;
+  }
+}
+
+const translateStart = () => {
+  state.source = resetItem();
+  switch (platform?.current) {
+    case Platform.Bing:
+      break;
+      case Platform.Google:
+        console.log(platform.current);
+        google(state.source.text, "auto", "chinese").then((text) => {
+          state.google.text = text;
+          state.source.loading = false;
+        });
+        break;
+    case Platform.YouDao:
+        break;
+  }
+  
+};
+
 </script>
 
 <template>
   <div>
-    <button type="button" @click="greet()">读取选中文本/粘贴板</button>
-    <Card
+    <!-- <button type="button" @click="greet()">读取选中文本/粘贴板</button> -->
+    <!-- <Card
       class="mtop20"
       :img-src="chatgptImage"
       title="Chatgpt"
@@ -124,7 +166,24 @@ async function greet() {
       title="Deepl"
       :text="state.deepl.text"
       :load="state.deepl.loading"
-    />
+    /> -->
+    <div class="content">
+      <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"></Textbox>
+    <div class="btns">
+      <Button class="tran_btn">
+        <IconCalendar />
+        清空
+      </Button>
+      <Button class="tran_btn" @click="translateStart">
+          <IconTransformFilled />
+          翻译
+      </Button>
+    </div> 
+      <Textbox :isTextarea="false">
+          <IconCopy />
+          复制文本
+      </Textbox>
+    </div>
   </div>
 </template>
 
@@ -132,5 +191,19 @@ async function greet() {
 .mtop20 {
   margin: 0 auto;
   margin-top: 20px;
+}
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tran_btn:hover {
+  border: 1px solid #fff;
 }
 </style>
