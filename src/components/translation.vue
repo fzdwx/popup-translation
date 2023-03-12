@@ -3,15 +3,18 @@ import { listen, Event } from "@tauri-apps/api/event";
 import { reactive } from "vue";
 import { getSelectionText } from "../command/core"
 import { deepl } from "../platform/deepl"
+import loding from "./loding.vue"
 
 interface TranslationInfo {
   sorce: string
   target: string
+  loaded: boolean
 }
 
 const translationInfo: TranslationInfo = reactive({
   sorce: "",
-  target: ""
+  target: "",
+  loaded: false,
 })
 
 /**
@@ -26,8 +29,10 @@ async function greet() {
     .then(val => {
       translationInfo.sorce = val.toString()
 
+      translationInfo.loaded = true
       deepl(translationInfo.sorce, "auto", "zh").then(text => {
         translationInfo.target = text
+        translationInfo.loaded = false
       })
 
     })
@@ -45,7 +50,11 @@ async function greet() {
       {{ translationInfo.sorce }}
     </div>
     <div>
-      {{ translationInfo.target }}
+      <loding :loaded="translationInfo.loaded">
+        <div>
+          {{ translationInfo.target }}
+        </div>
+      </loding>
     </div>
   </div>
 </template>

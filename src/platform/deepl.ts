@@ -1,3 +1,6 @@
+// inspired by https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate/blob/main/node_js_implementation/deepl.js
+// MIT License
+
 import { getClient, Body } from '@tauri-apps/api/http'
 
 const client = await getClient()
@@ -33,7 +36,6 @@ const supportedLanguages = [
 ];
 
 const langMap = new Map<string, string>(supportedLanguages.map(lang => [lang[0], lang[1]]));
-const langMapReverse = new Map<string, string>(supportedLanguages.map(([standardLang, lang]) => [lang, standardLang]));
 
 function initData(source_lang: string, target_lang: string) {
   return {
@@ -68,7 +70,7 @@ function getRandomNumber() {
 function getTimeStamp(iCount: number) {
   const ts = Date.now();
   if (iCount !== 0) {
-    iCount = iCount + 1;
+    iCount = iCount + 1; https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate/blob/main/node_js_implementation/deepl.js
     return ts - (ts % iCount) + iCount;
   } else {
     return ts;
@@ -82,8 +84,6 @@ async function postData(url: string, data: string) {
     }
   })
 }
-
-
 
 async function deepl(query: string, from: string, to: string): Promise<string> {
   const targetLanguage = langMap.get(to);
