@@ -3,24 +3,31 @@ pub fn read_text() -> Result<String, String> {
     use std::time::Duration;
     use x11_clipboard::Clipboard;
 
-    let clipboard = Clipboard::new().unwrap();
-    if let Ok(curr) = clipboard.load(
-        clipboard.getter.atoms.primary,
-        clipboard.getter.atoms.utf8_string,
-        clipboard.getter.atoms.property,
-        Duration::from_millis(100),
-    ) {
-        let curr = String::from_utf8_lossy(&curr)
-            .trim_matches('\u{0}')
-            .trim()
-            .to_string();
-        if !curr.is_empty() {
-            Ok(curr)
-        } else {
+    match Clipboard::new() {
+        Ok(clipboard) => {
+            if let Ok(curr) = clipboard.load(
+                clipboard.getter.atoms.primary,
+                clipboard.getter.atoms.utf8_string,
+                clipboard.getter.atoms.property,
+                Duration::from_millis(100),
+            ) {
+                let curr = String::from_utf8_lossy(&curr)
+                    .trim_matches('\u{0}')
+                    .trim()
+                    .to_string();
+                if !curr.is_empty() {
+                    Ok(curr)
+                } else {
+                    read_text_cross()
+                }
+            } else {
+                read_text_cross()
+            }
+        }
+        Err(err) => {
+            log::error!("linux read clip error {}", err);
             read_text_cross()
         }
-    } else {
-        read_text_cross()
     }
 }
 
@@ -55,6 +62,6 @@ pub fn read_text() -> Result<String, String> {
 fn read_text_cross() -> Result<String, String> {
     use clipboard::{ClipboardContext, ClipboardProvider};
     let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
-    
+
     ctx.get_contents().map_err(|e| e.to_string())
 }
