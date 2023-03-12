@@ -37,6 +37,8 @@ const props = defineProps<{
   align-items: center;
   height: 25px;
   margin-bottom: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .ico {
@@ -47,7 +49,9 @@ const props = defineProps<{
 }
 
 .text-container {
-  width: 95%;
+  margin-left: 10px;
+  margin-right: 10px;
+
   box-shadow: 0 0 0 1px rgba(36, 104, 193, 0.8);
   border-radius: 8px;
   border: 1px solid transparent;

@@ -10,3 +10,6 @@ dev:
 # build app
 build:
   cargo tauri build
+
+install: build
+  mv ./src-tauri/target/release/popup-translation ~/.cargo/bin/
