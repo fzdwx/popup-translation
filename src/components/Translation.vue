@@ -5,7 +5,7 @@ import { getSelectionText } from "../command/core";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
 import { google } from "../platform/google";
-import Card from "./Card.vue";
+import Card from "./common/Card.vue";
 
 import deeplImage from "../assets/deepl.png";
 import chatgptImage from "../assets/chatgpt.png";
