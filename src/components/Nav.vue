@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import {IconSettings, IconBrandGoogle, IconBrandBing, IconBrandNeteaseMusic} from "@tabler/icons-vue";
+import {
+  IconSettings,
+  IconBrandGoogle,
+  IconBrandBing,
+  IconBrandNeteaseMusic,
+} from "@tabler/icons-vue";
 import Button from "./common/Button.vue";
 import { Platform } from "../types/type";
 import { ref } from "vue";
 const props = defineProps<{
   plat: {
-    current: Platform
-  },
+    current: Platform;
+  };
   takes: {
-    isTakes: boolean,
-  },
+    isTakes: boolean;
+  };
   showSetPage: {
-    show: boolean,
-  },
+    show: boolean;
+  };
 }>();
 
 const click = (plat: Platform) => {
@@ -31,28 +36,40 @@ const show = () => {
   } else {
     color.value = "white";
   }
-}
+};
 </script>
 
 <template>
   <div class="nav">
     <div class="btns">
-      <Button class="btn" :class="{ active: plat.current === Platform.YouDao }"  @click="click(Platform.YouDao)">
+      <Button
+        class="btn"
+        :class="{ active: plat.current === Platform.YouDao }"
+        @click="click(Platform.YouDao)"
+      >
         <IconBrandNeteaseMusic :size="16" color="red"></IconBrandNeteaseMusic>
         有道词典
       </Button>
-      <Button class="btn" :class="{ active: plat.current ===  Platform.Bing }" @click="click(Platform.Bing)">
+      <Button
+        class="btn"
+        :class="{ active: plat.current === Platform.Bing }"
+        @click="click(Platform.Bing)"
+      >
         <IconBrandBing :size="16" color="skyblue"></IconBrandBing>
         bing
       </Button>
-      <Button class="btn" :class="{ active: plat.current ===  Platform.Google }" @click="click(Platform.Google)">
+      <Button
+        class="btn"
+        :class="{ active: plat.current === Platform.Google }"
+        @click="click(Platform.Google)"
+      >
         <IconBrandGoogle :size="16" color="skyblue"></IconBrandGoogle>
         google
       </Button>
     </div>
     <div class="setting">
       <div class="takes">
-        <input type="checkbox" name="takes" id="takes" @change="isTakes()">
+        <input type="checkbox" name="takes" id="takes" @change="isTakes()" />
         <label for="takes">划屏取词</label>
       </div>
       <IconSettings :color="color" @click="show"></IconSettings>
