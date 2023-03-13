@@ -140,7 +140,6 @@ const translateStart = () => {
       break;
   }
 };
-
 </script>
 
 <template>
