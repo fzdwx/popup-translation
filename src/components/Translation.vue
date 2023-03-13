@@ -1,53 +1,20 @@
 <script setup lang="ts">
-import { listen, Event } from "@tauri-apps/api/event";
-import { inject, provide, reactive, ref, watchEffect } from "vue";
-import { getSelectionText } from "../command/core";
-import { deepl } from "../platform/deepl";
-import { freegpt } from "../platform/chatgpt";
+import { inject, reactive } from "vue";
 import { google } from "../platform/google";
-import Card from "./common/Card.vue";
-
-import deeplImage from "../assets/deepl.png";
-import chatgptImage from "../assets/chatgpt.png";
-import googleImage from "../assets/google.ico";
 
 import { IconTransformFilled, IconCalendar, IconCopy } from "@tabler/icons-vue";
 import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
+import AggTranslation from "./aggregateMode/Translation.vue";
 
-import { Platform } from "../types/type";
+import { Platform, TranslationInfo } from "../types/type";
 
-interface TranslationItem {
-  text: string;
-  loading: boolean;
-}
-
-const resetItem = () => {
-  return {
-    text: "",
-    loading: true,
-  } as TranslationItem;
-};
-
-interface TranslationInfo {
-  source: TranslationItem;
-  deepl: TranslationItem;
-  chatgpt: TranslationItem;
-  google: TranslationItem;
-}
+// const takes = inject<{isTakes: boolean}>("isTakes");
+const platform = inject<{ current: Platform }>("plat");
+const model = inject<{ currentModel: number }>("model");
 
 const state: TranslationInfo = reactive({
   source: {
-    text: "",
-    loading: false,
-  },
-
-  deepl: {
-    text: "",
-    loading: false,
-  },
-
-  chatgpt: {
     text: "",
     loading: false,
   },
@@ -57,57 +24,6 @@ const state: TranslationInfo = reactive({
     loading: false,
   },
 });
-
-// const takes = inject<{isTakes: boolean}>("isTakes");
-const platform = inject<{ current: Platform }>("plat");
-const model = inject<{ currentModel: number }>("model");
-/**
- * 刷新翻译
- */
-const unListenRefreshTranslation = listen(
-  "refresh-translation",
-  async (event: Event<string>) => {
-    greet();
-  }
-);
-
-async function refresh(source: TranslationItem) {
-  deepl(source.text, "auto", "chinese")
-    .then((text) => {
-      state.deepl.text = text;
-      state.deepl.loading = false;
-    })
-    .catch((err) => {
-      console.log("deepl error", err);
-    });
-
-  freegpt(source.text, "chinese").then((text) => {
-    state.chatgpt.text = text;
-    state.chatgpt.loading = false;
-  });
-
-  google(source.text, "auto", "chinese").then((text) => {
-    state.google.text = text;
-    state.google.loading = false;
-  });
-}
-
-async function greet() {
-  state.source = resetItem();
-  state.chatgpt = resetItem();
-  state.deepl = resetItem();
-  state.google = resetItem();
-
-  await getSelectionText()
-    .then((val) => {
-      state.source.text = val.toString();
-      state.source.loading = false;
-      refresh(state.source);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
 
 // watchEffect(() => {
 // if (takes?.isTakes) {
@@ -143,31 +59,8 @@ const translateStart = () => {
 </script>
 
 <template>
-  <div v-if="model?.currentModel === 1">
-    <button type="button" @click="greet()">读取选中文本/粘贴板</button>
-    <Card
-      class="mtop20"
-      :img-src="chatgptImage"
-      title="Chatgpt"
-      :text="state.chatgpt.text"
-      :load="state.chatgpt.loading"
-    />
-    <Card
-      class="mtop20"
-      :img-src="googleImage"
-      title="Google"
-      :text="state.google.text"
-      :load="state.google.loading"
-    />
-    <Card
-      class="mtop20"
-      :img-src="deeplImage"
-      title="Deepl"
-      :text="state.deepl.text"
-      :load="state.deepl.loading"
-    />
-  </div>
-  <div class="content" v-else>
+  <AggTranslation :show="model?.currentModel === 1" />
+  <div class="content" v-if="model?.currentModel !== 1">
     <Textbox
       :isTextarea="true"
       :text="state.source.text"

@@ -19,12 +19,17 @@ interface TranslationItem {
     loading: boolean;
 }
 
-interface TranslationInfo {
+interface AggregateTranslationInfo {
     source: TranslationItem;
     deepl: TranslationItem;
     chatgpt: TranslationItem;
     google: TranslationItem;
 }
 
+interface TranslationInfo {
+    source: TranslationItem;
+    google: TranslationItem;
+}
+
 export { Platform }
-export type { KeyInfo, TranslationItem, TranslationInfo }
+export type { KeyInfo, TranslationItem, TranslationInfo, AggregateTranslationInfo }
