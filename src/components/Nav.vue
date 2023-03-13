@@ -2,12 +2,16 @@
 import {IconSettings, IconBrandGoogle, IconBrandBing, IconBrandNeteaseMusic} from "@tabler/icons-vue";
 import Button from "./common/Button.vue";
 import { Platform } from "../types/type";
+import { ref } from "vue";
 const props = defineProps<{
   plat: {
     current: Platform
   },
   takes: {
     isTakes: boolean,
+  },
+  showSetPage: {
+    show: boolean,
   },
 }>();
 
@@ -19,6 +23,15 @@ const isTakes = () => {
   props.takes.isTakes = !props.takes.isTakes;
 };
 
+const color = ref("white");
+const show = () => {
+  props.showSetPage.show = !props.showSetPage.show;
+  if (props.showSetPage.show) {
+    color.value = "skyblue";
+  } else {
+    color.value = "white";
+  }
+}
 </script>
 
 <template>
@@ -42,7 +55,7 @@ const isTakes = () => {
         <input type="checkbox" name="takes" id="takes" @change="isTakes()">
         <label for="takes">划屏取词</label>
       </div>
-      <IconSettings color="white"></IconSettings>
+      <IconSettings :color="color" @click="show"></IconSettings>
     </div>
   </div>
 </template>

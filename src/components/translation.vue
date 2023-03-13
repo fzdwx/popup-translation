@@ -10,10 +10,11 @@ import Card from "./card.vue";
 import deeplImage from "../assets/deepl.png";
 import chatgptImage from "../assets/chatgpt.png";
 import googleImage from "../assets/google.ico";
+
+import { IconTransformFilled,IconCalendar,IconCopy } from "@tabler/icons-vue";
 import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
-import { IconTransformFilled,IconCalendar } from "@tabler/icons-vue";
-import { IconCopy } from "@tabler/icons-vue";
+
 import { Platform } from "../types/type";
 
 interface TranslationItem {
@@ -59,6 +60,7 @@ const state: TranslationInfo = reactive({
 
 // const takes = inject<{isTakes: boolean}>("isTakes");
 const platform = inject<{current: Platform}>("plat");
+const model = inject<{currentModel: number}>("model");
 
 /**
  * 刷新翻译
@@ -118,35 +120,35 @@ const getTextInputVal = (text: string) => {
   if (text === "") {
     console.log(2); 
     return;
-  }else {
+  } else {
     state.source.text = text;
   }
 }
 
 const translateStart = () => {
-  state.source = resetItem();
+  state.source.loading = true;
+
   switch (platform?.current) {
     case Platform.Bing:
       break;
-      case Platform.Google:
+    case Platform.Google:
         console.log(platform.current);
         google(state.source.text, "auto", "chinese").then((text) => {
           state.google.text = text;
           state.source.loading = false;
         });
-        break;
+      break;
     case Platform.YouDao:
         break;
   }
-  
 };
 
 </script>
 
 <template>
-  <div>
-    <!-- <button type="button" @click="greet()">读取选中文本/粘贴板</button> -->
-    <!-- <Card
+  <div v-if="model?.currentModel === 1">
+    <button type="button" @click="greet()">读取选中文本/粘贴板</button>
+    <Card
       class="mtop20"
       :img-src="chatgptImage"
       title="Chatgpt"
@@ -166,9 +168,10 @@ const translateStart = () => {
       title="Deepl"
       :text="state.deepl.text"
       :load="state.deepl.loading"
-    /> -->
-    <div class="content">
-      <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"></Textbox>
+    />
+  </div>
+  <div class="content" v-else>
+    <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"></Textbox>
     <div class="btns">
       <Button class="tran_btn">
         <IconCalendar />
@@ -179,11 +182,10 @@ const translateStart = () => {
           翻译
       </Button>
     </div> 
-      <Textbox :isTextarea="false">
-          <IconCopy />
-          复制文本
-      </Textbox>
-    </div>
+    <Textbox :isTextarea="false">
+        <IconCopy />
+        复制文本
+    </Textbox>
   </div>
 </template>
 
