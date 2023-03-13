@@ -5,13 +5,13 @@ import { getSelectionText } from "../command/core";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
 import { google } from "../platform/google";
-import Card from "./card.vue";
+import Card from "./Card.vue";
 
 import deeplImage from "../assets/deepl.png";
 import chatgptImage from "../assets/chatgpt.png";
 import googleImage from "../assets/google.ico";
 
-import { IconTransformFilled,IconCalendar,IconCopy } from "@tabler/icons-vue";
+import { IconTransformFilled, IconCalendar, IconCopy } from "@tabler/icons-vue";
 import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
 
@@ -59,9 +59,8 @@ const state: TranslationInfo = reactive({
 });
 
 // const takes = inject<{isTakes: boolean}>("isTakes");
-const platform = inject<{current: Platform}>("plat");
-const model = inject<{currentModel: number}>("model");
-
+const platform = inject<{ current: Platform }>("plat");
+const model = inject<{ currentModel: number }>("model");
 /**
  * 刷新翻译
  */
@@ -111,20 +110,19 @@ async function greet() {
 }
 
 // watchEffect(() => {
-  // if (takes?.isTakes) {
-    // TODO
-    // 划屏取词
-  // }
+// if (takes?.isTakes) {
+// TODO
+// 划屏取词
+// }
 // });
 const getTextInputVal = (text: string) => {
   if (text === "") {
-    console.log(2); 
+    console.log(2);
     return;
   } else {
     state.source.text = text;
   }
-}
-
+};
 const translateStart = () => {
   state.source.loading = true;
 
@@ -132,14 +130,14 @@ const translateStart = () => {
     case Platform.Bing:
       break;
     case Platform.Google:
-        console.log(platform.current);
-        google(state.source.text, "auto", "chinese").then((text) => {
-          state.google.text = text;
-          state.source.loading = false;
-        });
+      console.log(platform.current);
+      google(state.source.text, "auto", "chinese").then((text) => {
+        state.google.text = text;
+        state.source.loading = false;
+      });
       break;
     case Platform.YouDao:
-        break;
+      break;
   }
 };
 
@@ -171,20 +169,25 @@ const translateStart = () => {
     />
   </div>
   <div class="content" v-else>
-    <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"></Textbox>
+    <Textbox
+      :isTextarea="true"
+      :text="state.source.text"
+      :getTextInputVal="getTextInputVal"
+      :load="state.source.loading"
+    ></Textbox>
     <div class="btns">
       <Button class="tran_btn">
         <IconCalendar />
         清空
       </Button>
       <Button class="tran_btn" @click="translateStart">
-          <IconTransformFilled />
-          翻译
+        <IconTransformFilled />
+        翻译
       </Button>
-    </div> 
+    </div>
     <Textbox :isTextarea="false">
-        <IconCopy />
-        复制文本
+      <IconCopy />
+      复制文本
     </Textbox>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { reactive, provide,  watchEffect } from 'vue'
-import Translation from "./components/translation.vue";
+import { reactive, provide, watchEffect } from "vue";
+
+import Translation from "./components/Translation.vue";
 import Nav from "./components/Nav.vue";
 import Set from "./components/Set.vue";
 
@@ -21,31 +22,30 @@ const keyList = reactive<KeyInfo>({
   youdao: {
     platform: "youdao Key",
     key: "",
-  }
-})
+  },
+});
 const model = reactive({
   currentModel: 1,
 });
 const showSetPage = reactive({
-  show: false,
+  show: true,
 });
 // watchEffect(()=>{
 //   console.log(takes.isTakes);
 // });
 provide("plat", plat);
 provide("model", model);
-
 </script>
 
 <template>
   <div class="header">
-    <Nav :plat = plat :takes= takes :showSetPage="showSetPage"/>
+    <Nav :plat="plat" :takes="takes" :showSetPage="showSetPage" />
   </div>
   <div class="container">
     <Translation />
   </div>
   <div class="setting" v-if="showSetPage.show">
-    <Set :keyList="keyList" :model="model"/>
+    <Set :keyList="keyList" :model="model" />
   </div>
 </template>
 
