@@ -2,9 +2,8 @@
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "devPath": "http://127.0.0.1:1420/",
+    "distDir": "../dist"
   },
   "package": {
     "productName": "popup-translation",
@@ -43,7 +42,12 @@
         "icons/icon.ico"
       ],
       "identifier": "io.fzdwx.popup-translation",
-      "targets": "all"
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
     },
     "security": {
       "csp": null
