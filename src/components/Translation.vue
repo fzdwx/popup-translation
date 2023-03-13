@@ -5,11 +5,12 @@ import { getSelectionText } from "../command/core";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
 import { google } from "../platform/google";
-import Card from "./card.vue";
 
 import deeplImage from "../assets/deepl.png";
 import chatgptImage from "../assets/chatgpt.png";
 import googleImage from "../assets/google.ico";
+
+import Card from "./Card.vue";
 
 interface TranslationItem {
   text: string;

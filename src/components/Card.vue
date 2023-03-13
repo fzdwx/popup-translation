@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Loding from "./loding.vue";
+import Loding from "./Loading.vue";
 
 const props = defineProps<{
   imgSrc: string;
