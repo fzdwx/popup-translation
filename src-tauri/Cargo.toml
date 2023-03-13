@@ -21,7 +21,6 @@ log = "0.4.17"
 tauri-plugin-log = { git = "https://github.com/lencx/tauri-plugins-workspace", branch = "dev", features = [
   "colored",
 ] }
-window-vibrancy = "0.3.2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
