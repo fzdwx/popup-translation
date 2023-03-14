@@ -17,7 +17,6 @@ const inputValue = function (e: any) {
 .ipt {
   margin: 8px;
 }
-
 .ipt label {
   margin-right: 5px;
 }
@@ -27,7 +26,6 @@ const inputValue = function (e: any) {
 .ipt {
   margin: 8px;
 }
-
 .ipt label {
   margin-right: 5px;
 }

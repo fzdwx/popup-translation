@@ -1938,6 +1938,7 @@ dependencies = [
 name = "popup-translation"
 version = "1.0.1"
 dependencies = [
+ "anyhow",
  "clipboard",
  "enigo",
  "log",

@@ -7,14 +7,14 @@ import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
 import AggTranslation from "./aggregateMode/Translation.vue";
 
-import { Model, Platform, TranslationInfo } from "../types/type";
+import { Mode, Platform, TranslationInfo } from "../types/type";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
 import { IconTexture } from "@tabler/icons-vue";
 
 // const takes = inject<{isTakes: boolean}>("isTakes");
 const platform = inject<{ current: Platform }>("plat");
-const model = inject<{ currentModel: Model }>("model");
+const mode = inject<{ currentMode: Mode }>("mode");
 
 const state: TranslationInfo = reactive({
   source: {
@@ -73,9 +73,14 @@ const translateStart = () => {
 </script>
 
 <template>
-  <AggTranslation v-if="model?.currentModel === Model.ModelOne" />
+  <AggTranslation v-if="mode?.currentMode === Mode.Aggergate" />
   <div class="content" v-else>
-    <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading">
+    <Textbox
+      :isTextarea="true"
+      :text="state.source.text"
+      :getTextInputVal="getTextInputVal"
+      :load="state.source.loading"
+    >
     </Textbox>
     <div class="btns">
       <Button class="tran_btn">
