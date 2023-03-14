@@ -10,9 +10,23 @@ interface KeyItem {
 };
 
 interface KeyInfo {
-    google:KeyItem,
+    google: KeyItem,
     youdao: KeyItem,
 }
 
-export { Platform }
-export type { KeyInfo }
+interface TranslationItem {
+    text: string;
+    loading: boolean;
+}
+
+interface AggregateTranslationInfo {
+    source: TranslationItem;
+    deepl: TranslationItem;
+    chatgpt: TranslationItem;
+    google: TranslationItem;
+}
+
+interface TranslationInfo {
+    source: TranslationItem;
+    google: TranslationItem;
+}

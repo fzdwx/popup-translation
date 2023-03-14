@@ -4,7 +4,7 @@ const url = "https://chatgpt-api.shn.hk/v1"
 
 async function freegpt(query: string, to: string) {
   let systemPrompt = 'You are a translation engine that can only translate text and cannot interpret it, and it is not allowed to output more than required content.'
-  let assistantPrompt = `翻译后的目标语言是: ${to}`
+  let assistantPrompt = `translate to ${to}`
 
   const resp = await postJson(url, JSON.stringify({
     "model": "gpt-3.5-turbo",
@@ -17,7 +17,7 @@ async function freegpt(query: string, to: string) {
         "role": 'user',
         "content": assistantPrompt,
       },
-      { "role": 'user', "content": `Content to be translated :${query}` },
+      { "role": 'user', "content": `${query}` },
     ],
   }))
 
