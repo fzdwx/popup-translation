@@ -6,9 +6,9 @@ enum Platform {
 	Deepl,
 }
 
-enum Model {
-	ModelOne,
-	ModelTwo,
+enum Mode {
+	Aggergate,  // mode 1
+	Split,      // mode 2
 }
 
 interface KeyItem {
@@ -39,6 +39,7 @@ interface TranslationInfo {
 	source: TranslationItem;
 }
 
+// app config
 interface Config {
 	keys: {
 		chatGpt: string,
@@ -47,7 +48,7 @@ interface Config {
 	}
 }
 
-export { Platform, Model };
+export { Platform, Mode };
 export type {
 	KeyInfo,
 	TranslationItem,

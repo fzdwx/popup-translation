@@ -4,9 +4,9 @@ import { reactive, provide, watchEffect, ref, onBeforeMount } from "vue";
 import Translation from "./components/Translation.vue";
 import Nav from "./components/Nav.vue";
 import Set from "./components/Set.vue";
-import Model1Nav from "./components/nav/Model1Nav.vue";
+import AggregateModeNav from "./components/aggregateMode/Nav.vue";
 
-import { KeyInfo, Model, Platform } from "./types/type";
+import { KeyInfo, Mode, Platform } from "./types/type";
 import { readConfig } from "./command/core";
 
 const plat = reactive({
@@ -31,8 +31,8 @@ const keyList = reactive<KeyInfo>({
     key: "",
   },
 });
-const model = reactive({
-  currentModel: Model.ModelTwo,
+const mode = reactive({
+  currentMode: Mode.Split,
 });
 const showSetPage = reactive({
   show: false,
@@ -57,7 +57,7 @@ const reload = () => {
   readText.value = true;
 };
 provide("plat", plat);
-provide("model", model);
+provide("mode", mode);
 provide("readText", readText);
 provide("showSetPage", showSetPage);
 </script>
@@ -68,12 +68,12 @@ provide("showSetPage", showSetPage);
       <template #platform_link>
         <button
           type="button"
-          v-if="model.currentModel === Model.ModelOne"
+          v-if="mode.currentMode === Mode.Aggergate"
           @click="reload"
         >
           读取选中文本/粘贴板
         </button>
-        <Model1Nav v-else :plat="plat"></Model1Nav>
+        <AggregateModeNav v-else :plat="plat"></AggregateModeNav>
       </template>
     </Nav>
   </div>
@@ -81,7 +81,7 @@ provide("showSetPage", showSetPage);
     <Translation />
   </div>
   <div class="setting" v-if="showSetPage.show">
-    <Set :keyList="keyList" :model="model" />
+    <Set :keyList="keyList" :mode="mode" />
   </div>
 </template>
 

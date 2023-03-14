@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { inject } from "vue";
-import { KeyInfo, Model, Config } from "../types/type";
+import { KeyInfo, Mode, Config } from "../types/type";
 import Input from "./common/Input.vue";
 import Button from "./common/Button.vue";
 import { writeConfig } from "../command/core";
 const props = defineProps<{
   keyList: KeyInfo;
-  model: {
-    currentModel: Model;
+  mode: {
+    currentMode: Mode;
   };
 }>();
 
@@ -35,11 +35,11 @@ const save = async () => {
       <span>翻译设置:</span>
       <span class="close-btn" @click="showClick"> X </span>
     </div>
-    <div class="model">
+    <div class="mode">
       选择模式:
-      <select name="" id="" v-model="props.model.currentModel">
-        <option :value="Model.ModelOne">模式一</option>
-        <option :value="Model.ModelTwo">模式二</option>
+      <select name="" id="" v-model="props.mode.currentMode">
+        <option :value="Mode.Aggergate">模式一</option>
+        <option :value="Mode.Split">模式二</option>
       </select>
     </div>
     <Input
@@ -83,11 +83,11 @@ const save = async () => {
   cursor: pointer;
 }
 
-.model {
+.mode {
   margin: 8px;
 }
 
-.model > select {
+.mode > select {
   width: 100px;
   height: 30px;
   margin: 8px;
