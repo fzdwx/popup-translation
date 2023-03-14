@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-const props = defineProps(["platform", "modelValue"]);
-const emit = defineEmits(["update:modelValue"]);
-const inputValue = (e:any) => {
-  emit("update:modelValue", e.target.value);
-}
+const props = defineProps(["platform", "modeValue"]);
+const emit = defineEmits(["update:modeValue"]);
+const inputValue = (e: any) => {
+  emit("update:modeValue", e.target.value);
+};
 </script>
 
 <template>
@@ -13,7 +13,7 @@ const inputValue = (e:any) => {
       type="text"
       name="ipt"
       id="ipt"
-      :value="modelValue"
+      :value="modeValue"
       @input="inputValue($event)"
     />
   </div>
