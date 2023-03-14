@@ -4,7 +4,7 @@
 
  -->
 <script setup lang="ts">
-import { reactive } from "vue";
+import { Ref, inject, reactive, watchEffect } from "vue";
 import { listen, Event } from "@tauri-apps/api/event";
 
 import { getSelectionText } from "../../command/core";
@@ -18,10 +18,6 @@ import Card from "../common/Card.vue";
 import deeplImage from "../../assets/deepl.png";
 import chatgptImage from "../../assets/chatgpt.png";
 import googleImage from "../../assets/google.ico";
-
-const props = defineProps<{
-  show: boolean;
-}>();
 
 const state: AggregateTranslationInfo = reactive({
   source: {
@@ -51,10 +47,6 @@ const state: AggregateTranslationInfo = reactive({
 const unListenRefreshTranslation = listen(
   "refresh-translation",
   async (event: Event<string>) => {
-    if (!props.show) {
-      return;
-    }
-
     reload();
   }
 );
@@ -103,31 +95,30 @@ const resetItem = () => {
     loading: true,
   } as TranslationItem;
 };
+const readText = inject<Ref<boolean>>("readText");
+watchEffect(() => {
+  if (readText?.value === true) {
+    reload();
+    readText.value = false;
+  }
+});
 </script>
 
 <template>
-  <div v-if="props.show">
-    <button type="button" @click="reload">读取选中文本/粘贴板</button>
-    <Card
-      class="mtop20"
-      :img-src="chatgptImage"
-      title="Chatgpt"
-      :text="state.chatgpt.text"
-      :load="state.chatgpt.loading"
-    />
-    <Card
-      class="mtop20"
-      :img-src="googleImage"
-      title="Google"
-      :text="state.google.text"
-      :load="state.google.loading"
-    />
-    <Card
-      class="mtop20"
-      :img-src="deeplImage"
-      title="Deepl"
-      :text="state.deepl.text"
-      :load="state.deepl.loading"
-    />
+  <div class="aggregate">
+    <Card class="card" :img-src="chatgptImage" title="Chatgpt" :text="state.chatgpt.text" :load="state.chatgpt.loading" />
+    <Card class="card" :img-src="googleImage" title="Google" :text="state.google.text" :load="state.google.loading" />
+    <Card class="card" :img-src="deeplImage" title="Deepl" :text="state.deepl.text" :load="state.deepl.loading" />
   </div>
 </template>
+
+<style scoped>
+.card {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.aggregate {
+  margin: 20px 0;
+}
+</style>

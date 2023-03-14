@@ -1,20 +1,27 @@
 <script setup lang="ts">
-import { reactive, provide, watchEffect } from "vue";
+import { reactive, provide, watchEffect, ref, onBeforeMount } from "vue";
 
 import Translation from "./components/Translation.vue";
 import Nav from "./components/Nav.vue";
 import Set from "./components/Set.vue";
+import Model1Nav from "./components/nav/Model1Nav.vue";
 
-import { KeyInfo, Platform } from "./types/type";
+import { KeyInfo, Model, Platform } from "./types/type";
+import { readKeys } from "./utils/file";
+
 const plat = reactive({
-  current: Platform.YouDao,
+  current: Platform.Google,
 });
 
 const takes = reactive({
-  isTakes: false,
+  isTakes: true,
 });
 
 const keyList = reactive<KeyInfo>({
+  chatgpt: {
+    platform: "ChatGPT Key",
+    key: "",
+  },
   google: {
     platform: "Google Key",
     key: "",
@@ -25,21 +32,43 @@ const keyList = reactive<KeyInfo>({
   },
 });
 const model = reactive({
-  currentModel: 1,
+  currentModel: Model.ModelTwo,
 });
 const showSetPage = reactive({
-  show: true,
+  show: false,
 });
+
 // watchEffect(()=>{
 //   console.log(takes.isTakes);
 // });
+
+// read keys
+onBeforeMount(() => {
+  readKeys().then(({ chatgpt, google, youdao }) => {
+    keyList.chatgpt = chatgpt;
+    keyList.google = google;
+    keyList.youdao = youdao;
+  });
+});
+
+let readText = ref(false);
+const reload = () => {
+  readText.value = true;
+};
 provide("plat", plat);
 provide("model", model);
+provide("readText", readText);
+provide("showSetPage", showSetPage);
 </script>
 
 <template>
   <div class="header">
-    <Nav :plat="plat" :takes="takes" :showSetPage="showSetPage" />
+    <Nav :plat="plat" :takes="takes" :showSetPage="showSetPage">
+      <template #platform_link>
+        <button type="button" v-if="model.currentModel === Model.ModelOne" @click="reload">读取选中文本/粘贴板</button>
+        <Model1Nav v-else :plat="plat"></Model1Nav>
+      </template>
+    </Nav>
   </div>
   <div class="container">
     <Translation />
@@ -59,7 +88,7 @@ provide("model", model);
 <style scoped>
 .setting {
   position: absolute;
-  right: 0;
+  right: 10px;
   top: 50px;
 }
 </style>

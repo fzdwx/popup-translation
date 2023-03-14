@@ -1,34 +1,32 @@
 <script setup lang="ts">
 import { inject, reactive } from "vue";
 import { google } from "../platform/google";
-import Card from "./card.vue";
 
 import { IconTransformFilled, IconCalendar, IconCopy } from "@tabler/icons-vue";
 import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
 import AggTranslation from "./aggregateMode/Translation.vue";
 
-import { Platform, TranslationInfo } from "../types/type";
+import { Model, Platform, TranslationInfo } from "../types/type";
+import { deepl } from "../platform/deepl";
+import { freegpt } from "../platform/chatgpt";
+import { IconCalendarOff } from "@tabler/icons-vue";
+import { IconCalendarCog } from "@tabler/icons-vue";
+import { IconCalendarCancel } from "@tabler/icons-vue";
+import { IconDelta } from "@tabler/icons-vue";
+import { IconTexture } from "@tabler/icons-vue";
 
 // const takes = inject<{isTakes: boolean}>("isTakes");
 const platform = inject<{ current: Platform }>("plat");
-const model = inject<{ currentModel: number }>("model");
+const model = inject<{ currentModel: Model }>("model");
 
 const state: TranslationInfo = reactive({
   source: {
     text: "",
     loading: false,
-  },
-
-  google: {
-    text: "",
-    loading: false,
+    result: "",
   },
 });
-
-// const takes = inject<{isTakes: boolean}>("isTakes");
-const platform = inject<{current: Platform}>("plat");
-const model = inject<{currentModel: number}>("model");
 
 // watchEffect(() => {
 // if (takes?.isTakes) {
@@ -48,14 +46,29 @@ const translateStart = () => {
   state.source.loading = true;
 
   switch (platform?.current) {
-    case Platform.Bing:
-      break;
     case Platform.Google:
-      console.log(platform.current);
       google(state.source.text, "auto", "chinese").then((text) => {
-        state.google.text = text;
+        state.source.result = text;
         state.source.loading = false;
       });
+      break;
+    case Platform.ChatGTP:
+      freegpt(state.source.text, "chinese").then((text) => {
+        state.source.result = text;
+        state.source.loading = false;
+      });
+      break;
+    case Platform.Deepl:
+      deepl(state.source.text, "auto", "chinese")
+        .then((text) => {
+          state.source.result = text;
+          state.source.loading = false;
+        })
+        .catch((err) => {
+          console.log("deepl error", err);
+        });
+      break;
+    case Platform.Bing:
       break;
     case Platform.YouDao:
       break;
@@ -64,17 +77,13 @@ const translateStart = () => {
 </script>
 
 <template>
-  <AggTranslation :show="model?.currentModel === 1" />
-  <div class="content" v-if="model?.currentModel !== 1">
-    <Textbox
-      :isTextarea="true"
-      :text="state.source.text"
-      :getTextInputVal="getTextInputVal"
-      :load="state.source.loading"
-    ></Textbox>
+  <AggTranslation v-if="model?.currentModel === Model.ModelOne" />
+  <div class="content" v-else>
+    <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading">
+    </Textbox>
     <div class="btns">
       <Button class="tran_btn">
-        <IconCalendar />
+        <IconTexture />
         清空
       </Button>
       <Button class="tran_btn" @click="translateStart">
@@ -82,46 +91,27 @@ const translateStart = () => {
         翻译
       </Button>
     </div>
-    <Textbox :isTextarea="false">
+    <Textbox :isTextarea="false" :text="state.source?.result">
       <IconCopy />
       复制文本
-    </Textbox>
-  </div>
-  <div class="content" v-else>
-    <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"></Textbox>
-    <div class="btns">
-      <Button class="tran_btn">
-        <IconCalendar />
-        清空
-      </Button>
-      <Button class="tran_btn" @click="translateStart">
-          <IconTransformFilled />
-          翻译
-      </Button>
-    </div> 
-    <Textbox :isTextarea="false">
-        <IconCopy />
-        复制文本
     </Textbox>
   </div>
 </template>
 
 <style scoped>
-.mtop20 {
-  margin: 0 auto;
-  margin-top: 20px;
-}
 .content {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .btns {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 .tran_btn:hover {
   border: 1px solid #fff;
 }

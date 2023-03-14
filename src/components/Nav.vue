@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import {
   IconSettings,
-  IconBrandGoogle,
-  IconBrandBing,
-  IconBrandNeteaseMusic,
 } from "@tabler/icons-vue";
-import Button from "./common/Button.vue";
+
 import { Platform } from "../types/type";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 const props = defineProps<{
   plat: {
     current: Platform;
@@ -20,9 +17,7 @@ const props = defineProps<{
   };
 }>();
 
-const click = (plat: Platform) => {
-  props.plat.current = plat;
-};
+
 
 const isTakes = () => {
   props.takes.isTakes = !props.takes.isTakes;
@@ -31,45 +26,22 @@ const isTakes = () => {
 const color = ref("white");
 const show = () => {
   props.showSetPage.show = !props.showSetPage.show;
-  if (props.showSetPage.show) {
-    color.value = "skyblue";
-  } else {
+  color.value = "skyblue";
+};
+
+watchEffect(() => {
+  if (!props.showSetPage.show) {
     color.value = "white";
   }
-};
+});
 </script>
 
 <template>
   <div class="nav">
-    <div class="btns">
-      <Button
-        class="btn"
-        :class="{ active: plat.current === Platform.YouDao }"
-        @click="click(Platform.YouDao)"
-      >
-        <IconBrandNeteaseMusic :size="16" color="red"></IconBrandNeteaseMusic>
-        有道词典
-      </Button>
-      <Button
-        class="btn"
-        :class="{ active: plat.current === Platform.Bing }"
-        @click="click(Platform.Bing)"
-      >
-        <IconBrandBing :size="16" color="skyblue"></IconBrandBing>
-        bing
-      </Button>
-      <Button
-        class="btn"
-        :class="{ active: plat.current === Platform.Google }"
-        @click="click(Platform.Google)"
-      >
-        <IconBrandGoogle :size="16" color="skyblue"></IconBrandGoogle>
-        google
-      </Button>
-    </div>
+    <slot name="platform_link"></slot>
     <div class="setting">
       <div class="takes">
-        <input type="checkbox" name="takes" id="takes" @change="isTakes()" />
+        <input type="checkbox" name="takes" id="takes" @change="isTakes()" checked />
         <label for="takes">划屏取词</label>
       </div>
       <IconSettings :color="color" @click="show"></IconSettings>
@@ -84,20 +56,9 @@ const show = () => {
   align-items: center;
   width: 100%;
   height: 50px;
+  padding: 8px;
   /* background-color: #fff; */
   border-bottom: 1px solid #ccc;
-}
-.nav .btns {
-  display: flex;
-}
-
-.active {
-  background-color: rgb(91, 77, 77);
-}
-
-.btns .btn {
-  margin: 5px;
-  flex: 1;
 }
 
 .nav .setting {
@@ -116,7 +77,8 @@ const show = () => {
   margin-right: 8px;
   font-size: 14px;
 }
-.takes > input {
+
+.takes>input {
   width: 15px;
   height: 15px;
 }
