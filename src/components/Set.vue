@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject } from "vue";
-import { KeyInfo, Model } from "../types/type";
+import { KeyInfo, Model, Config } from "../types/type";
 import Input from "./common/Input.vue";
 import Button from "./common/Button.vue";
-import { saveKey2Json } from "../utils/file";
+import { writeConfig } from "../command/core";
 const props = defineProps<{
   keyList: KeyInfo;
   model: {
@@ -17,18 +17,23 @@ const showClick = () => {
 };
 
 const save = async () => {
-  await saveKey2Json(props.keyList);
+  const config: Config = {
+    keys: {
+      chatGpt: props.keyList.chatGpt.key,
+      youdao: props.keyList.youdao.key,
+      google: props.keyList.google.key,
+    },
+  };
+  const configJson = JSON.stringify(config);
+  await writeConfig(configJson);
 };
-
 </script>
 
 <template>
   <div class="set">
     <div class="close-set">
       <span>翻译设置:</span>
-      <span class="close-btn" @click="showClick">
-        X
-      </span>
+      <span class="close-btn" @click="showClick"> X </span>
     </div>
     <div class="model">
       选择模式:
@@ -37,7 +42,11 @@ const save = async () => {
         <option :value="Model.ModelTwo">模式二</option>
       </select>
     </div>
-    <Input v-for="item in props.keyList" :platform="item.platform" v-model="item.key"></Input>
+    <Input
+      v-for="item in props.keyList"
+      :platform="item.platform"
+      v-model="item.key"
+    ></Input>
     <div>
       <Button :style="{ border: '1px solid #fff' }" @click="save">保存</Button>
     </div>
@@ -78,7 +87,7 @@ const save = async () => {
   margin: 8px;
 }
 
-.model>select {
+.model > select {
   width: 100px;
   height: 30px;
   margin: 8px;

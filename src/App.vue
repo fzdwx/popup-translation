@@ -7,7 +7,7 @@ import Set from "./components/Set.vue";
 import Model1Nav from "./components/nav/Model1Nav.vue";
 
 import { KeyInfo, Model, Platform } from "./types/type";
-import { readKeys } from "./utils/file";
+import { readConfig } from "./command/core";
 
 const plat = reactive({
   current: Platform.Google,
@@ -18,7 +18,7 @@ const takes = reactive({
 });
 
 const keyList = reactive<KeyInfo>({
-  chatgpt: {
+  chatGpt: {
     platform: "ChatGPT Key",
     key: "",
   },
@@ -42,12 +42,13 @@ const showSetPage = reactive({
 //   console.log(takes.isTakes);
 // });
 
-// read keys
+// read config
 onBeforeMount(() => {
-  readKeys().then(({ chatgpt, google, youdao }) => {
-    keyList.chatgpt = chatgpt;
-    keyList.google = google;
-    keyList.youdao = youdao;
+  readConfig().then((config) => {
+    const keys = config.keys;
+    keyList.chatGpt.key = keys.chatGpt;
+    keyList.google.key = keys.google;
+    keyList.youdao.key = keys.youdao;
   });
 });
 
@@ -65,7 +66,13 @@ provide("showSetPage", showSetPage);
   <div class="header">
     <Nav :plat="plat" :takes="takes" :showSetPage="showSetPage">
       <template #platform_link>
-        <button type="button" v-if="model.currentModel === Model.ModelOne" @click="reload">读取选中文本/粘贴板</button>
+        <button
+          type="button"
+          v-if="model.currentModel === Model.ModelOne"
+          @click="reload"
+        >
+          读取选中文本/粘贴板
+        </button>
         <Model1Nav v-else :plat="plat"></Model1Nav>
       </template>
     </Nav>
