@@ -24,3 +24,12 @@ defineEmits(["update:modelValue"]);
   margin-right: 5px;
 }
 </style>
+
+<style scoped>
+.ipt {
+  margin: 8px;
+}
+.ipt label {
+  margin-right: 5px;
+}
+</style>

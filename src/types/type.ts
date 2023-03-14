@@ -1,35 +1,48 @@
 enum Platform {
-    YouDao,
-    Bing,
-    Google,
+	ChatGTP,
+	YouDao,
+	Bing,
+	Google,
+	Deepl,
+}
+
+enum Model {
+	ModelOne,
+	ModelTwo,
 }
 
 interface KeyItem {
-    platform: string,
-    key: string,
-};
+	platform: string;
+	key: string;
+}
 
 interface KeyInfo {
-    google: KeyItem,
-    youdao: KeyItem,
+	chatgpt: KeyItem;
+	google: KeyItem;
+	youdao: KeyItem;
 }
 
 interface TranslationItem {
-    text: string;
-    loading: boolean;
+	text: string;
+	loading: boolean;
+	result?: string;
 }
 
 interface AggregateTranslationInfo {
-    source: TranslationItem;
-    deepl: TranslationItem;
-    chatgpt: TranslationItem;
-    google: TranslationItem;
+	source: TranslationItem;
+	deepl: TranslationItem;
+	chatgpt: TranslationItem;
+	google: TranslationItem;
 }
 
 interface TranslationInfo {
-    source: TranslationItem;
-    google: TranslationItem;
+	source: TranslationItem;
 }
 
-export { Platform }
-export type { KeyInfo, TranslationItem, TranslationInfo, AggregateTranslationInfo }
+export { Platform, Model };
+export type {
+	KeyInfo,
+	TranslationItem,
+	TranslationInfo,
+	AggregateTranslationInfo,
+};
