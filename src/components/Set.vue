@@ -42,7 +42,11 @@ const save = async () => {
         <option :value="Mode.Split">模式二</option>
       </select>
     </div>
-    <Input v-for="item in props.keyList" :platform="item.platform" v-model="item.key"></Input>
+    <Input
+      v-for="item in props.keyList"
+      :platform="item.platform"
+      v-model="item.key"
+    ></Input>
     <div>
       <Button :style="{ border: '1px solid #fff' }" @click="save">保存</Button>
     </div>
@@ -83,7 +87,7 @@ const save = async () => {
   margin: 8px;
 }
 
-.mode>select {
+.mode > select {
   width: 100px;
   height: 30px;
   margin: 8px;

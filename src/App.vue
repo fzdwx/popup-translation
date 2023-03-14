@@ -66,7 +66,11 @@ provide("showSetPage", showSetPage);
   <div class="header">
     <Nav :plat="plat" :takes="takes" :showSetPage="showSetPage">
       <template #platform_link>
-        <button type="button" v-if="mode.currentMode === Mode.Aggergate" @click="reload">
+        <button
+          type="button"
+          v-if="mode.currentMode === Mode.Aggergate"
+          @click="reload"
+        >
           读取选中文本/粘贴板
         </button>
         <AggregateModeNav v-else :plat="plat"></AggregateModeNav>
@@ -85,6 +89,13 @@ provide("showSetPage", showSetPage);
 .setting {
   position: absolute;
   right: 0;
+  top: 50px;
+}
+</style>
+<style scoped>
+.setting {
+  position: absolute;
+  right: 10px;
   top: 50px;
 }
 </style>
