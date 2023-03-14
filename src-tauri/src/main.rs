@@ -5,6 +5,7 @@ mod clip;
 mod command;
 mod setting;
 mod setup;
+mod utils;
 
 fn main() {
     tauri::Builder::default()
