@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { IconTransitionRight } from "@tabler/icons-vue";
 import { Platform } from "../../types/type";
 import Button from "../common/Button.vue";
 import {
   IconBrandGoogle,
   IconBrandBing,
+  IconTransformFilled,
 } from "@tabler/icons-vue";
-import { IconTransformFilled } from "@tabler/icons-vue";
 
 const props = defineProps<{
   plat: {

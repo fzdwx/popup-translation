@@ -10,10 +10,6 @@ import AggTranslation from "./aggregateMode/Translation.vue";
 import { Model, Platform, TranslationInfo } from "../types/type";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
-import { IconCalendarOff } from "@tabler/icons-vue";
-import { IconCalendarCog } from "@tabler/icons-vue";
-import { IconCalendarCancel } from "@tabler/icons-vue";
-import { IconDelta } from "@tabler/icons-vue";
 import { IconTexture } from "@tabler/icons-vue";
 
 // const takes = inject<{isTakes: boolean}>("isTakes");
