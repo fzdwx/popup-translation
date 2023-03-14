@@ -2,7 +2,7 @@
 import { inject, reactive } from "vue";
 import { google } from "../platform/google";
 
-import { IconTransformFilled, IconCalendar, IconCopy } from "@tabler/icons-vue";
+import { IconTransformFilled, IconTexture, IconCopy } from "@tabler/icons-vue";
 import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
 import AggTranslation from "./aggregateMode/Translation.vue";
@@ -10,7 +10,6 @@ import AggTranslation from "./aggregateMode/Translation.vue";
 import { Mode, Platform, TranslationInfo } from "../types/type";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
-import { IconTexture } from "@tabler/icons-vue";
 
 // const takes = inject<{isTakes: boolean}>("isTakes");
 const platform = inject<{ current: Platform }>("plat");
