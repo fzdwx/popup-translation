@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Platform } from "../../types/type";
-import Button from "../common/Button.vue";
+import Button from "../../common/Button.vue";
 import {
   IconBrandGoogle,
   IconBrandBing,
   IconTransformFilled,
 } from "@tabler/icons-vue";
+import { Platform } from "../../../types/type";
 
 const props = defineProps<{
   plat: {
@@ -20,19 +20,35 @@ const platClick = (plat: Platform) => {
 
 <template>
   <div class="btns">
-    <Button class="btn" :class="{ active: plat.current === Platform.ChatGTP }" @click="platClick(Platform.ChatGTP)">
+    <Button
+      class="btn"
+      :class="{ active: plat.current === Platform.ChatGTP }"
+      @click="platClick(Platform.ChatGTP)"
+    >
       <IconTransformFilled :size="16" color="skyblue"></IconTransformFilled>
       ChatGPT
     </Button>
-    <Button class="btn" :class="{ active: plat.current === Platform.YouDao }" @click="platClick(Platform.YouDao)">
+    <Button
+      class="btn"
+      :class="{ active: plat.current === Platform.YouDao }"
+      @click="platClick(Platform.YouDao)"
+    >
       <IconTransformFilled :size="16" color="skyblue"></IconTransformFilled>
       有道词典
     </Button>
-    <Button class="btn" :class="{ active: plat.current === Platform.Google }" @click="platClick(Platform.Google)">
+    <Button
+      class="btn"
+      :class="{ active: plat.current === Platform.Google }"
+      @click="platClick(Platform.Google)"
+    >
       <IconBrandGoogle :size="16" color="skyblue"></IconBrandGoogle>
       Google
     </Button>
-    <Button class="btn" :class="{ active: plat.current === Platform.Bing }" @click="platClick(Platform.Bing)">
+    <Button
+      class="btn"
+      :class="{ active: plat.current === Platform.Bing }"
+      @click="platClick(Platform.Bing)"
+    >
       <IconBrandBing :size="16" color="skyblue"></IconBrandBing>
       Bing
     </Button>

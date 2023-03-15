@@ -4,7 +4,7 @@ import { reactive, provide, watchEffect, ref, onBeforeMount } from "vue";
 import Translation from "./components/Translation.vue";
 import Nav from "./components/Nav.vue";
 import Set from "./components/Set.vue";
-import AggregateModeNav from "./components/aggregateMode/Nav.vue";
+import SplitModeNav from "./components/mode/split/Nav.vue";
 
 import { KeyInfo, Mode, Platform } from "./types/type";
 import { readConfig } from "./command/core";
@@ -73,7 +73,7 @@ provide("showSetPage", showSetPage);
         >
           读取选中文本/粘贴板
         </button>
-        <AggregateModeNav v-else :plat="plat"></AggregateModeNav>
+        <SplitModeNav v-else :plat="plat"></SplitModeNav>
       </template>
     </Nav>
   </div>

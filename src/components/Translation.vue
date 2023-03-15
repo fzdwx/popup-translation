@@ -2,10 +2,10 @@
 import { inject, reactive } from "vue";
 import { google } from "../platform/google";
 
-import { IconTransformFilled, IconCalendar, IconCopy } from "@tabler/icons-vue";
+import { IconTransformFilled, IconCopy } from "@tabler/icons-vue";
 import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
-import AggTranslation from "./aggregateMode/Translation.vue";
+import AggTranslation from "./mode/aggregate/Translation.vue";
 
 import { Mode, Platform, TranslationInfo } from "../types/type";
 import { deepl } from "../platform/deepl";

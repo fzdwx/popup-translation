@@ -7,17 +7,17 @@
 import { Ref, inject, reactive, watchEffect } from "vue";
 import { listen, Event } from "@tauri-apps/api/event";
 
-import { getSelectionText } from "../../command/core";
-import { freegpt } from "../../platform/chatgpt";
-import { deepl } from "../../platform/deepl";
-import { google } from "../../platform/google";
-import { AggregateTranslationInfo, TranslationItem } from "../../types/type";
+import Card from "../../common/Card.vue";
 
-import Card from "../common/Card.vue";
+import deeplImage from "../../../assets/deepl.png";
+import chatgptImage from "../../../assets/chatgpt.png";
+import googleImage from "../../../assets/google.ico";
 
-import deeplImage from "../../assets/deepl.png";
-import chatgptImage from "../../assets/chatgpt.png";
-import googleImage from "../../assets/google.ico";
+import { getSelectionText } from "../../../command/core";
+import { freegpt } from "../../../platform/chatgpt";
+import { deepl } from "../../../platform/deepl";
+import { google } from "../../../platform/google";
+import { AggregateTranslationInfo, TranslationItem } from "../../../types/type";
 
 const state: AggregateTranslationInfo = reactive({
   source: {
@@ -106,9 +106,27 @@ watchEffect(() => {
 
 <template>
   <div class="aggregate">
-    <Card class="card" :img-src="chatgptImage" title="Chatgpt" :text="state.chatgpt.text" :load="state.chatgpt.loading" />
-    <Card class="card" :img-src="googleImage" title="Google" :text="state.google.text" :load="state.google.loading" />
-    <Card class="card" :img-src="deeplImage" title="Deepl" :text="state.deepl.text" :load="state.deepl.loading" />
+    <Card
+      class="card"
+      :img-src="chatgptImage"
+      title="Chatgpt"
+      :text="state.chatgpt.text"
+      :load="state.chatgpt.loading"
+    />
+    <Card
+      class="card"
+      :img-src="googleImage"
+      title="Google"
+      :text="state.google.text"
+      :load="state.google.loading"
+    />
+    <Card
+      class="card"
+      :img-src="deeplImage"
+      title="Deepl"
+      :text="state.deepl.text"
+      :load="state.deepl.loading"
+    />
   </div>
 </template>
 
