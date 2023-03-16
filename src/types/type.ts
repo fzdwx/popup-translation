@@ -7,8 +7,8 @@ enum Platform {
 }
 
 enum Mode {
-	Aggergate,  // mode 1
-	Split,      // mode 2
+	Aggergate = "aggergate",  // mode 1
+	Split = "split",      // mode 2
 }
 
 interface KeyItem {
@@ -46,6 +46,7 @@ interface Config {
 		youdao: string,
 		google: string,
 	}
+	mode?: Mode
 }
 
 export { Platform, Mode };

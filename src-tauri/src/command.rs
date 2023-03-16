@@ -9,7 +9,6 @@ pub async fn get_selection_text() -> Result<String, String> {
 #[tauri::command]
 #[allow(dead_code)]
 pub async fn write_config(data: String) -> Result<(), String> {
-    println!("data:{:?}", data);
     Config::cover(data);
     Ok(())
 }

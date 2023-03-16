@@ -15,9 +15,19 @@ fn log_path() -> PathBuf {
     utils::app_root().join("log")
 }
 
-#[derive(Default, serde::Deserialize, serde::Serialize, Debug)]
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
 pub struct Config {
     pub keys: KeyInfo,
+    pub mode: Option<Mode>,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            keys: KeyInfo::default(),
+            mode: Some(Mode::default()),
+        }
+    }
 }
 
 #[derive(Default, serde::Deserialize, serde::Serialize, Debug)]
@@ -26,6 +36,15 @@ pub struct KeyInfo {
     pub chat_gpt: String,
     pub youdao: String,
     pub google: String,
+}
+
+#[derive(Default, serde::Deserialize, serde::Serialize, Debug)]
+pub enum Mode {
+    #[serde(rename = "aggergate")]
+    #[default]
+    Aggergate,
+    #[serde(rename = "split")]
+    Split,
 }
 
 impl Config {
@@ -66,17 +85,26 @@ impl Config {
     }
 
     pub fn cover(data: String) -> Self {
-        log::debug!("config.json cover new config: {}", data);
+        log::debug!("config.json cover data: {}", data);
+
         log::debug!(
             "config.json cover old config: {}",
             serde_json::to_string_pretty(&Self::read()).unwrap()
         );
-        serde_json::from_str(&data)
+
+        let s = serde_json::from_str(&data)
             .unwrap_or_else(|err| {
                 log::error!("[cover] config parse error: {}", err);
                 Self::default()
             })
-            .write()
+            .write();
+
+        log::debug!(
+            "config.json cover new config: {}",
+            serde_json::to_string_pretty(&s).unwrap()
+        );
+
+        s
     }
 }
 

@@ -49,6 +49,10 @@ onBeforeMount(() => {
     keyList.chatGpt.key = keys.chatGpt;
     keyList.google.key = keys.google;
     keyList.youdao.key = keys.youdao;
+    if (config.mode !== undefined) {
+      mode.currentMode = config.mode;
+    }
+    console.log("config", config);
   });
 });
 

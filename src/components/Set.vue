@@ -23,7 +23,9 @@ const save = async () => {
       youdao: props.keyList.youdao.key,
       google: props.keyList.google.key,
     },
+    mode: props.mode.currentMode,
   };
+
   const configJson = JSON.stringify(config);
   await writeConfig(configJson);
 };
