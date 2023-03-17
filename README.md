@@ -32,7 +32,7 @@ cargo tauri dev
 
 ## Screenshots
 
-![image](https://user-images.githubusercontent.com/65269574/224546884-9b05ba37-d1af-4bc6-b77b-5013bef7144f.png)
+![image](https://user-images.githubusercontent.com/65269574/225850537-fc795f36-802e-4bf2-9b6d-48e0f5435c1a.png)
 
 ![gif](https://github.com/fzdwx/popup-translation/raw/tauri/.github/show.gif)
 
