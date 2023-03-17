@@ -5,6 +5,7 @@ import Translation from "./components/Translation.vue";
 import Nav from "./components/Nav.vue";
 import Set from "./components/Set.vue";
 import SplitModeNav from "./components/mode/split/Nav.vue";
+import AggregateModeNav from "./components/mode/aggregate/Nav.vue";
 
 import { KeyInfo, Mode, Platform } from "./types/type";
 import { readConfig } from "./command/core";
@@ -52,17 +53,19 @@ onBeforeMount(() => {
     if (config.mode !== undefined) {
       mode.currentMode = config.mode;
     }
-    console.log("config", config);
   });
 });
 
-let readText = ref(false);
+// for aggregate mode
+// refresh selection text
+let reloadSelectionText = ref(false);
 const reload = () => {
-  readText.value = true;
+  reloadSelectionText.value = true;
 };
+
 provide("plat", plat);
 provide("mode", mode);
-provide("readText", readText);
+provide("reloadSelectionText", reloadSelectionText);
 provide("showSetPage", showSetPage);
 </script>
 
@@ -70,13 +73,11 @@ provide("showSetPage", showSetPage);
   <div class="header">
     <Nav :plat="plat" :takes="takes" :showSetPage="showSetPage">
       <template #platform_link>
-        <button
-          type="button"
+        <AggregateModeNav
+          :reload="reload"
+          :mode="mode"
           v-if="mode.currentMode === Mode.Aggergate"
-          @click="reload"
-        >
-          读取选中文本/粘贴板
-        </button>
+        />
         <SplitModeNav v-else :plat="plat"></SplitModeNav>
       </template>
     </Nav>

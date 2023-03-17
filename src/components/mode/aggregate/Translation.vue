@@ -95,11 +95,12 @@ const resetItem = () => {
     loading: true,
   } as TranslationItem;
 };
-const readText = inject<Ref<boolean>>("readText");
+
+const reloadSelectionText = inject<Ref<boolean>>("reloadSelectionText");
 watchEffect(() => {
-  if (readText?.value === true) {
+  if (reloadSelectionText?.value === true) {
     reload();
-    readText.value = false;
+    reloadSelectionText.value = false;
   }
 });
 </script>
