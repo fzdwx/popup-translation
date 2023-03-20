@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use tauri::{GlobalShortcutManager, Manager};
 use tauri_plugin_log::{
     fern::colors::{Color, ColoredLevelConfig},
     LogTarget,
@@ -19,6 +20,7 @@ fn log_path() -> PathBuf {
 pub struct Config {
     pub keys: KeyInfo,
     pub mode: Option<Mode>,
+    pub shortcuts: Option<Shortcuts>,
 }
 
 impl Default for Config {
@@ -26,6 +28,7 @@ impl Default for Config {
         Self {
             keys: KeyInfo::default(),
             mode: Some(Mode::default()),
+            shortcuts: Some(Shortcuts::default()),
         }
     }
 }
@@ -45,6 +48,19 @@ pub enum Mode {
     Aggergate,
     #[serde(rename = "split")]
     Split,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
+pub struct Shortcuts {
+    pub toogle: String, // default: alt+s
+}
+
+impl Default for Shortcuts {
+    fn default() -> Self {
+        Self {
+            toogle: "alt+s".to_string(),
+        }
+    }
 }
 
 impl Config {
@@ -84,12 +100,13 @@ impl Config {
         self
     }
 
-    pub fn cover(data: String) -> Self {
+    pub fn cover(data: String) -> (Self, Self) {
         log::debug!("config.json cover data: {}", data);
 
+        let old = Self::read();
         log::debug!(
             "config.json cover old config: {}",
-            serde_json::to_string_pretty(&Self::read()).unwrap()
+            serde_json::to_string_pretty(&old).unwrap()
         );
 
         let s = serde_json::from_str(&data)
@@ -104,8 +121,27 @@ impl Config {
             serde_json::to_string_pretty(&s).unwrap()
         );
 
-        s
+        (old, s)
     }
+}
+
+pub fn refresh_shortcuts(_old: Config, new: Config, app: tauri::AppHandle) -> anyhow::Result<()> {
+    let mut manager = app.global_shortcut_manager();
+    let main_window = app.get_window("main").unwrap();
+
+    manager.unregister_all()?;
+    let shortcuts = new.shortcuts.unwrap_or_default();
+    manager.register(&shortcuts.toogle, move || {
+        if main_window.is_visible().unwrap() {
+            main_window.hide().unwrap();
+        } else {
+            main_window.show().unwrap();
+            main_window.set_focus().unwrap();
+            app.emit_all("refresh-translation", "ttt").unwrap();
+        }
+    })?;
+
+    Ok(())
 }
 
 pub fn log_builder() -> tauri_plugin_log::Builder {

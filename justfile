@@ -5,7 +5,7 @@ hello:
 
 # run app
 dev:
-  cargo tauri dev
+  RUST_BACKTRACE=1 cargo tauri dev
 
 # build app
 build:

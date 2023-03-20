@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue";
-import { KeyInfo, Mode, Config } from "../types/type";
+import { KeyInfo, Mode, Config, Shortcurs } from "../types/type";
 import Input from "./common/Input.vue";
 import Button from "./common/Button.vue";
 import { writeConfig } from "../command/core";
@@ -9,6 +9,7 @@ const props = defineProps<{
   mode: {
     currentMode: Mode;
   };
+  shortcurs: Shortcurs;
 }>();
 
 const showSetPage = inject("showSetPage");
@@ -24,6 +25,9 @@ const save = async () => {
       google: props.keyList.google.key,
     },
     mode: props.mode.currentMode,
+    shortcuts: {
+      toogle: props.shortcurs.toogle,
+    },
   };
 
   const configJson = JSON.stringify(config);
@@ -44,6 +48,7 @@ const save = async () => {
         <option :value="Mode.Split">模式二</option>
       </select>
     </div>
+    <Input platform="弹出/隐藏" v-model="props.shortcurs.toogle" />
     <Input
       v-for="item in props.keyList"
       :platform="item.platform"

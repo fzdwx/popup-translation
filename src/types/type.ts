@@ -11,6 +11,10 @@ enum Mode {
 	Split = "split",      // mode 2
 }
 
+interface Shortcurs {
+	toogle: string;
+}
+
 interface KeyItem {
 	platform: string;
 	key: string;
@@ -47,6 +51,7 @@ interface Config {
 		google: string,
 	}
 	mode?: Mode
+	shortcuts?: Shortcurs
 }
 
 export { Platform, Mode };
@@ -55,5 +60,6 @@ export type {
 	TranslationItem,
 	TranslationInfo,
 	AggregateTranslationInfo,
-	Config
+	Config,
+	Shortcurs,
 };

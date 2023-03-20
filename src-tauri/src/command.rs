@@ -1,4 +1,7 @@
-use crate::{clip, setting::Config};
+use crate::{
+    clip,
+    setting::{self, Config},
+};
 
 #[tauri::command]
 #[allow(dead_code)]
@@ -8,8 +11,9 @@ pub async fn get_selection_text() -> Result<String, String> {
 
 #[tauri::command]
 #[allow(dead_code)]
-pub async fn write_config(data: String) -> Result<(), String> {
-    Config::cover(data);
+pub async fn write_config(data: String, app_handle: tauri::AppHandle) -> Result<(), String> {
+    let (old, new) = Config::cover(data);
+    setting::refresh_shortcuts(old, new, app_handle).unwrap();
     Ok(())
 }
 

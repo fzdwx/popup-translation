@@ -7,7 +7,7 @@ import Set from "./components/Set.vue";
 import SplitModeNav from "./components/mode/split/Nav.vue";
 import AggregateModeNav from "./components/mode/aggregate/Nav.vue";
 
-import { KeyInfo, Mode, Platform } from "./types/type";
+import { KeyInfo, Mode, Platform, Shortcurs } from "./types/type";
 import { readConfig } from "./command/core";
 
 const plat = reactive({
@@ -38,6 +38,9 @@ const mode = reactive({
 const showSetPage = reactive({
   show: false,
 });
+const shortcurs = reactive<Shortcurs>({
+  toogle: "Alt+Shift+T",
+});
 
 // watchEffect(()=>{
 //   console.log(takes.isTakes);
@@ -52,6 +55,9 @@ onBeforeMount(() => {
     keyList.youdao.key = keys.youdao;
     if (config.mode !== undefined) {
       mode.currentMode = config.mode;
+    }
+    if (config.shortcuts !== undefined) {
+      shortcurs.toogle = config.shortcuts.toogle;
     }
   });
 });
@@ -86,7 +92,7 @@ provide("showSetPage", showSetPage);
     <Translation />
   </div>
   <div class="setting" v-if="showSetPage.show">
-    <Set :keyList="keyList" :mode="mode" />
+    <Set :shortcurs="shortcurs" :keyList="keyList" :mode="mode" />
   </div>
 </template>
 

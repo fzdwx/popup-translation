@@ -2,10 +2,14 @@ use std::error::Error;
 
 use tauri::{App, GlobalShortcutManager, Manager};
 
+use crate::setting;
+
 pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let main_window = app.get_window("main").unwrap();
     main_window.hide()?;
     main_window.set_decorations(false)?;
+
+    let config = setting::Config::read();
 
     // // 仅在 macOS 下执行
     // #[cfg(target_os = "macos")]
@@ -27,7 +31,8 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let handle = app.handle();
     let mut shortcur = app.global_shortcut_manager();
 
-    shortcur.register("alt+s", move || {
+    let shortcuts = config.shortcuts.unwrap_or_default();
+    shortcur.register(&shortcuts.toogle, move || {
         if main_window.is_visible().unwrap() {
             main_window.hide().unwrap();
         } else {

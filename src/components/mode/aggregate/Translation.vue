@@ -107,13 +107,13 @@ watchEffect(() => {
 
 <template>
   <div class="aggregate">
-    <Card
+    <!-- <Card
       class="card"
       :img-src="chatgptImage"
       title="Chatgpt"
       :text="state.chatgpt.text"
       :load="state.chatgpt.loading"
-    />
+    /> -->
     <Card
       class="card"
       :img-src="googleImage"
