@@ -46,8 +46,17 @@ const platClick = (plat: Platform) => {
     </Button>
     <Button
       class="btn"
+      :class="{ active: plat.current === Platform.Deepl }"
+      @click="platClick(Platform.Deepl)"
+    >
+      <IconBrandBing :size="16" color="skyblue"></IconBrandBing>
+      Deepl
+    </Button>
+    <Button
+      class="btn"
       :class="{ active: plat.current === Platform.Bing }"
       @click="platClick(Platform.Bing)"
+      disabled
     >
       <IconBrandBing :size="16" color="skyblue"></IconBrandBing>
       Bing

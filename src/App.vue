@@ -7,7 +7,7 @@ import Set from "./components/Set.vue";
 import SplitModeNav from "./components/mode/split/Nav.vue";
 import AggregateModeNav from "./components/mode/aggregate/Nav.vue";
 
-import { KeyInfo, Mode, Platform, Shortcurs } from "./types/type";
+import { KeyInfo, Mode, Platform, Shortcuts } from "./types/type";
 import { readConfig } from "./command/core";
 
 const plat = reactive({
@@ -38,8 +38,8 @@ const mode = reactive({
 const showSetPage = reactive({
   show: false,
 });
-const shortcurs = reactive<Shortcurs>({
-  toogle: "Alt+Shift+T",
+const shortcuts = reactive<Shortcuts>({
+  toggle: "Alt+Shift+T",
 });
 
 // watchEffect(()=>{
@@ -57,7 +57,7 @@ onBeforeMount(() => {
       mode.currentMode = config.mode;
     }
     if (config.shortcuts !== undefined) {
-      shortcurs.toogle = config.shortcuts.toogle;
+      shortcuts.toggle = config.shortcuts.toggle;
     }
   });
 });
@@ -82,7 +82,7 @@ provide("showSetPage", showSetPage);
         <AggregateModeNav
           :reload="reload"
           :mode="mode"
-          v-if="mode.currentMode === Mode.Aggergate"
+          v-if="mode.currentMode === Mode.Aggregate"
         />
         <SplitModeNav v-else :plat="plat"></SplitModeNav>
       </template>
@@ -92,7 +92,7 @@ provide("showSetPage", showSetPage);
     <Translation />
   </div>
   <div class="setting" v-if="showSetPage.show">
-    <Set :shortcurs="shortcurs" :keyList="keyList" :mode="mode" />
+    <Set :shortcuts="shortcuts" :keyList="keyList" :mode="mode" />
   </div>
 </template>
 

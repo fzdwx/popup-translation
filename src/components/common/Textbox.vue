@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import Loading from "./Loading.vue"
 const isFocusOrBlur = ref(false);
 const props = defineProps<{
@@ -14,7 +14,9 @@ const textAreaBg = (val: boolean) => {
 };
 
 const translate_content = ref("");
-translate_content.value = props.text as string;
+watchEffect(()=>{
+  translate_content.value = props.text as string;
+});
 
 watch(translate_content, (val) => {
   props.getTextInputVal?.(val);
@@ -64,7 +66,7 @@ const copyText = () => {
     v-model="translate_content"
     >
     </textarea>
-    <div class="text" ref="translation_res" v-else>
+    <div class="text" v-else>
       {{ text }}
     </div>
     <div class="tool" @click="copyText">

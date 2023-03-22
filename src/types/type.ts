@@ -7,12 +7,12 @@ enum Platform {
 }
 
 enum Mode {
-	Aggergate = "aggergate",  // mode 1
+	Aggregate = "aggergate",  // mode 1
 	Split = "split",      // mode 2
 }
 
-interface Shortcurs {
-	toogle: string;
+interface Shortcuts {
+	toggle: string;
 }
 
 interface KeyItem {
@@ -51,7 +51,7 @@ interface Config {
 		google: string,
 	}
 	mode?: Mode
-	shortcuts?: Shortcurs
+	shortcuts?: Shortcuts
 }
 
 export { Platform, Mode };
@@ -61,5 +61,5 @@ export type {
 	TranslationInfo,
 	AggregateTranslationInfo,
 	Config,
-	Shortcurs,
+	Shortcuts as Shortcuts,
 };

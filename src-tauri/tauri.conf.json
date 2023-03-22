@@ -18,7 +18,8 @@
         "scope": [
           "https://www2.deepl.com/jsonrpc",
           "https://chatgpt-api.shn.hk/v1",
-          "https://translate.googleapis.com/*"
+          "https://translate.googleapis.com/*",
+          "http://fanyi.youdao.com/translate"
         ]
       },
       "shell": {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue";
-import { KeyInfo, Mode, Config, Shortcurs } from "../types/type";
+import { KeyInfo, Mode, Config,Shortcuts } from "../types/type";
 import Input from "./common/Input.vue";
 import Button from "./common/Button.vue";
 import { writeConfig } from "../command/core";
@@ -9,7 +9,7 @@ const props = defineProps<{
   mode: {
     currentMode: Mode;
   };
-  shortcurs: Shortcurs;
+  shortcuts: Shortcuts;
 }>();
 
 const showSetPage = inject("showSetPage");
@@ -26,7 +26,7 @@ const save = async () => {
     },
     mode: props.mode.currentMode,
     shortcuts: {
-      toogle: props.shortcurs.toogle,
+      toggle: props.shortcuts.toggle,
     },
   };
 
@@ -44,11 +44,11 @@ const save = async () => {
     <div class="mode">
       选择模式:
       <select name="" id="" v-model="props.mode.currentMode">
-        <option :value="Mode.Aggergate">模式一</option>
+        <option :value="Mode.Aggregate">模式一</option>
         <option :value="Mode.Split">模式二</option>
       </select>
     </div>
-    <Input platform="弹出/隐藏" v-model="props.shortcurs.toogle" />
+    <Input platform="弹出/隐藏" v-model="props.shortcuts.toggle" />
     <Input
       v-for="item in props.keyList"
       :platform="item.platform"
@@ -67,7 +67,7 @@ const save = async () => {
   justify-content: start;
   align-items: start;
   width: 400px;
-  height: 350px;
+  height: 400px;
   padding: 8px;
   background-color: #1d1d1d;
   box-shadow: 1px 4px 10px rgba(255, 255, 255, 0.6);
