@@ -10,7 +10,7 @@ import AggTranslation from "./mode/aggregate/Translation.vue";
 import { Mode, Platform, TranslationInfo } from "../types/type";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
-
+import { youdao } from "../platform/youdao";
 // const takes = inject<{isTakes: boolean}>("isTakes");
 const platform = inject<{ current: Platform }>("plat");
 const mode = inject<{ currentMode: Mode }>("mode");
@@ -61,9 +61,17 @@ const translateStart = () => {
           console.log("deepl error", err);
         });
       break;
-    case Platform.Bing:
-      break;
     case Platform.YouDao:
+        youdao(state.source.text, "auto")
+          .then((text) => {
+            state.source.text = text;
+            state.source.loading = false;
+          })
+          .catch((err) => {
+            console.log("youdao api error", err);
+          });
+        break;
+    case Platform.Bing:
       break;
   }
 };
