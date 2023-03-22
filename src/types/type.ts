@@ -61,5 +61,5 @@ export type {
 	TranslationInfo,
 	AggregateTranslationInfo,
 	Config,
-	Shortcuts as Shortcuts,
+	Shortcuts,
 };
