@@ -2,7 +2,7 @@
 import { inject, reactive } from "vue";
 import { google } from "../platform/google";
 
-import { IconTransformFilled, IconCopy } from "@tabler/icons-vue";
+import { IconTransformFilled, IconCopy ,IconTexture} from "@tabler/icons-vue";
 import Textbox from "./common/Textbox.vue";
 import Button from "./common/Button.vue";
 import AggTranslation from "./mode/aggregate/Translation.vue";
@@ -10,7 +10,6 @@ import AggTranslation from "./mode/aggregate/Translation.vue";
 import { Mode, Platform, TranslationInfo } from "../types/type";
 import { deepl } from "../platform/deepl";
 import { freegpt } from "../platform/chatgpt";
-import { IconTexture } from "@tabler/icons-vue";
 
 // const takes = inject<{isTakes: boolean}>("isTakes");
 const platform = inject<{ current: Platform }>("plat");
@@ -31,14 +30,12 @@ const state: TranslationInfo = reactive({
 // }
 // });
 const getTextInputVal = (text: string) => {
-  if (text === "") {
-    console.log(2);
-    return;
-  } else {
     state.source.text = text;
-  }
 };
 const translateStart = () => {
+  if (state.source.text === "") {
+    return;
+  }
   state.source.loading = true;
 
   switch (platform?.current) {
@@ -70,6 +67,10 @@ const translateStart = () => {
       break;
   }
 };
+
+const cleanClick = ()=> {
+  state.source.text = "";
+};
 </script>
 
 <template>
@@ -83,7 +84,7 @@ const translateStart = () => {
     >
     </Textbox>
     <div class="btns">
-      <Button class="tran_btn">
+      <Button class="tran_btn" @click="cleanClick">
         <IconTexture />
         清空
       </Button>

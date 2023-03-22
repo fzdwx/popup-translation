@@ -67,7 +67,7 @@ const save = async () => {
   justify-content: start;
   align-items: start;
   width: 400px;
-  height: 350px;
+  height: 400px;
   padding: 8px;
   background-color: #1d1d1d;
   box-shadow: 1px 4px 10px rgba(255, 255, 255, 0.6);
