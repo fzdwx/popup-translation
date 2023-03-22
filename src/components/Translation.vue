@@ -64,7 +64,7 @@ const translateStart = () => {
     case Platform.YouDao:
         youdao(state.source.text, "auto")
           .then((text) => {
-            state.source.text = text;
+            state.source.result = text;
             state.source.loading = false;
           })
           .catch((err) => {
