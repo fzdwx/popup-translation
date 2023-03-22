@@ -73,7 +73,7 @@ const translateStart = () => {
 </script>
 
 <template>
-  <AggTranslation v-if="mode?.currentMode === Mode.Aggergate" />
+  <AggTranslation v-if="mode?.currentMode === Mode.Aggregate" />
   <div class="content" v-else>
     <Textbox
       :isTextarea="true"
