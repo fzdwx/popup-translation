@@ -7,7 +7,7 @@ enum Platform {
 }
 
 enum Mode {
-	Aggregate = "aggergate",  // mode 1
+	Aggregate = "aggregate",  // mode 1
 	Split = "split",      // mode 2
 }
 
