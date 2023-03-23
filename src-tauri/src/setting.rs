@@ -52,13 +52,13 @@ pub enum Mode {
 
 #[derive(serde::Deserialize, serde::Serialize, Debug)]
 pub struct Shortcuts {
-    pub toogle: String, // default: alt+s
+    pub toggle: String, // default: alt+s
 }
 
 impl Default for Shortcuts {
     fn default() -> Self {
         Self {
-            toogle: "alt+s".to_string(),
+            toggle: "alt+s".to_string(),
         }
     }
 }
@@ -131,7 +131,7 @@ pub fn refresh_shortcuts(_old: Config, new: Config, app: tauri::AppHandle) -> an
 
     manager.unregister_all()?;
     let shortcuts = new.shortcuts.unwrap_or_default();
-    manager.register(&shortcuts.toogle, move || {
+    manager.register(&shortcuts.toggle, move || {
         if main_window.is_visible().unwrap() {
             main_window.hide().unwrap();
         } else {

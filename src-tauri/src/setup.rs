@@ -32,7 +32,7 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let mut shortcur = app.global_shortcut_manager();
 
     let shortcuts = config.shortcuts.unwrap_or_default();
-    shortcur.register(&shortcuts.toogle, move || {
+    shortcur.register(&shortcuts.toggle, move || {
         if main_window.is_visible().unwrap() {
             main_window.hide().unwrap();
         } else {
