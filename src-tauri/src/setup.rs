@@ -6,7 +6,7 @@ use crate::setting;
 
 pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let main_window = app.get_window("main").unwrap();
-    main_window.hide()?;
+    // main_window.hide()?;
     main_window.set_decorations(false)?;
 
     let config = setting::Config::read();
