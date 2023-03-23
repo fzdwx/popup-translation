@@ -26,13 +26,7 @@ const inputValue = (e: any) => {
 .ipt label {
   margin-right: 5px;
 }
-</style>
-
-<style scoped>
-.ipt {
-  margin: 8px;
-}
-.ipt label {
-  margin-right: 5px;
+.ipt input {
+  color: black;
 }
 </style>

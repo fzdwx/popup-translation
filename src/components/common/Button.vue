@@ -17,6 +17,7 @@ button {
   border: 1px solid transparent;
   font-size: 1em;
   font-weight: 500;
+  color: #ffffff;
   background-color: #1d1d1d;
 }
 </style>
