@@ -6,6 +6,7 @@ mod command;
 mod setting;
 mod setup;
 mod utils;
+mod sys_tray;
 
 fn main() {
     tauri::Builder::default()
@@ -16,6 +17,10 @@ fn main() {
             command::write_config,
             command::read_config
         ])
+        .system_tray(sys_tray::Tray::init())
+        .on_system_tray_event(|app, event|{
+            sys_tray::Tray::system_tray_event(app, event);
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
