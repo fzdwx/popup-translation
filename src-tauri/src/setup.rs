@@ -6,7 +6,7 @@ use crate::setting;
 
 pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let main_window = app.get_window("main").unwrap();
-    main_window.hide()?;
+    // main_window.hide()?;
     main_window.set_decorations(false)?;
 
     let config = setting::Config::read();
@@ -32,7 +32,7 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let mut shortcur = app.global_shortcut_manager();
 
     let shortcuts = config.shortcuts.unwrap_or_default();
-    shortcur.register(&shortcuts.toogle, move || {
+    shortcur.register(&shortcuts.toggle, move || {
         if main_window.is_visible().unwrap() {
             main_window.hide().unwrap();
         } else {
