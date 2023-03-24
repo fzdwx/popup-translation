@@ -125,11 +125,18 @@ impl Config {
     }
 }
 
-pub fn refresh_shortcuts(_old: Config, new: Config, app: tauri::AppHandle) -> anyhow::Result<()> {
+pub fn refresh_shortcuts(old: Config, new: Config, app: tauri::AppHandle) -> anyhow::Result<()> {
     let mut manager = app.global_shortcut_manager();
     let main_window = app.get_window("main").unwrap();
 
-    manager.unregister_all()?;
+    if let Some(shortcurs) = old.shortcuts {
+        if let Ok(b) = manager.is_registered(&shortcurs.toggle) {
+            if b {
+                manager.unregister(&shortcurs.toggle)?;
+            }
+        }
+    }
+
     let shortcuts = new.shortcuts.unwrap_or_default();
     manager.register(&shortcuts.toggle, move || {
         if main_window.is_visible().unwrap() {
