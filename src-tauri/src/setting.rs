@@ -43,7 +43,7 @@ pub struct KeyInfo {
 
 #[derive(Default, serde::Deserialize, serde::Serialize, Debug)]
 pub enum Mode {
-    #[serde(rename = "aggergate")]
+    #[serde(rename = "aggregate")]
     #[default]
     Aggergate,
     #[serde(rename = "split")]

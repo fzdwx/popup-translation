@@ -1,25 +1,19 @@
 <script lang="ts" setup>
-const props = defineProps(["platform", "modelValue"]);
-const emit = defineEmits(["update:modelValue"]);
+const props = defineProps(['platform', 'modelValue']);
+const emit = defineEmits(['update:modelValue']);
 const inputValue = (e: any) => {
-  emit("update:modelValue", e.target.value);
+  emit('update:modelValue', e.target.value);
 };
 </script>
 
 <template>
   <div class="ipt">
     <label for="ipt"> {{ props.platform }}: </label>
-    <input
-      type="text"
-      name="ipt"
-      id="ipt"
-      :value="modelValue"
-      @input="inputValue($event)"
-    />
+    <input type="text" name="ipt" id="ipt" :value="modelValue" @input="inputValue($event)" />
   </div>
 </template>
 
-<style scoped>
+<style>
 .ipt {
   margin: 8px;
 }
@@ -27,6 +21,6 @@ const inputValue = (e: any) => {
   margin-right: 5px;
 }
 .ipt input {
-  color: black;
+  color: white;
 }
 </style>

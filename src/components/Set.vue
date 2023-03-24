@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { inject } from "vue";
-import { KeyInfo, Mode, Config,Shortcuts } from "../types/type";
-import Input from "./common/Input.vue";
-import Button from "./common/Button.vue";
-import { writeConfig } from "../command/core";
+import { inject } from 'vue';
+import { KeyInfo, Mode, Config, Shortcuts } from '../types/type';
+import Input from './common/Input.vue';
+import Button from './common/Button.vue';
+import { writeConfig } from '../command/core';
 const props = defineProps<{
   keyList: KeyInfo;
   mode: {
@@ -12,7 +12,7 @@ const props = defineProps<{
   shortcuts: Shortcuts;
 }>();
 
-const showSetPage = inject("showSetPage");
+const showSetPage = inject('showSetPage');
 const showClick = () => {
   (showSetPage as { show: boolean }).show = false;
 };
@@ -49,11 +49,7 @@ const save = async () => {
       </select>
     </div>
     <Input platform="弹出/隐藏" v-model="props.shortcuts.toggle" />
-    <Input
-      v-for="item in props.keyList"
-      :platform="item.platform"
-      v-model="item.key"
-    ></Input>
+    <Input v-for="item in props.keyList" :platform="item.platform" v-model="item.key"></Input>
     <div>
       <Button :style="{ border: '1px solid #fff' }" @click="save">保存</Button>
     </div>
@@ -100,6 +96,6 @@ const save = async () => {
   margin: 8px;
   font-size: 16px;
   background-color: #1d1d1d;
-  color: #fff;
+  color: black;
 }
 </style>
