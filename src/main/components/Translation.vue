@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { inject, reactive } from "vue";
-import { google } from "../platform/google";
+import { inject, reactive } from 'vue';
+import { google } from '../../platform/google';
 
-import { IconTransformFilled, IconCopy ,IconTexture} from "@tabler/icons-vue";
-import Textbox from "./common/Textbox.vue";
-import Button from "./common/Button.vue";
-import AggTranslation from "./mode/aggregate/Translation.vue";
+import { IconTransformFilled, IconCopy, IconTexture } from '@tabler/icons-vue';
+import Textbox from './common/Textbox.vue';
+import Button from './common/Button.vue';
+import AggTranslation from './mode/aggregate/Translation.vue';
 
-import { Mode, Platform, TranslationInfo } from "../types/type";
-import { deepl } from "../platform/deepl";
-import { freegpt } from "../platform/chatgpt";
-import { youdao } from "../platform/youdao";
+import { Mode, Platform, TranslationInfo } from '../../types/type';
+import { freegpt } from '../../platform/chatgpt';
+import { deepl } from '../../platform/deepl';
+import { youdao } from '../../platform/youdao';
 // const takes = inject<{isTakes: boolean}>("isTakes");
-const platform = inject<{ current: Platform }>("plat");
-const mode = inject<{ currentMode: Mode }>("mode");
+const platform = inject<{ current: Platform }>('plat');
+const mode = inject<{ currentMode: Mode }>('mode');
 
 const state: TranslationInfo = reactive({
   source: {
-    text: "",
+    text: '',
     loading: false,
-    result: "",
+    result: '',
   },
 });
 
@@ -30,67 +30,61 @@ const state: TranslationInfo = reactive({
 // }
 // });
 const getTextInputVal = (text: string) => {
-    state.source.text = text;
+  state.source.text = text;
 };
 const translateStart = () => {
-  if (state.source.text === "") {
+  if (state.source.text === '') {
     return;
   }
   state.source.loading = true;
 
   switch (platform?.current) {
     case Platform.Google:
-      google(state.source.text, "auto", "chinese").then((text) => {
+      google(state.source.text, 'auto', 'chinese').then((text) => {
         state.source.result = text;
         state.source.loading = false;
       });
       break;
     case Platform.ChatGTP:
-      freegpt(state.source.text, "chinese").then((text) => {
+      freegpt(state.source.text, 'chinese').then((text) => {
         state.source.result = text;
         state.source.loading = false;
       });
       break;
     case Platform.Deepl:
-      deepl(state.source.text, "auto", "chinese")
+      deepl(state.source.text, 'auto', 'chinese')
         .then((text) => {
           state.source.result = text;
           state.source.loading = false;
         })
         .catch((err) => {
-          console.log("deepl error", err);
+          console.log('deepl error', err);
         });
       break;
     case Platform.YouDao:
-        youdao(state.source.text, "auto")
-          .then((text) => {
-            state.source.result = text;
-            state.source.loading = false;
-          })
-          .catch((err) => {
-            console.log("youdao api error", err);
-          });
-        break;
+      youdao(state.source.text, 'auto')
+        .then((text) => {
+          state.source.result = text;
+          state.source.loading = false;
+        })
+        .catch((err) => {
+          console.log('youdao api error', err);
+        });
+      break;
     case Platform.Bing:
       break;
   }
 };
 
-const cleanClick = ()=> {
-  state.source.text = "";
+const cleanClick = () => {
+  state.source.text = '';
 };
 </script>
 
 <template>
   <AggTranslation v-if="mode?.currentMode === Mode.Aggregate" />
   <div class="content" v-else>
-    <Textbox
-      :isTextarea="true"
-      :text="state.source.text"
-      :getTextInputVal="getTextInputVal"
-      :load="state.source.loading"
-    >
-    </Textbox>
+    <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"> </Textbox>
     <div class="btns">
       <Button class="tran_btn" @click="cleanClick">
         <IconTexture />

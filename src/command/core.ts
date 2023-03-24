@@ -1,21 +1,21 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import { Config } from "../types/type";
+import { invoke } from '@tauri-apps/api/tauri';
+import { Config } from '../types/type';
 
 /**
  * 获取光标选择的文本/粘贴板内容
  * @returns selection text
  */
 async function getSelectionText(): Promise<String> {
-  return invoke<String>("get_selection_text")
+  return invoke<String>('get_selection_text');
 }
 
 /**
  * 写入配置
  * @param config string
- * @returns 
+ * @returns
  */
 async function writeConfig(config: any): Promise<void> {
-  return invoke("write_config", { "data": config })
+  return invoke('write_config', { data: config });
 }
 
 /**
@@ -23,7 +23,7 @@ async function writeConfig(config: any): Promise<void> {
  * @returns Config
  */
 async function readConfig(): Promise<Config> {
-  return invoke("read_config")
+  return invoke('read_config');
 }
 
-export { getSelectionText, writeConfig, readConfig }
+export { getSelectionText, writeConfig, readConfig };

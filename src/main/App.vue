@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { reactive, provide, watchEffect, ref, onBeforeMount } from "vue";
+import { reactive, provide, watchEffect, ref, onBeforeMount } from 'vue';
 
-import Translation from "./components/Translation.vue";
-import Nav from "./components/Nav.vue";
-import Set from "./components/Set.vue";
-import SplitModeNav from "./components/mode/split/Nav.vue";
-import AggregateModeNav from "./components/mode/aggregate/Nav.vue";
+import Translation from './components/Translation.vue';
+import Nav from './components/Nav.vue';
+import Set from './components/Set.vue';
+import SplitModeNav from './components/mode/split/Nav.vue';
+import AggregateModeNav from './components/mode/aggregate/Nav.vue';
 
-import { KeyInfo, Mode, Platform, Shortcuts } from "./types/type";
-import { readConfig } from "./command/core";
+import { readConfig } from '../command/core';
+import { Platform, KeyInfo, Mode, Shortcuts } from '../types/type';
 
 const plat = reactive({
   current: Platform.Google,
@@ -20,16 +20,16 @@ const takes = reactive({
 
 const keyList = reactive<KeyInfo>({
   chatGpt: {
-    platform: "ChatGPT Key",
-    key: "",
+    platform: 'ChatGPT Key',
+    key: '',
   },
   google: {
-    platform: "Google Key",
-    key: "",
+    platform: 'Google Key',
+    key: '',
   },
   youdao: {
-    platform: "youdao Key",
-    key: "",
+    platform: 'youdao Key',
+    key: '',
   },
 });
 const mode = reactive({
@@ -39,7 +39,7 @@ const showSetPage = reactive({
   show: false,
 });
 const shortcuts = reactive<Shortcuts>({
-  toggle: "Alt+Shift+T",
+  toggle: 'Alt+Shift+T',
 });
 
 // watchEffect(()=>{
@@ -69,21 +69,17 @@ const reload = () => {
   reloadSelectionText.value = true;
 };
 
-provide("plat", plat);
-provide("mode", mode);
-provide("reloadSelectionText", reloadSelectionText);
-provide("showSetPage", showSetPage);
+provide('plat', plat);
+provide('mode', mode);
+provide('reloadSelectionText', reloadSelectionText);
+provide('showSetPage', showSetPage);
 </script>
 
 <template>
   <div class="header">
     <Nav :plat="plat" :takes="takes" :showSetPage="showSetPage">
       <template #platform_link>
-        <AggregateModeNav
-          :reload="reload"
-          :mode="mode"
-          v-if="mode.currentMode === Mode.Aggregate"
-        />
+        <AggregateModeNav :reload="reload" :mode="mode" v-if="mode.currentMode === Mode.Aggregate" />
         <SplitModeNav v-else :plat="plat"></SplitModeNav>
       </template>
     </Nav>

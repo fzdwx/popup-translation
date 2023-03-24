@@ -9,15 +9,15 @@ import { listen, Event } from '@tauri-apps/api/event';
 
 import Card from '../../common/Card.vue';
 
-import deeplImage from '../../../assets/deepl.png';
-import chatgptImage from '../../../assets/chatgpt.png';
-import googleImage from '../../../assets/google.ico';
+import deeplImage from '../../../../assets/deepl.png';
+import chatgptImage from '../../../../assets/chatgpt.png';
+import googleImage from '../../../../assets/google.ico';
 
-import { getSelectionText } from '../../../command/core';
-import { freegpt } from '../../../platform/chatgpt';
-import { deepl } from '../../../platform/deepl';
-import { google } from '../../../platform/google';
-import { AggregateTranslationInfo, TranslationItem } from '../../../types/type';
+import { getSelectionText } from '../../../../command/core';
+import { freegpt } from '../../../../platform/chatgpt';
+import { deepl } from '../../../../platform/deepl';
+import { google } from '../../../../platform/google';
+import { AggregateTranslationInfo, TranslationItem } from '../../../../types/type';
 
 const state: AggregateTranslationInfo = reactive({
   source: {

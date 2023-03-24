@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject } from 'vue';
-import { KeyInfo, Mode, Config, Shortcuts } from '../types/type';
+import { KeyInfo, Mode, Config, Shortcuts } from '../../types/type';
 import Input from './common/Input.vue';
 import Button from './common/Button.vue';
-import { writeConfig } from '../command/core';
+import { writeConfig } from '../../command/core';
 const props = defineProps<{
   keyList: KeyInfo;
   mode: {
