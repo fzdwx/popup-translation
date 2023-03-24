@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import {
-  IconSettings,
-} from "@tabler/icons-vue";
+import { IconSettings } from '@tabler/icons-vue';
 
-import { Platform } from "../types/type";
-import { ref, watchEffect } from "vue";
+import { Platform } from '../../types/type';
+import { ref, watchEffect } from 'vue';
 const props = defineProps<{
   plat: {
     current: Platform;
@@ -17,21 +15,19 @@ const props = defineProps<{
   };
 }>();
 
-
-
 const isTakes = () => {
   props.takes.isTakes = !props.takes.isTakes;
 };
 
-const color = ref("white");
+const color = ref('white');
 const show = () => {
   props.showSetPage.show = !props.showSetPage.show;
-  color.value = "skyblue";
+  color.value = 'skyblue';
 };
 
 watchEffect(() => {
   if (!props.showSetPage.show) {
-    color.value = "white";
+    color.value = 'white';
   }
 });
 </script>
@@ -78,7 +74,7 @@ watchEffect(() => {
   font-size: 14px;
 }
 
-.takes>input {
+.takes > input {
   width: 15px;
   height: 15px;
 }
