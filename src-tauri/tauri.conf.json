@@ -15,12 +15,7 @@
       "http": {
         "all": true,
         "request": true,
-        "scope": [
-          "https://www2.deepl.com/jsonrpc",
-          "https://chatgpt-api.shn.hk/v1",
-          "https://translate.googleapis.com/*",
-          "http://fanyi.youdao.com/*"
-        ]
+        "scope": ["https://www2.deepl.com/jsonrpc", "https://chatgpt-api.shn.hk/v1", "https://translate.googleapis.com/*", "http://fanyi.youdao.com/*"]
       },
       "shell": {
         "all": false,
@@ -35,14 +30,7 @@
     },
     "bundle": {
       "active": true,
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico",
-        "icons/icon.png"
-      ],
+      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico", "icons/icon.png"],
       "identifier": "io.fzdwx.popup-translation",
       "targets": "all",
       "windows": {
@@ -51,7 +39,7 @@
         "timestampUrl": ""
       }
     },
-    "systemTray":{
+    "systemTray": {
       "iconPath": "icons/icon.png",
       "iconAsTemplate": true
     },

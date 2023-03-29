@@ -11,6 +11,7 @@ import { Mode, Platform, TranslationInfo } from '../../types/type';
 import { freegpt } from '../../platform/chatgpt';
 import { deepl } from '../../platform/deepl';
 import { youdao } from '../../platform/youdao';
+import LangSwitch from './common/LangSwitch.vue';
 // const takes = inject<{isTakes: boolean}>("isTakes");
 const platform = inject<{ current: Platform }>('plat');
 const mode = inject<{ currentMode: Mode }>('mode');
@@ -20,6 +21,7 @@ const state: TranslationInfo = reactive({
     text: '',
     loading: false,
     result: '',
+    targetLang: 'chinese',
   },
 });
 
@@ -40,19 +42,19 @@ const translateStart = () => {
 
   switch (platform?.current) {
     case Platform.Google:
-      google(state.source.text, 'auto', 'chinese').then((text) => {
+      google(state.source.text, 'auto', state.source.targetLang).then((text) => {
         state.source.result = text;
         state.source.loading = false;
       });
       break;
     case Platform.ChatGTP:
-      freegpt(state.source.text, 'chinese').then((text) => {
+      freegpt(state.source.text, state.source.targetLang).then((text) => {
         state.source.result = text;
         state.source.loading = false;
       });
       break;
     case Platform.Deepl:
-      deepl(state.source.text, 'auto', 'chinese')
+      deepl(state.source.text, 'auto', state.source.targetLang)
         .then((text) => {
           state.source.result = text;
           state.source.loading = false;
@@ -79,6 +81,10 @@ const translateStart = () => {
 const cleanClick = () => {
   state.source.text = '';
 };
+
+const onChangeLang = (lang: string) => {
+  state.source.targetLang = lang;
+};
 </script>
 
 <template>
@@ -86,6 +92,7 @@ const cleanClick = () => {
   <div class="content" v-else>
     <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"> </Textbox>
     <div class="btns">
+      <LangSwitch :onChange="onChangeLang" :lang="state.source.targetLang" />
       <Button class="tran_btn" @click="cleanClick">
         <IconTexture />
         清空
