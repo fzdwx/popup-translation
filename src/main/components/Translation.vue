@@ -21,8 +21,8 @@ const state: TranslationInfo = reactive({
     text: '',
     loading: false,
     result: '',
-    targetLang: 'chinese',
   },
+  targetLang: 'chinese',
 });
 
 // watchEffect(() => {
@@ -42,19 +42,19 @@ const translateStart = () => {
 
   switch (platform?.current) {
     case Platform.Google:
-      google(state.source.text, 'auto', state.source.targetLang).then((text) => {
+      google(state.source.text, 'auto', state.targetLang).then((text) => {
         state.source.result = text;
         state.source.loading = false;
       });
       break;
     case Platform.ChatGTP:
-      freegpt(state.source.text, state.source.targetLang).then((text) => {
+      freegpt(state.source.text, state.targetLang).then((text) => {
         state.source.result = text;
         state.source.loading = false;
       });
       break;
     case Platform.Deepl:
-      deepl(state.source.text, 'auto', state.source.targetLang)
+      deepl(state.source.text, 'auto', state.targetLang)
         .then((text) => {
           state.source.result = text;
           state.source.loading = false;
@@ -83,7 +83,7 @@ const cleanClick = () => {
 };
 
 const onChangeLang = (lang: string) => {
-  state.source.targetLang = lang;
+  state.targetLang = lang;
 };
 </script>
 
@@ -92,7 +92,7 @@ const onChangeLang = (lang: string) => {
   <div class="content" v-else>
     <Textbox :isTextarea="true" :text="state.source.text" :getTextInputVal="getTextInputVal" :load="state.source.loading"> </Textbox>
     <div class="btns">
-      <LangSwitch :onChange="onChangeLang" :lang="state.source.targetLang" />
+      <LangSwitch :onChange="onChangeLang" :lang="state.targetLang" />
       <Button class="tran_btn" @click="cleanClick">
         <IconTexture />
         清空

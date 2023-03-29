@@ -30,7 +30,6 @@ interface TranslationItem {
   text: string;
   loading: boolean;
   result?: string;
-  targetLang: string;
 }
 
 interface AggregateTranslationInfo {
@@ -42,6 +41,7 @@ interface AggregateTranslationInfo {
 
 interface TranslationInfo {
   source: TranslationItem;
+  targetLang: string;
 }
 
 // app config
