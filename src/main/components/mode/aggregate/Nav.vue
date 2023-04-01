@@ -8,4 +8,5 @@ const props = defineProps<{
 </script>
 <template>
   <Button style="width: 170px" @click="props.reload"> 读取选中文本/粘贴板 </Button>
+  <slot name="agg-btn"> </slot>
 </template>

@@ -8,6 +8,7 @@ import { Ref, inject, reactive, watchEffect } from 'vue';
 import { listen, Event } from '@tauri-apps/api/event';
 
 import Card from '../../common/Card.vue';
+import LangSwitch from '../../common/LangSwitch.vue';
 
 import deeplImage from '../../../../assets/deepl.png';
 import chatgptImage from '../../../../assets/chatgpt.png';
@@ -17,12 +18,15 @@ import { getSelectionText } from '../../../../command/core';
 import { freegpt } from '../../../../platform/chatgpt';
 import { deepl } from '../../../../platform/deepl';
 import { google } from '../../../../platform/google';
-import { AggregateTranslationInfo, TranslationItem } from '../../../../types/type';
+import { AggregateTranslationInfo, TranslationInfo, TranslationItem } from '../../../../types/type';
 
 const state: AggregateTranslationInfo = reactive({
   source: {
-    text: '',
-    loading: false,
+    source: {
+      text: '',
+      loading: false,
+    },
+    targetLang: 'chinese',
   },
 
   deepl: {
@@ -49,15 +53,15 @@ const unListenRefreshTranslation = listen('refresh-translation', async (event: E
 });
 
 async function reload() {
-  state.source = resetItem();
+  state.source.source = resetItem();
   state.chatgpt = resetItem();
   state.deepl = resetItem();
   state.google = resetItem();
 
   await getSelectionText()
     .then((val) => {
-      state.source.text = val.toString();
-      state.source.loading = false;
+      state.source.source.text = val.toString();
+      state.source.source.loading = false;
       refresh(state.source);
     })
     .catch((err) => {
@@ -65,8 +69,8 @@ async function reload() {
     });
 }
 
-async function refresh(source: TranslationItem) {
-  deepl(source.text, 'auto', 'chinese')
+async function refresh({ source, targetLang }: TranslationInfo) {
+  deepl(source.text, 'auto', targetLang)
     .then((text) => {
       state.deepl.text = text;
       state.deepl.loading = false;
@@ -75,12 +79,12 @@ async function refresh(source: TranslationItem) {
       console.log('deepl error', err);
     });
 
-  freegpt(source.text, 'chinese').then((text) => {
-    state.chatgpt.text = text;
-    state.chatgpt.loading = false;
-  });
+  // freegpt(source.text, targetLang).then((text) => {
+  // state.chatgpt.text = text;
+  // state.chatgpt.loading = false;
+  // });
 
-  google(source.text, 'auto', 'chinese').then((text) => {
+  google(source.text, 'auto', targetLang).then((text) => {
     state.google.text = text;
     state.google.loading = false;
   });
@@ -98,6 +102,14 @@ watchEffect(() => {
   if (reloadSelectionText?.value === true) {
     reload();
     reloadSelectionText.value = false;
+  }
+});
+
+const currentLang = inject<{ lang: string }>('currentLang');
+watchEffect(() => {
+  if (currentLang) {
+    state.source.targetLang = currentLang.lang;
+    refresh(state.source);
   }
 });
 </script>

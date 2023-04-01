@@ -33,7 +33,7 @@ interface TranslationItem {
 }
 
 interface AggregateTranslationInfo {
-  source: TranslationItem;
+  source: TranslationInfo;
   deepl: TranslationItem;
   chatgpt: TranslationItem;
   google: TranslationItem;
