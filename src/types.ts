@@ -40,7 +40,7 @@ interface AggregateTranslationInfo {
 }
 
 interface TranslationInfo {
-  source: TranslationItem;
+  info: TranslationItem;
   targetLang: string;
 }
 

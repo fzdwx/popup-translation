@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/tauri';
-import { Config } from '../types/type';
+import { Config } from '../types';
 
 /**
  * 获取光标选择的文本/粘贴板内容

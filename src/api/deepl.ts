@@ -1,15 +1,15 @@
 // inspired by https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate/blob/main/node_js_implementation/deepl.js
 // MIT License
 
-import { postJson } from './core'
+import { postJson } from './comman';
 
 const supportedLanguages = [
-  ["auto", "auto"],
-  ["english", "EN"],
-  ["chinese", "ZH"],
+  ['auto', 'auto'],
+  ['english', 'EN'],
+  ['chinese', 'ZH'],
 ];
 
-const langMap = new Map<string, string>(supportedLanguages.map(lang => [lang[0], lang[1]]));
+const langMap = new Map<string, string>(supportedLanguages.map((lang) => [lang[0], lang[1]]));
 
 function initData(source_lang: string, target_lang: string) {
   return {
@@ -19,16 +19,12 @@ function initData(source_lang: string, target_lang: string) {
     params: {
       splitting: 'newlines',
       timestamp: 1,
-      texts: [
-        {
-
-        }
-      ],
+      texts: [{}],
       lang: {
         source_lang_user_selected: source_lang,
-        target_lang: target_lang
-      }
-    }
+        target_lang: target_lang,
+      },
+    },
   };
 }
 
@@ -59,11 +55,11 @@ async function deepl(query: string, from: string, to: string): Promise<string> {
   const target_lang = targetLanguage || 'ZH';
   const translate_text = query || '';
   const url = 'https://www2.deepl.com/jsonrpc';
-  let id = getRandomNumber()
+  let id = getRandomNumber();
   const post_data = initData(source_lang, target_lang);
   const text = {
     text: translate_text,
-    requestAlternatives: 3
+    requestAlternatives: 3,
   };
   post_data.id = id;
   post_data.params.texts = [text];
@@ -79,9 +75,7 @@ async function deepl(query: string, from: string, to: string): Promise<string> {
 
   //@ts-ignore
   // console.log("deepl", response.data.result.texts[0].text);
-  return response.data.result.texts[0].text
+  return response.data.result.texts[0].text;
 }
 
-export {
-  deepl
-}
+export { deepl };

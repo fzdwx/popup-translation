@@ -1,13 +1,13 @@
 //免费翻译API
-import { get } from './core'
+import { get } from './comman';
 
 const supportedLanguages = [
-  ["auto", "AUTO"],
-  ["zh2en", "ZH_CN2EN"],
-  ["zh2jp", "ZH_CN2JP"],
+  ['auto', 'AUTO'],
+  ['zh2en', 'ZH_CN2EN'],
+  ['zh2jp', 'ZH_CN2JP'],
 ];
 
-const langMap = new Map<string, string>(supportedLanguages.map(lang => [lang[0], lang[1]]));
+const langMap = new Map<string, string>(supportedLanguages.map((lang) => [lang[0], lang[1]]));
 
 async function youdao(query: string, type: string): Promise<string> {
   const sourceLanguage = langMap.get(type);
@@ -17,9 +17,7 @@ async function youdao(query: string, type: string): Promise<string> {
   const url = `http://fanyi.youdao.com/translate?doctype=json&type=${source_lang}&i=${translate_text}`;
   const response = await get(url);
   //@ts-ignore
-  return response.data.translateResult.map(s => s[0].tgt).join('');
+  return response.data.translateResult.map((s) => s[0].tgt).join('');
 }
 
-export {
-  youdao,
-}
+export { youdao };

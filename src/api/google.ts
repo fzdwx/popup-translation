@@ -1,4 +1,4 @@
-import { get } from './core';
+import { get } from './comman';
 
 const supportedLanguages = [
   ['auto', 'auto'],
