@@ -12,12 +12,19 @@
   "dependencies": {
     "@tabler/icons-vue": "^2.10.0",
     "@tauri-apps/api": "^1.2.0",
+    "@vueuse/components": "^9.13.0",
+    "@vueuse/core": "^9.13.0",
+    "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.6",
+    "unplugin-auto-import": "^0.15.2",
+    "unplugin-vue-components": "^0.24.1",
     "vue": "^3.2.45"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.2.2",
     "@types/node": "^18.7.10",
     "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1",
