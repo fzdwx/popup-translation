@@ -4,7 +4,7 @@ import Nav from '@/components/Nav/index'
 import Translation from '@/components/Translation/index'
 </script>
 <template>
-  <div class="dark:text-cyan-200">
+  <div class="app">
     <Nav />
     <Translation />
     <Setting />
