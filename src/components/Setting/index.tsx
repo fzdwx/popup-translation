@@ -22,27 +22,13 @@ const dark = () => {
   )
 }
 
-const toogleSettingDiv = (toogleSettingVal: any, toogle: Function) => {
-  return (
-    <button
-      onClick={() => {
-        toogle()
-      }}
-    >
-      {rs(toogleSettingVal, 'Close Setting', 'Open Setting')}
-    </button>
-  )
-}
-
 export default (props: {}, { slots }: SetupContext) => {
   const { config, toogleSetting } = useConfigState()
+  const { toogleSettingVal } = toogleSetting()
 
-  const { toogleSettingVal, toogle } = toogleSetting()
-
-  if (!toogleSettingVal.value) return toogleSettingDiv(toogleSettingVal, toogle)
+  if (!toogleSettingVal.value) return <div></div>
   return (
     <div>
-      <div>{toogleSettingDiv(toogleSettingVal, toogle)}</div>
       <div>{dark()}</div>
     </div>
   )
