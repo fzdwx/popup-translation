@@ -1,6 +1,17 @@
+import { LogicalSize, appWindow } from '@tauri-apps/api/window'
+
 export default () => {
-  const { toogleSetting } = useConfigState()
-  const { toogle } = toogleSetting()
+  const { toogleSetting, resetWindow } = useConfigState()
+  const { toogle, showSetting } = toogleSetting()
+
+  const onToogleSetting = () => {
+    toogle()
+    if (showSetting()) {
+      appWindow.setSize(new LogicalSize(1000, 400))
+    } else {
+      resetWindow()
+    }
+  }
 
   return (
     <div class="flex flex-row">
@@ -8,7 +19,7 @@ export default () => {
       <div class="basis-1/4"></div>
       <div class=" basis-1/2">
         <div class="flex justify-end">
-          <button type="button" onClick={() => toogle()}>
+          <button type="button" onClick={() => onToogleSetting()}>
             设置
           </button>
         </div>
