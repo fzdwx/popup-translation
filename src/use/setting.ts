@@ -1,34 +1,15 @@
-import { Config } from '@/types'
-import { useToggle } from '@vueuse/core'
-import { LogicalSize, appWindow } from '@tauri-apps/api/window'
+const toogleSettingVal = ref<Boolean>(false)
 
-export const useConfigState = createGlobalState(() => {
-  const config = ref<Config>()
-
-  onMounted(async () => {
-    config.value = await readConfig()
-  })
-
-  const toogleSettingVal = ref<Boolean>(false)
+export const useToogleSetting = () => {
   const showSetting = () => {
     return toogleSettingVal.value
   }
-  const toogleSetting = () => {
-    const toogle = useToggle(toogleSettingVal)
-    return {
-      toogleSettingVal,
-      toogle,
-      showSetting
-    }
-  }
 
-  const resetWindow = () => {
-    appWindow.setSize(new LogicalSize(800, 600))
-  }
+  const toogle = useToggle(toogleSettingVal)
 
   return {
-    config,
-    toogleSetting,
-    resetWindow
+    toogleSettingVal,
+    toogle,
+    showSetting
   }
-})
+}

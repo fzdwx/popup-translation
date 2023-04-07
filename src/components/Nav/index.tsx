@@ -1,8 +1,8 @@
 import { LogicalSize, appWindow } from '@tauri-apps/api/window'
 
 export default () => {
-  const { toogleSetting, resetWindow } = useConfigState()
-  const { toogle, showSetting } = toogleSetting()
+  const { resetWindow } = useConfigState()
+  const { toogle, showSetting } = useToogleSetting()
 
   const onToogleSetting = () => {
     toogle()

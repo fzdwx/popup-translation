@@ -23,10 +23,9 @@ const dark = () => {
 }
 
 export default (props: {}, { slots }: SetupContext) => {
-  const { config, toogleSetting } = useConfigState()
-  const { toogleSettingVal } = toogleSetting()
+  const { showSetting } = useToogleSetting()
 
-  if (!toogleSettingVal.value) return <div></div>
+  if (!showSetting()) return <div>123123</div>
   return (
     <div>
       <div>{dark()}</div>

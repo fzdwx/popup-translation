@@ -3,8 +3,7 @@ import Setting from '@/components/Setting/index'
 import Nav from '@/components/Nav/index'
 import Translation from '@/components/Translation/index'
 
-const { toogleSetting } = useConfigState()
-const { toogle, showSetting } = toogleSetting()
+const { showSetting } = useToogleSetting()
 </script>
 <template>
   <div class="app">

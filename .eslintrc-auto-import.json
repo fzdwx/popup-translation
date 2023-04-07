@@ -248,6 +248,7 @@
     "useToNumber": true,
     "useToString": true,
     "useToggle": true,
+    "useToogleSetting": true,
     "useTransition": true,
     "useUrlSearchParams": true,
     "useUserMedia": true,
