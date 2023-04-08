@@ -1,3 +1,4 @@
+import { SetupContext } from 'vue'
 function r(
   condition: boolean,
   ifTrue: () => JSX.Element,
@@ -16,4 +17,19 @@ function rs(condition: boolean, ifTrue: string, ifFalse?: string): string {
   return ifFalse ? ifFalse : ''
 }
 
-export { r, rs }
+type Component<T> = (props: T, ctx: SetupContext) => JSX.Element
+
+/**
+ * Define a component
+ * @param component {@link Component}
+ * @returns {@link Component}
+ * @example
+ * export default defineComponent((props: {}, { slots }: SetupContext) => {
+ *  return ( <div> {slots.default?.()} </div> )
+ * })
+ */
+function defineComponent<T>(component: Component<T>): Component<T> {
+  return component
+}
+
+export { r, rs, defineComponent }

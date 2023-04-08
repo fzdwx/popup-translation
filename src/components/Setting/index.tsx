@@ -1,4 +1,4 @@
-import { rs } from '@/utils'
+import { rs, defineComponent } from '@/utils'
 import { SetupContext } from 'vue'
 import { UseDark } from '@vueuse/components'
 
@@ -22,13 +22,13 @@ const dark = () => {
   )
 }
 
-export default (props: {}, { slots }: SetupContext) => {
+export default defineComponent((props: {}, { slots }: SetupContext) => {
   const { showSetting } = useToogleSetting()
 
-  if (!showSetting()) return <div>123123</div>
+  if (!showSetting()) return <div></div>
   return (
     <div>
       <div>{dark()}</div>
     </div>
   )
-}
+})

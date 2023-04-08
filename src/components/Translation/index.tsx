@@ -1,5 +1,5 @@
 import { SetupContext } from 'vue'
 
-export default (props: {}, { slots }: SetupContext) => {
+export default defineComponent((props: {}, { slots }: SetupContext) => {
   return <div>Translation ...</div>
-}
+})
