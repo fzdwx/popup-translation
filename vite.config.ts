@@ -14,7 +14,9 @@ export default defineConfig(async () => ({
   plugins: [
     vueJsx({}),
     vue(),
-    UnoCSS(),
+    UnoCSS({
+      configFile: './unocss.config.ts'
+    }),
     AutoImport({
       dts: './src/types/auto-import.d.ts',
       eslintrc: {
