@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import autoprefixer from 'autoprefixer'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import UnoCSS from 'unocss/vite'
 
 const mobile =
   process.env.TAURI_PLATFORM === 'android' ||
@@ -14,7 +14,7 @@ export default defineConfig(async () => ({
   plugins: [
     vueJsx({}),
     vue(),
-
+    UnoCSS(),
     AutoImport({
       dts: './src/types/auto-import.d.ts',
       eslintrc: {
