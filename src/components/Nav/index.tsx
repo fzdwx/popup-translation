@@ -1,4 +1,5 @@
 import { LogicalSize, appWindow } from '@tauri-apps/api/window'
+import LangSwitch from './LangSwitch'
 
 export default defineComponent(() => {
   const { resetWindow } = useConfigState()
@@ -16,8 +17,12 @@ export default defineComponent(() => {
   return (
     <div class="flex flex-row">
       <div class="basis-1/4"></div>
-      <div class="basis-1/4"></div>
-      <div class=" basis-1/2">
+      <div class="basis-1/2">
+        <div flex justify-center>
+          {<LangSwitch />}
+        </div>
+      </div>
+      <div class=" basis-1/4">
         <div class="flex justify-end">
           <button type="button" onClick={() => onToogleSetting()}>
             设置

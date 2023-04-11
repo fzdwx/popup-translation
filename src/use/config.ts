@@ -1,6 +1,8 @@
 import { Config } from '@/types'
 import { LogicalSize, appWindow } from '@tauri-apps/api/window'
 
+const defaultTargetLang = 'chinese'
+
 const config = ref<Config>()
 onMounted(async () => {
   config.value = await readConfig()
@@ -11,8 +13,24 @@ export const useConfigState = createGlobalState(() => {
     appWindow.setSize(new LogicalSize(800, 600))
   }
 
+  const getTargetLang = () => {
+    if (!config.value) {
+      return defaultTargetLang
+    }
+    return config.value.targetLang || defaultTargetLang
+  }
+
+  const setTargetLang = (lang: string) => {
+    if (!config.value) {
+      return
+    }
+    config.value.targetLang = lang
+  }
+
   return {
     config,
-    resetWindow
+    resetWindow,
+    getTargetLang,
+    setTargetLang
   }
 })

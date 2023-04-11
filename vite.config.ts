@@ -12,8 +12,8 @@ const mobile =
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
   plugins: [
-    vueJsx({}),
     vue(),
+    vueJsx({}),
     UnoCSS({
       configFile: './unocss.config.ts'
     }),
