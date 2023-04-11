@@ -46,7 +46,7 @@ interface TranslationInfo {
 
 // app config
 interface Config {
-  keys: {
+  keys?: {
     chatGpt: string
     youdao: string
     google: string
