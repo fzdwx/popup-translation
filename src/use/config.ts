@@ -1,4 +1,4 @@
-import { Config } from '@/types'
+import { Config, Mode } from '@/types'
 import { LogicalSize, appWindow } from '@tauri-apps/api/window'
 
 const defaultTargetLang = 'chinese'
@@ -21,8 +21,13 @@ export const useConfigState = createGlobalState(() => {
     config.value.targetLang = lang
   }
 
+  const mode = computed(() => {
+    return config.value.mode || Mode.Aggregate
+  })
+
   return {
     config,
+    mode,
     resetWindow,
     getTargetLang,
     setTargetLang
