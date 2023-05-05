@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import path from 'node:path'
 import UnoCSS from 'unocss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { defineConfig } from 'vite'
+import Inspect from 'vite-plugin-inspect'
+import solidPlugin from 'vite-plugin-solid'
 
 const mobile =
   process.env.TAURI_PLATFORM === 'android' ||
@@ -11,35 +11,26 @@ const mobile =
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
+  resolve: {
+    alias: {
+      '~/': `${path.resolve(__dirname, 'src')}/`,
+    },
+  },
   plugins: [
-    vue(),
-    vueJsx({}),
-    UnoCSS({
-      configFile: './unocss.config.ts'
-    }),
+    Inspect(),
     AutoImport({
-      dts: './src/types/auto-import.d.ts',
-      eslintrc: {
-        enabled: true
-      },
-      imports: ['vue', '@vueuse/core'],
-      vueTemplate: true,
-      dirs: ['./src/api/*', './src/command/*', './src/utils/*', './src/use/*']
+      imports: [
+        'solid-js',
+      ],
     }),
-    Components({
-      dts: './src/types/components.d.ts',
-      dirs: ['./src/components/Setting/*']
-    })
+    solidPlugin(),
+    UnoCSS({
+      // your config or in uno.config.ts
+    }),
   ],
-
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   // prevent vite from obscuring rust errors
   clearScreen: false,
-  resolve: {
-    alias: {
-      '@': '/src'
-    }
-  },
   // tauri expects a fixed port, fail if that port is not available
   server: {
     port: 1420,
