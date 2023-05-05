@@ -1,12 +1,7 @@
-function App() {
+export default function () {
   return (
-    <p py-20 text-center text-4xl text-green-700>
-      Hello{' '}
-      <span text-teal-400 m-2 text-center text-5xl animate-bounce >
-        This is react with Unocss and Vite ⚡
-      </span>
-    </p>
+    <div className=" text-emerald-500 text-2xl">
+      hello world
+    </div>
   )
 }
-
-export default App
