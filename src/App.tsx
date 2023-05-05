@@ -1,6 +1,4 @@
-import type { Component } from 'solid-js'
-
-const App: Component = () => {
+function App() {
   return (
     <p py-20 text-center text-4xl text-green-700>
       Hello{' '}

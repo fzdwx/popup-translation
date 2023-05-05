@@ -1,8 +1,10 @@
-import { render } from 'solid-js/web'
-import 'uno.css'
-
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import "uno.css"
 import App from './App'
 
-const root = document.getElementById('app')
-
-render(() => <App />, root!)
+ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
