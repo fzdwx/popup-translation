@@ -1,5 +1,4 @@
 import { invoke } from '@tauri-apps/api/tauri'
-import { Config } from '@/types'
 
 /**
  * 获取光标选择的文本/粘贴板内容
@@ -22,7 +21,7 @@ async function writeConfig(config: any): Promise<void> {
  *  读取配置
  * @returns Config
  */
-async function readConfig(): Promise<Config> {
+async function readConfig(): Promise<Object> {
   return invoke('read_config')
 }
 
