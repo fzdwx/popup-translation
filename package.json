@@ -24,13 +24,11 @@
     "tailwindcss-animate": "^1.0.5"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.38.5",
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.5",
     "@types/react-dom": "^18.2.3",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
-    "eslint": "^8.39.0",
     "postcss": "^8.4.23",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4",
@@ -38,10 +36,5 @@
     "vite": "^4.3.5",
     "vite-plugin-inspect": "^0.7.25",
     "vite-plugin-solid": "^2.7.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@antfu"
-    ]
   }
 }
