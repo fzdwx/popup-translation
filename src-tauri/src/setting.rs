@@ -86,7 +86,7 @@ impl Config {
         let path = &config_path();
         if !utils::exists(path) {
             utils::create_file(path).unwrap();
-            log::info!("confg.json created");
+            log::info!("config.json created");
         }
         if let Ok(v) = serde_json::to_string_pretty(&self) {
             std::fs::write(path, v).unwrap_or_else(|err| {

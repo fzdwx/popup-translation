@@ -1,5 +1,8 @@
 # Popup translation
 
+## Recommended to use [pot](https://github.com/pot-app/pot-desktop)
+
+
 一款基于 tauri 的弹窗翻译软件
 
 1. 划词翻译
