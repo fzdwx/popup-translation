@@ -1,6 +1,6 @@
 # Popup translation
 
-## Recommended to use [pot](https://github.com/pot-app/pot-desktop)
+## Recommended to use [openai-translator](https://github.com/openai-translator/openai-translator)
 
 
 一款基于 tauri 的弹窗翻译软件
